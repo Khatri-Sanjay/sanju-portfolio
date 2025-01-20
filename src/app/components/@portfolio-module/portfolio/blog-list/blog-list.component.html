@@ -1,0 +1,92 @@
+<div class="container-fluid container-lg py-4 py-lg-5">
+  <header class="text-center mb-4 mb-lg-5">
+    <h1 class="display-4 fw-bold mb-3">Latest Blog Posts</h1>
+    <p class="lead text-muted w-lg-75 mx-auto">Discover insightful articles and stay updated with our latest content</p>
+  </header>
+
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    @for (post of posts; track post.postId) {
+      <div class="col">
+        <article class="card h-100 shadow-sm border-0 transition-hover">
+          <div class="position-relative">
+            <img [src]="post.imageUrl" [alt]="post.title"
+                 class="card-img-top object-fit-cover"
+                 style="height: 200px;">
+            <div class="position-absolute top-0 end-0 p-3">
+              <button class="btn btn-light btn-sm rounded-circle shadow-sm">
+                <i class="bi bi-bookmark"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="card-body d-flex flex-column">
+            <div class="d-flex align-items-center mb-3">
+              <div class="position-relative">
+                <img [src]="post.author.avatar" [alt]="post.author.name"
+                     class="rounded-circle border border-2"
+                     width="48" height="48">
+                <span class="position-absolute bottom-0 end-0 bg-success rounded-circle p-1 border border-white"></span>
+              </div>
+              <div class="ms-2">
+                <h6 class="mb-0 fw-semibold">{{post.author.name}}</h6>
+                <div class="text-muted small">
+                  <span>{{post.publishDate | date:'mediumDate'}}</span>
+                  <span class="mx-1">·</span>
+                  <span>{{post.readTime}} min read</span>
+                </div>
+              </div>
+            </div>
+
+            <h5 class="card-title fw-bold mb-3">{{post.title}}</h5>
+            <p class="card-text text-muted flex-grow-1">{{post.excerpt}}</p>
+
+            <div class="mt-3">
+              <div class="d-flex flex-wrap gap-2 mb-3">
+                @for (tag of post.tags; track tag) {
+                  <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill">
+                    {{tag}}
+                  </span>
+                }
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-3">
+                  <button class="btn btn-link text-muted p-0">
+                    <i class="bi bi-heart me-1"></i>
+                    <span>24</span>
+                  </button>
+                  <button class="btn btn-link text-muted p-0">
+                    <i class="bi bi-chat me-1"></i>
+                    <span>12</span>
+                  </button>
+                </div>
+                <a (click)="navigateToPost(post.postId)"
+                   class="btn btn-primary rounded-pill px-4">
+                  Read More
+                </a>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    }
+  </div>
+
+  <nav class="mt-5" aria-label="Blog pagination">
+    <ul class="pagination pagination-lg justify-content-center">
+      <li class="page-item disabled">
+        <a class="page-link rounded-start-pill" href="#" tabindex="-1" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li class="page-item active"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        <a class="page-link rounded-end-pill" href="#" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>

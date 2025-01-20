@@ -1,0 +1,113 @@
+<div class="container-fluid">
+  <!-- Breadcrumbs at the top -->
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#">User</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Add User</li>
+    </ol>
+  </nav>
+
+  <!-- Main Form Section -->
+  <div class="form-container">
+    <h2 class="text-center mb-4">Add User</h2>
+
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="form-wrapper">
+      <!-- Personal Details -->
+      <div class="mb-3">
+        <h5>Personal Details</h5>
+        <div class="row">
+          <div class="col-12 col-md-4 mb-3">
+            <label for="firstName" class="form-label">First Name</label>
+            <input
+              type="text"
+              id="firstName"
+              class="form-control form-control-sm"
+              formControlName="firstName"
+              placeholder="Enter your first name"
+            />
+            <div *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched" class="error-text">
+              First name is required.
+            </div>
+          </div>
+          <div class="col-12 col-md-4 mb-3">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input
+              type="text"
+              id="lastName"
+              class="form-control form-control-sm"
+              formControlName="lastName"
+              placeholder="Enter your last name"
+            />
+          </div>
+          <div class="col-12 col-md-4 mb-3">
+            <label for="middleName" class="form-label">Middle Name</label>
+            <input
+              type="text"
+              id="middleName"
+              class="form-control form-control-sm"
+              formControlName="middleName"
+              placeholder="Enter your middle name"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Role Selection -->
+      <div class="mb-3">
+        <h5>Role Selection</h5>
+        <div class="mb-3">
+          <label for="role" class="form-label">User Role</label>
+          <select id="role" class="form-select form-select-sm" formControlName="role">
+            <option value="" disabled>Select Role</option>
+            <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Login Details -->
+      <div class="mb-3">
+        <h5>Login Details</h5>
+        <div class="row">
+          <div class="col-12 col-md-6 mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input
+              type="email"
+              id="email"
+              class="form-control form-control-sm"
+              formControlName="email"
+              placeholder="Enter your email"
+            />
+          </div>
+          <div class="col-12 col-md-6 mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              id="password"
+              class="form-control form-control-sm"
+              formControlName="password"
+              placeholder="Enter your password"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Address Details -->
+      <div class="mb-3">
+        <h5>Address Details</h5>
+        <div class="mb-3">
+          <label for="address" class="form-label">Address</label>
+          <textarea
+            id="address"
+            class="form-control form-control-sm"
+            formControlName="address"
+            rows="3"
+            placeholder="Enter your address"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-primary w-100" [disabled]="userForm.invalid">Submit</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,75 @@
+@if (post) {
+  <div class="container py-5">
+    <article class="mb-5">
+      <header class="text-center mb-4">
+        <h1 class="display-4 mb-3">{{post.title}}</h1>
+        <div class="d-flex justify-content-center align-items-center mb-4">
+          <img [src]="post.author.avatar" [alt]="post.author.name"
+               class="rounded-circle me-2" width="50" height="50">
+          <div class="text-start">
+            <h6 class="mb-0">{{post.author.name}}</h6>
+            <small class="text-muted">
+              {{post.publishDate | date:'mediumDate'}} · {{post.readTime}} min read
+            </small>
+          </div>
+        </div>
+        <img [src]="post.imageUrl" [alt]="post.title"
+             class="img-fluid rounded shadow-lg mb-4">
+      </header>
+
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="content">
+            <p class="lead">{{post.content}}</p>
+          </div>
+
+          <div class="tags mt-4">
+            @for (tag of post.tags; track tag) {
+              <span class="badge bg-primary me-2">{{tag}}</span>
+            }
+          </div>
+
+          <hr class="my-5">
+
+          <section class="comments">
+            <h3 class="mb-4">Comments ({{post.comments.length}})</h3>
+
+            <div class="card mb-4">
+              <div class="card-body">
+                <h5 class="card-title">Leave a Comment</h5>
+                <form>
+                  <div class="mb-3">
+                        <textarea class="form-control" rows="3"
+                                  placeholder="Write your comment..."></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Post Comment</button>
+                </form>
+              </div>
+            </div>
+
+            @for (comment of post.comments; track comment.commentId) {
+              <div class="card mb-3">
+                <div class="card-body">
+                  <div class="d-flex mb-3">
+                    <img [src]="comment.author.avatar" [alt]="comment.author.name"
+                         class="rounded-circle me-2" width="40" height="40">
+                    <div>
+                      <h6 class="mb-0">{{comment.author.name}}</h6>
+                      <small class="text-muted">
+                        {{comment.date | date:'mediumDate'}}
+                      </small>
+                    </div>
+                  </div>
+                  <p class="card-text">{{comment.content}}</p>
+                  <button class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-hand-thumbs-up"></i> {{comment.likes}}
+                  </button>
+                </div>
+              </div>
+            }
+          </section>
+        </div>
+      </div>
+    </article>
+  </div>
+}

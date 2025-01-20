@@ -1,0 +1,50 @@
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <!-- Logo -->
+    <a class="navbar-brand logo-box" href="/home">
+      <span class="brand-first">S</span>
+      <span class="brand-name">
+        <span class="brand-sanjay">Sanjay</span>
+        <span class="brand-khatri">Khatri</span>
+        <div class="logo-underline"></div>
+      </span>
+    </a>
+
+    <!-- Mobile Toggle -->
+    <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="toggler-icon top-bar"></span>
+      <span class="toggler-icon middle-bar"></span>
+      <span class="toggler-icon bottom-bar"></span>
+    </button>
+
+    <!-- Navigation Links -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="about" routerLinkActive="active" data-bs-toggle="collapse" data-bs-target="#navbarNav">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="projects" routerLinkActive="active" data-bs-toggle="collapse" data-bs-target="#navbarNav">Projects</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="skills" routerLinkActive="active" data-bs-toggle="collapse" data-bs-target="#navbarNav">Skills</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="blogs" routerLinkActive="active" data-bs-toggle="collapse" data-bs-target="#navbarNav">Blogs</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="contact" routerLinkActive="active" data-bs-toggle="collapse" data-bs-target="#navbarNav">Contact</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/tools" routerLinkActive="active" data-bs-toggle="collapse" data-bs-target="#navbarNav">Tools</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" (click)="openInNewTab()" data-bs-toggle="collapse" data-bs-target="#navbarNav">Terminal</a>
+        </li>
+        <li class="nav-item ms-lg-3">
+          <a class="nav-link resume-btn" routerLink="resume" routerLinkActive="active" data-bs-toggle="collapse" data-bs-target="#navbarNav">Resume</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

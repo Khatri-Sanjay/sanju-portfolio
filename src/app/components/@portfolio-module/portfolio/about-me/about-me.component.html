@@ -1,0 +1,78 @@
+<div class="main-container">
+  <!-- Hero Section -->
+  <section class="hero-section" [@fadeIn]>
+    <div class="hero-content">
+      <div class="profile-container">
+        <div class="profile-background"></div>
+        <img src="/assets/image/sanjuprofile.png" alt="Profile Picture" class="profile-img" loading="lazy">
+      </div>
+      <h1 class="hero-title">
+        {{ displayedText }}
+        <span class="wave">👋</span>
+      </h1>
+      <p class="hero-subtitle">Full Stack Developer</p>
+      <div class="social-links">
+        <a href="https://github.com/yourusername" target="_blank" class="social-link">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="https://linkedin.com/in/yourusername" target="_blank" class="social-link">
+          <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="mailto:your.email@example.com" class="social-link">
+          <i class="fas fa-envelope"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about-section" [@fadeInUp]>
+    <div class="section-header">
+      <h2>About Me</h2>
+      <div class="section-underline"></div>
+    </div>
+
+    <div class="about-content">
+      <div class="about-card">
+        <div class="about-text">
+          <p class="text-center">
+            I'm a passionate Full Stack Developer with over 2 years of experience in creating
+            modern web applications. I specialize in building scalable solutions using cutting-edge
+            technologies and best practices in software development.
+          </p>
+          <p class="text-center">
+            My goal is to create intuitive and performant applications that make a real difference
+            in users' lives while maintaining clean, maintainable code.
+          </p>
+        </div>
+
+        <div class="quick-info">
+          <div class="info-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>{{ personalDetails.address.city || ''}}, {{ personalDetails.address.country || ''}}</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-graduation-cap"></i>
+            <span>BCA (Bachelor of Computer Application)</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-code-branch"></i>
+            <span>2+ Years Experience</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="skills-section">
+        <h3>Technical Skills</h3>
+        <div class="skills-grid">
+          @for(skill of skills; track skill) {
+            <div class="skill-item">
+              <!--<i [class]="skill?.icon"></i>-->
+              <span>{{ skill }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

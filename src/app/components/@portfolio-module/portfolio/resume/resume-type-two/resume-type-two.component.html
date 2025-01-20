@@ -1,0 +1,89 @@
+<div class="offset-11 mb-2">
+  <button class="btn btn-sm btn-outline-primary" ngxPrint
+          [useExistingCss]="true"
+          [printSectionId]="'contentToPrintType2'">
+    <i class="fas fa-print mr-2"></i> Print
+  </button>
+</div>
+
+<div class="resume-container" id="contentToPrintType2">
+  <!-- Header Section -->
+  <header class="profile-header">
+    <div class="profile-image-container">
+      <img src="https://media.licdn.com/dms/image/v2/D5603AQE6gzXAs0m3GA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1708078794359?e=1740614400&v=beta&t=hk3W8ZLT1-QJrOKKBlwW2q_xbDwo83fONFeIzR6OOPU" [alt]="resumeData.personalInfo.name" class="profile-image">
+    </div>
+    <div class="profile-info">
+      <h1>{{resumeData.personalInfo.name}}</h1>
+      <h2>{{resumeData.personalInfo.title}}</h2>
+    </div>
+  </header>
+
+  <div class="resume-content">
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <section class="contact-info">
+        <h3>Contact Information</h3>
+        <ul>
+          <li>
+            <i class="fas fa-envelope"></i>
+            <a [href]="'mailto:' + resumeData.personalInfo.email">{{resumeData.personalInfo.email}}</a>
+          </li>
+          <li>
+            <i class="fas fa-phone"></i>
+            <span>{{resumeData.personalInfo.phone}}</span>
+          </li>
+          <li>
+            <i class="fas fa-map-marker-alt"></i>
+            <span>{{resumeData.personalInfo.location}}</span>
+          </li>
+          <li>
+            <i class="fab fa-linkedin"></i>
+            <a [href]="'https://' + resumeData.personalInfo.linkedin" target="_blank">{{resumeData.personalInfo.linkedin}}</a>
+          </li>
+        </ul>
+      </section>
+
+      <section class="skills-section">
+        <h3>Technical Skills</h3>
+        <div class="skills-container">
+          <span *ngFor="let skill of resumeData.skills" class="skill-badge">
+            {{skill.name}}
+          </span>
+        </div>
+      </section>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <section class="summary-section">
+        <h3>Professional Summary</h3>
+        <p>{{resumeData.personalInfo.summary}}</p>
+      </section>
+
+      <section class="experience-section">
+        <h3>Professional Experience</h3>
+        <div *ngFor="let exp of resumeData.experience" class="experience-item">
+          <div class="experience-header">
+            <h4>{{exp.title}}</h4>
+            <span class="period">{{exp.period}}</span>
+          </div>
+          <div class="company-info">
+            <span class="company">{{exp.company}}</span>
+            <span class="location">{{exp.location}}</span>
+          </div>
+          <ul class="experience-description">
+            <li *ngFor="let desc of exp.description">{{desc}}</li>
+          </ul>
+          <div *ngIf="exp.skillsDeveloped" class="skills-developed">
+            <h5>Skills Developed:</h5>
+            <div class="skills-badges">
+              <span *ngFor="let skill of exp.skillsDeveloped" class="skill-badge">
+                {{skill}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+/* Table Styles */
+.table-responsive {
+  overflow-x: auto;
+}
+.table th.sortable {
+  cursor: pointer;
+}
+.sort-icon {
+  width: 12px;
+  height: 12px;
+}
+.selection-column {
+  width: 40px;
+  text-align: center;
+}
+.action-column {
+  white-space: nowrap;
+  width: 1%;
+}
+
+/* Cell Types */
+.table-image {
+  max-height: 50px;
+  max-width: 50px;
+  object-fit: contain;
+}
+.progress {
+  margin-bottom: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .action-column .btn-text {
+    display: none;
+  }
+  .table-responsive {
+    margin-bottom: 1rem;
+  }
+}
+
+.pagination {
+  flex-wrap: nowrap;
+  margin-bottom: 0;
+}
+
+.page-link {
+  min-width: 40px;
+  text-align: center;
+  padding: 0.375rem;
+  user-select: none;
+}
+
+@media (max-width: 576px) {
+  .pagination .page-item:not(.active):not(:first-child):not(:last-child) {
+    display: none;
+  }
+
+  .form-select {
+    width: 100% !important;
+  }
+}

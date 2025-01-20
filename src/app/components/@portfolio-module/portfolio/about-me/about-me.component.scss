@@ -1,0 +1,260 @@
+// Variables
+$primary-color: #2563eb;
+$secondary-color: #3b82f6;
+$text-primary: #1f2937;
+$text-secondary: #4b5563;
+$background-light: #f8fafc;
+$card-background: #ffffff;
+$gradient-primary: linear-gradient(135deg, $primary-color, $secondary-color);
+$box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+// Global Styles
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+// Hero Section
+.hero-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+  background: $background-light;
+}
+
+.hero-content {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.profile-container {
+  position: relative;
+  margin-bottom: 2rem;
+  display: inline-block;
+}
+
+.profile-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: $gradient-primary;
+  border-radius: 50%;
+  transform: scale(1.1);
+  filter: blur(20px);
+  opacity: 0.1;
+}
+
+.profile-img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid $card-background;
+  box-shadow: $box-shadow;
+  position: relative;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  color: $text-primary;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: $text-secondary;
+  margin-bottom: 2rem;
+}
+
+.social-links {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.social-link {
+  font-size: 1.5rem;
+  color: $text-secondary;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: $primary-color;
+    transform: translateY(-2px);
+  }
+}
+
+// About Section
+.about-section {
+  padding: 4rem 0;
+  background: $background-light;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+
+  h2 {
+    font-size: 2rem;
+    color: $text-primary;
+    margin-bottom: 1rem;
+  }
+}
+
+.section-underline {
+  width: 60px;
+  height: 4px;
+  background: $gradient-primary;
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+.about-content {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+}
+
+.about-card {
+  background: $card-background;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: $box-shadow;
+}
+
+.about-text {
+  color: $text-secondary;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+
+  p {
+    margin-bottom: 1rem;
+  }
+}
+
+.quick-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  i {
+    font-size: 1.25rem;
+    color: $primary-color;
+  }
+
+  span {
+    color: $text-secondary;
+  }
+}
+
+.skills-section {
+  background: $card-background;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: $box-shadow;
+
+  h3 {
+    color: $text-primary;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1.5rem;
+}
+
+.skill-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: $background-light;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $box-shadow;
+  }
+
+  i {
+    font-size: 1.5rem;
+    color: $primary-color;
+  }
+
+  span {
+    color: $text-secondary;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+}
+
+// Animations
+.wave {
+  display: inline-block;
+  animation: wave 2s infinite;
+}
+
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(20deg); }
+  75% { transform: rotate(-15deg); }
+}
+
+// Media Queries
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .profile-img {
+    width: 150px;
+    height: 150px;
+  }
+
+  .about-content {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-info {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 1.75rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .about-card {
+    padding: 1.5rem;
+  }
+
+  .skills-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

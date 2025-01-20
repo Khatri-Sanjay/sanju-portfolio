@@ -1,0 +1,73 @@
+$primary-color: #2d3436;
+$accent-color: #0984e3;
+$gradient-start: #0984e3;
+$gradient-end: #00b894;
+$white: #ffffff;
+$shadow-color: rgba(45, 52, 54, 0.1);
+$transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+.scroll-btn {
+  position: fixed;
+  bottom: 4rem;
+  right: 4rem;
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(45deg, $gradient-start, $gradient-end);
+  color: $white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  font-weight: bold;
+  box-shadow: 0 4px 10px $shadow-color, 0 2px 4px $shadow-color;
+  transition: $transition;
+  z-index: 1000;
+
+  &:hover {
+    background: linear-gradient(45deg, $gradient-end, $gradient-start);
+    transform: scale(1.2);
+    box-shadow: 0 6px 14px $shadow-color, 0 4px 8px $shadow-color;
+  }
+
+  &:active {
+    transform: scale(1);
+    box-shadow: 0 2px 6px $shadow-color, 0 1px 3px $shadow-color;
+  }
+}
+
+.scroll-icon {
+  text-shadow: 0 0 8px $white, 0 0 16px $accent-color;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    text-shadow: 0 0 8px $white, 0 0 16px $accent-color;
+  }
+  50% {
+    text-shadow: 0 0 12px $white, 0 0 24px $accent-color;
+  }
+}
+
+@media (max-width: 768px) {
+  .scroll-btn {
+    bottom: 2rem;
+    right: 2rem;
+    width: 55px;
+    height: 55px;
+    font-size: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .scroll-btn {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+}

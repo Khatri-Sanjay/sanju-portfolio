@@ -1,0 +1,42 @@
+/* Styling for breadcrumb at the top */
+nav[aria-label="breadcrumb"] {
+  margin: 20px 0; /* Margin to separate the breadcrumb from other content */
+  padding: 10px 0; /* Add padding for better spacing */
+  background-color: #f8f9fa; /* Light background color */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+}
+
+/* Style for each breadcrumb item */
+.breadcrumb-item {
+  font-size: 14px; /* Smaller font size for a neat appearance */
+  display: inline-block; /* Ensure the items are displayed in a row */
+}
+
+/* Style for breadcrumb links */
+.breadcrumb-link {
+  text-decoration: none;
+  color: #0056b3; /* Blue color for links */
+}
+
+.breadcrumb-link:hover {
+  color: #003366; /* Darker blue on hover */
+  text-decoration: underline; /* Underline on hover */
+}
+
+/* Active breadcrumb item */
+.breadcrumb-item.active {
+  color: #6c757d; /* Grey color for active item */
+  font-weight: 600; /* Slightly bold to emphasize the current page */
+}
+
+/* Add responsive styles for smaller screens */
+@media (max-width: 768px) {
+  .breadcrumb-item {
+    font-size: 12px; /* Smaller font size on mobile */
+  }
+
+  nav[aria-label="breadcrumb"] {
+    padding: 8px 0; /* Adjust padding for smaller screens */
+  }
+}

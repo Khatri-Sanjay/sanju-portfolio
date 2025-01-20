@@ -1,0 +1,15 @@
+.page-input::-webkit-inner-spin-button,
+.page-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.page-input {
+  -moz-appearance: textfield;
+  text-align: center;
+}
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+}
+.not-allowed {
+  cursor: not-allowed;
+}

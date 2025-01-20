@@ -1,0 +1,96 @@
+<aside class="sidebar" [class.expanded]="isExpanded()" [class.mobile-expanded]="isMobileExpanded()">
+  <!-- Sidebar Header -->
+  <div class="sidebar-header">
+    <div class="logo-container">
+      <i class="bi bi-boxes text-primary fs-4"></i>
+      @if (isExpanded()) {
+        <span class="logo-text ms-2">DashBoard</span>
+      }
+    </div>
+    <button class="collapse-btn d-none d-md-block" (click)="toggleSidebar()">
+      <i class="bi" [class.bi-chevron-left]="isExpanded()" [class.bi-chevron-right]="!isExpanded()"></i>
+    </button>
+  </div>
+
+  <!-- User Profile Section -->
+<!--  <div class="user-profile">
+    <div class="profile-image">
+      <img [src]="userAvatar" alt="Profile" (error)="handleImageError()">
+    </div>
+    @if (isExpanded()) {
+      <div class="profile-info">
+        <div class="profile-name">{{ userName }}</div>
+        <div class="profile-role">{{ userRole }}</div>
+      </div>
+    }
+  </div>-->
+
+  <!-- Navigation Menu -->
+  <nav class="nav-menu">
+    @for (section of menuSections(); track section.title) {
+      <div class="menu-section">
+        @if (isExpanded()) {
+          <div class="section-title">{{ section.title }}</div>
+        }
+        <ul class="nav-links">
+          @for (item of section.items; track item.id) {
+            <li>
+              <a [routerLink]="!hasChildren(item) ? item.path : null"
+                 routerLinkActive="active"
+                 [routerLinkActiveOptions]="{ exact: true }"
+                 class="nav-link"
+                 (click)="handleMenuClick(item)"
+                 [class.has-submenu]="hasChildren(item)">
+                <i class="bi {{ item.icon }}"></i>
+                @if (isExpanded()) {
+                  <span class="link-text">{{ item.label }}</span>
+                  @if (hasBadge(item)) {
+                    <span class="badge" [class]="'bg-' + item.badge.variant">
+                      {{ item.badge.text }}
+                    </span>
+                  }
+                  @if (hasChildren(item)) {
+                    <i class="bi submenu-arrow"
+                       [class.bi-chevron-down]="expandedMenus.includes(item.id)"
+                       [class.bi-chevron-right]="!expandedMenus.includes(item.id)">
+                    </i>
+                  }
+                }
+              </a>
+              @if (hasChildren(item) && expandedMenus.includes(item.id)) {
+                <ul class="submenu" [@submenuAnimation]>
+                  @for (child of item.children; track child.id) {
+                    <li>
+                      <a [routerLink]="child.path"
+                         routerLinkActive="active"
+                         class="nav-link">
+                        <i class="bi {{ child.icon }}"></i>
+                        <span class="link-text">{{ child.label }}</span>
+                      </a>
+                    </li>
+                  }
+                </ul>
+              }
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  </nav>
+
+  <!-- Bottom Actions -->
+<!--  <div class="sidebar-footer">
+    @if (isExpanded()) {
+      <div class="upgrade-pro">
+        <i class="bi bi-star-fill text-warning"></i>
+        <span class="ms-2">Upgrade to Pro</span>
+      </div>
+    }
+    <button class="settings-btn" [title]="isExpanded() ? 'Settings' : 'Open Settings'">
+      <i class="bi bi-gear"></i>
+      @if (isExpanded()) {
+        <span class="ms-2">Settings</span>
+      }
+    </button>
+  </div>-->
+</aside>

@@ -1,0 +1,96 @@
+<!-- Hero Section -->
+<section id="home" class="hero-section min-vh-100 position-relative overflow-hidden py-4 py-lg-0">
+  <div class="animated-bg"></div>
+  <div class="container position-relative h-100">
+    <div class="row align-items-center min-vh-100 g-4 g-lg-5">
+      <!-- Content Column -->
+      <div class="col-lg-6 hero-content order-2 order-lg-1">
+        <div class="animate-text-wrap text-center text-lg-start mx-auto mx-lg-0" style="max-width: 540px;">
+          <div class="pre-heading d-inline-block">👋 Hello, I'm Sanjay</div>
+          <h1 class="display-4 fw-bold mb-3 gradient-text lh-sm">
+            Crafting Digital Experiences
+          </h1>
+          <p class="lead mb-4 text-muted">
+            Transforming ideas into elegant solutions through creative development & thoughtful design
+          </p>
+          <div class="hero-buttons d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
+            <a class="btn btn-gradient btn-lg px-4 py-3">
+              <span>View My Work</span>
+              <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+            <a class="btn btn-outline-dark btn-lg px-4 py-3" (click)="openChat()">
+              <i class="bi bi-chat-dots me-2"></i>
+              <span>Let's Talk</span>
+            </a>
+          </div>
+          <div class="mt-4">
+            <app-type-writer></app-type-writer>
+          </div>
+          <div class="tech-stack mt-4">
+            <span class="tech-label">Tech Stack:</span>
+            <div class="tech-icons">
+              <i class="bi bi-code-square"></i>
+              <i class="bi bi-braces"></i>
+              <i class="bi bi-database"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image Column -->
+      <div class="col-lg-6 position-relative order-1 order-lg-2 mb-4 mb-lg-0">
+        <div class="hero-image-wrap px-4 px-lg-0">
+          <!-- Floating Shapes -->
+          <div class="floating-shape shape1 d-none d-lg-block"></div>
+          <div class="floating-shape shape2 d-none d-lg-block"></div>
+          <div class="floating-shape shape3 d-none d-lg-block"></div>
+
+          <!-- Hero Image Container -->
+          <div class="hero-image-container text-center">
+            <img
+              src="/assets/image/sanjay2.png"
+              alt="Sanjay's Profile"
+              class="hero-image img-fluid"
+              style="max-width: 90%; width: auto;"
+            >
+            <!-- Experience Badge -->
+            <!--<div class="experience-badge">
+              <span class="number">2+</span>
+              <span class="text">Years Experience</span>
+            </div>-->
+          </div>
+        </div>
+
+        <!-- Social Links -->
+        <div class="social-links">
+          <a href="{{ personalDetails.socialProfiles.gitHub }}" class="social-link" data-tooltip="GitHub">
+            <i class="bi bi-github"></i>
+          </a>
+          <a href="{{ personalDetails.socialProfiles.linkedIn }}" class="social-link" data-tooltip="LinkedIn">
+            <i class="bi bi-linkedin"></i>
+          </a>
+          <a href="#" class="social-link" data-tooltip="Twitter">
+            <i class="bi bi-twitter-x"></i>
+          </a>
+          <a href="{{ personalDetails.socialProfiles.instagram }}" class="social-link" data-tooltip="Instagram">
+            <i class="bi bi-instagram"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll Indicator -->
+  <div class="scroll-indicator d-none d-lg-block">
+    <div class="mouse">
+      <div class="wheel"></div>
+    </div>
+  </div>
+</section>
+
+<app-skills></app-skills>
+
+<app-project></app-project>
+
+<app-contact-me></app-contact-me>
+

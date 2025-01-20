@@ -1,0 +1,17 @@
+<app-portfolio-header></app-portfolio-header>
+<div
+  class="content-wrapper"
+  [@routeAnimations]="prepareRoute(outlet)"
+>
+  <router-outlet #outlet="outlet"></router-outlet>
+</div>
+<app-portfolio-footer></app-portfolio-footer>
+
+@if (chatService.chatVisible$()) {
+  <app-chat-window></app-chat-window>
+}
+
+@if (!chatService.chatVisible$()) {
+  <app-scroll-to-top></app-scroll-to-top>
+}
+

@@ -1,0 +1,275 @@
+$gradient-start: #0984e3;
+$gradient-end: #00b894;
+
+.chat-window {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 380px;
+  height: 500px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.chat-window.minimized {
+  height: 5rem;
+  overflow: hidden;
+}
+
+.chat-window.maximized {
+  width: 800px;
+  overflow: hidden;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  padding: 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.action-btn:hover {
+  opacity: 1;
+}
+
+.minimize:hover {
+  color: #3b82f6;
+}
+
+.maximize:hover {
+  color: #10b981;
+}
+
+.close:hover {
+  color: #ef4444;
+}
+
+.chat-header {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $gradient-start, $gradient-end);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Ensures the image is contained within the circle */
+  border: 3px solid green; /* Green border around the avatar */
+  position: relative; /* To position the green dot inside the avatar */
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.online-dot {
+  position: absolute;
+  bottom: 5px;
+  right: -15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: green; /* Green dot to indicate "online" */
+  border: 2px solid white; /* Optional, adds a little contrast around the dot */
+}
+
+.header-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Align the content to the start of the column */
+}
+
+.status-container {
+  position: relative; /* To position the green dot relative to status text */
+  display: flex;
+  align-items: center; /* Align status text and dot vertically */
+}
+
+.title {
+  font-weight: 600;
+  font-size: 16px;
+  color: #333;
+}
+
+.status {
+  font-size: 14px;
+  color: green;
+  margin-left: 4px; /* Space between the dot and the status text */
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-button {
+  padding: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.action-button:hover {
+  opacity: 1;
+}
+
+.messages-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: #f3f4f6;
+}
+
+.message {
+  max-width: 80%;
+}
+
+.message.bot {
+  align-self: flex-start;
+}
+
+.message:not(.bot) {
+  align-self: flex-end;
+}
+
+.message-content {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.message.bot .message-content {
+  background: linear-gradient(135deg, $gradient-start, $gradient-end);
+  color: white;
+}
+
+.timestamp {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-top: 4px;
+  display: block;
+}
+
+.input-container {
+  padding: 16px;
+  display: flex;
+  gap: 8px; /* Space between the input and button */
+  border-top: 1px solid #e5e7eb;
+  justify-content: flex-start; /* Keep both elements aligned to the left */
+  align-items: center; /* Vertically center the input and button */
+}
+
+input {
+  flex: 1; /* Ensure input takes up the available space */
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  border-color: #2563eb; /* Highlight input on focus */
+}
+
+button {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #3b82f6, #9333ea); /* Gradient colors */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button:hover:enabled {
+  background-color: #2563eb; /* Slight hover effect */
+  transform: scale(1.05); /* Slight scale up on hover */
+}
+
+@media (max-width: 600px) {
+  /* No change in flex direction, button and input stay side by side */
+  .input-container {
+    gap: 8px; /* Maintain space between input and button */
+  }
+
+  input {
+    font-size: 14px; /* Ensure font size remains consistent */
+  }
+
+  button {
+    font-size: 14px; /* Consistent font size for button */
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-window {
+    width: 100%;
+    height: 70vh;
+    bottom: 1rem;
+    right: 0;
+    left: 0;
+    border-radius: 0;
+  }
+}
+
+.w-4 {
+  width: 1rem;
+}
+
+.h-4 {
+  height: 1rem;
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+/* Hide the button on small screens (max-width: 600px) */
+@media (max-width: 600px) {
+  .action-btn.maximize {
+    display: none;
+  }
+}

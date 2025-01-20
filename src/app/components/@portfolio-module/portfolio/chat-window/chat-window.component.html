@@ -1,0 +1,73 @@
+<div class="chat-window" [class.minimized]="chatService.minimized$()" @widgetAnimation
+  [class.maximized]="chatService.maximized$()"
+>
+  <div class="chat-header">
+    <div class="header-left">
+      <div class="avatar">
+        <img src="assets/image/sanjuprofile.png" alt="Profile Avatar" />
+      </div>
+      <div class="header-info">
+        <span class="title">Portfolio Chat</span>
+        <div class="status-container">
+          <div class="online-dot"></div>
+          <span class="status">Online</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button
+        class="action-btn minimize"
+        (click)="minimize()"
+        title="Minimize">
+        <svg viewBox="0 0 24 24" class="w-4 h-4">
+          <path d="M20 12H4" stroke="black" stroke-width="2" fill="none"/>
+        </svg>
+      </button>
+      <button
+        class="action-btn maximize"
+        (click)="toggleMaximize()"
+        title="{{ isMaximized ? 'Restore' : 'Maximize' }}">
+        <svg viewBox="0 0 24 24" class="w-4 h-4">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+        </svg>
+      </button>
+      <button
+        class="action-btn close"
+        (click)="close()"
+        title="Close">
+        <svg viewBox="0 0 24 24" class="w-4 h-4">
+          <path d="M18 6L6 18M6 6l12 12" stroke="black" stroke-width="2" fill="none"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  @if (!chatService.minimized$()) {
+    <div class="messages-container" #scrollContainer>
+      @for (msg of chatService.messages$(); track msg.timestamp) {
+        <div class="message" [class.bot]="msg.isBot" @widgetAnimation>
+          <div class="message-content">
+            <p [class.typing]="msg.isTyping">
+              {{msg.isTyping ? 'typing . . .' : msg.text}}
+            </p>
+            <span class="timestamp">{{msg.timestamp | date:'shortTime'}}</span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="input-container">
+      <input
+        type="text"
+        [(ngModel)]="currentMessage"
+        (keyup.enter)="sendMessage()"
+        [placeholder]="'Type your message...'"
+        [disabled]="chatService.typing$()">
+      <button
+        (click)="sendMessage()"
+        [disabled]="!currentMessage.trim() || chatService.typing$()">
+        Send
+      </button>
+    </div>
+  }
+</div>

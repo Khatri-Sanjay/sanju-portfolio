@@ -1,0 +1,23 @@
+/* Main Content Wrapper Styling */
+.content-wrapper {
+  margin-top: 80px; /* Space below navbar */
+  padding: 20px; /* Padding around content */
+  min-height: calc(100vh - 80px); /* Ensure full height */
+  background-color: #f9f9f9; /* Subtle background color */
+  border-radius: 8px; /* Rounded corners for better aesthetics */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow for a modern look */
+  overflow: hidden; /* Prevent content overflow */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding: 15px; /* Reduce padding for smaller screens */
+    margin-top: 60px; /* Adjust for smaller navbars */
+  }
+}
+
+/* Smooth Transition for Routed Content */
+.content-wrapper * {
+  transition: all 0.3s ease-in-out;
+}
