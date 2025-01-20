@@ -8,7 +8,7 @@ import {
 import {UserService} from '../../../shared-service/@api-services/user.service';
 import {MatDialog} from '@angular/material/dialog';
 import {AddEditUserComponent} from './add-edit-user/add-edit-user.component';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -110,7 +110,7 @@ export class UserComponent implements OnInit{
     enableRowSelection: true,
     enableExport: true,
     pageSize: 10,
-    pageSizeOptions: [1, 2, 5, 10, 25, 50],
+    pageSizeOptions: [5, 10, 25, 50],
     theme: 'default',
     selectionType: 'multi',
     exportFormats: ['excel', 'pdf', 'csv'],
@@ -160,7 +160,8 @@ export class UserComponent implements OnInit{
 
   constructor(
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -176,7 +177,7 @@ export class UserComponent implements OnInit{
   onActionClick(event: { action: string, item: any }) {
     console.log('Action clicked:', event);
     if (event && event.action === 'Add') {
-      this.router.navigate(['admin/base/add-user'])
+      this.router.navigate(['add-user'], { relativeTo: this.route });
       // this.dialog.open(AddEditUserComponent, {
       //   width: '80%',            // Custom width
       //   height: '80%',           // Custom height

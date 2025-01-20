@@ -1,9 +1,34 @@
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li *ngFor="let breadcrumb of breadcrumbs; let last = last"
-        [ngClass]="{'breadcrumb-item': true, 'active': last}">
-      <a *ngIf="!last" [routerLink]="breadcrumb.url" class="breadcrumb-link">{{ breadcrumb.label }}</a>
-      <span *ngIf="last" class="breadcrumb-text">{{ breadcrumb.label }}</span>
-    </li>
-  </ol>
-</nav>
+<div class="breadcrumb-wrapper">
+  <nav class="breadcrumb-container" aria-label="Breadcrumb navigation">
+    <ol class="breadcrumb-list">
+<!--      <li class="breadcrumb-item home-item">-->
+<!--        <a [routerLink]="['/']" class="home-link">-->
+<!--          <i class="bi bi-house-door home-icon"></i>-->
+<!--          <span class="home-text">Home</span>-->
+<!--        </a>-->
+<!--      </li>-->
+
+      @for (breadcrumb of breadcrumbs; track breadcrumb.url) {
+        <li class="breadcrumb-item" @fadeSlide>
+          <div class="separator">
+            <svg class="chevron-icon" viewBox="0 0 24 24">
+              <path d="M9 18l6-6-6-6"></path>
+            </svg>
+          </div>
+          <a
+            [routerLink]="[breadcrumb.url]"
+            [queryParams]="breadcrumb.params"
+            class="breadcrumb-link"
+            [class.active]="isLast(breadcrumb)"
+          >
+            @if (breadcrumb.icon) {
+              <i [class]="breadcrumb.icon + ' breadcrumb-icon'"
+                 [title]="breadcrumb.label"></i>
+            }
+            <span class="breadcrumb-text">{{ breadcrumb.label }}</span>
+          </a>
+        </li>
+      }
+    </ol>
+  </nav>
+</div>

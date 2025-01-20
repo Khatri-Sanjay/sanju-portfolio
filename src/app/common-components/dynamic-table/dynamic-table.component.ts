@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {
   DatePipe,
   NgClass,
@@ -139,7 +139,7 @@ interface ExtendedColumnConfig extends ColumnConfig {
   standalone: true,
   styleUrl: './dynamic-table.component.scss'
 })
-export class DynamicTableComponent implements OnInit {
+export class DynamicTableComponent implements OnInit, OnChanges {
   @Input() columns: ColumnConfig[] = [];
   @Input() data: any[] = [];
   @Input() config: TableConfig = defaultConfig;
@@ -184,6 +184,16 @@ export class DynamicTableComponent implements OnInit {
     this.initializeTable();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data']) {
+      this.processData();
+    }
+    if (changes['config']) {
+      this.processData();
+    }
+    // Add other inputs as needed
+  }
+
   // Initialization
   private initializeTable() {
     this.pageSize = this.config.pageSize || defaultConfig.pageSize || 10;
@@ -203,7 +213,13 @@ export class DynamicTableComponent implements OnInit {
 
   // Data Processing Methods
   private processData() {
+    if (!Array.isArray(this.data)) {
+      console.error('Data is not an array:', this.data);
+      this.data = []; // Default to an empty array to avoid further issues
+    }
+
     let processedData = [...this.data];
+    console.log('Processed Data:', processedData);
 
     // Apply filters
     if (this.config.enableFilter) {

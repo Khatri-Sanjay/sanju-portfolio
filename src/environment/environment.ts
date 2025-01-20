@@ -3,5 +3,6 @@ export const environment = {
   LOCAL_STORAGE_NAME: 'Sanjay Khatri',
   PRODUCT_NAME: 'Sanju Portfolio',
   PRODUCT_SLOGAN: 'Be Yourself',
-  baseApiUrl: 'https://personal-website-209f0-default-rtdb.firebaseio.com/'
+  baseApiUrl: 'https://personal-website-209f0-default-rtdb.firebaseio.com/',
+  API_KEY: 'AIzaSyDIFu1bx0zeKoQluUS0cSkjRQvqflS51W8',
 };

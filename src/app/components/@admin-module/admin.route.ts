@@ -4,6 +4,7 @@ import {DashboardComponent} from './dashboard/dashboard.component';
 import {BlogsComponent} from './blogs/blogs.component';
 import {UserComponent} from './user/user.component';
 import {AddEditUserComponent} from './user/add-edit-user/add-edit-user.component';
+import {AddEditBlogsComponent} from './blogs/add-edit-blogs/add-edit-blogs.component';
 
 export const AdminRoute: Routes = [
   {
@@ -17,11 +18,6 @@ export const AdminRoute: Routes = [
         data: { title: 'Dashboard', breadcrumb: 'Dashboard' }
       },
       {
-        path: 'blogs',
-        component: BlogsComponent,
-        data: { title: 'Blog', breadcrumb: 'Blog' }
-      },
-      {
         path: 'users',
         component: UserComponent,
         data: { title: 'User List', breadcrumb: 'User' }
@@ -29,8 +25,19 @@ export const AdminRoute: Routes = [
       {
         path: 'add-user',
         component: AddEditUserComponent,
-        data: { title: 'add', breadcrumb: 'Add User' }
-      }
+        data: { title: 'Add User', breadcrumb: 'Add User' }
+      },
+      {
+        path: 'blogs',
+        component: BlogsComponent,
+        data: { title: 'Blog', breadcrumb: 'Blog' }
+      },
+      {
+        path: 'add-blog',
+        component: AddEditBlogsComponent,
+        data: { title: 'Add Blog', breadcrumb: 'Add Blog' }
+      },
+
     ]
   },
 

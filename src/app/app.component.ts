@@ -4,10 +4,11 @@ import {animate, query, style, transition, trigger} from '@angular/animations';
 import {Title} from '@angular/platform-browser';
 import {filter} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {SpinnerComponent} from './common-components/spinner/spinner.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, SpinnerComponent],
   templateUrl: './app.component.html',
   standalone: true,
   styleUrl: './app.component.scss',

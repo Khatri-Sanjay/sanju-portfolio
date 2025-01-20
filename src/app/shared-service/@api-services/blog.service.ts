@@ -1,7 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import {inject, Injectable} from '@angular/core';
+import {catchError, Observable, of, Subject, tap, throwError} from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import {Author, BlogComment, BlogPost} from '../../@core/interface/blog-post';
+import {HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders, HttpParams} from '@angular/common/http';
+import {environment} from '../../../environment/environment';
+import {ToastrService} from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -150,124 +153,6 @@ In this article, we'll explore current AI applications in web development and lo
     return of(post).pipe(delay(300));
   }
 
-  // Get recent posts
-  getRecentPosts(count: number = 5): Observable<BlogPost[]> {
-    return of(
-      [...this.posts]
-        .sort((a, b) => b.publishDate.getTime() - a.publishDate.getTime())
-        .slice(0, count)
-    ).pipe(delay(300));
-  }
-
-  // Get posts by category
-  getPostsByCategory(category: string): Observable<BlogPost[]> {
-    return of(
-      this.posts.filter(post =>
-        post.category.toLowerCase() === category.toLowerCase()
-      )
-    ).pipe(delay(300));
-  }
-
-  // Get posts by author
-  getPostsByAuthor(authorId: string): Observable<BlogPost[]> {
-    return of(
-      this.posts.filter(post => post.author.authorId === authorId)
-    ).pipe(delay(300));
-  }
-
-  // Search posts
-  searchPosts(query: string): Observable<BlogPost[]> {
-    const searchTerm = query.toLowerCase();
-    return of(
-      this.posts.filter(post =>
-        post.title.toLowerCase().includes(searchTerm) ||
-        post.content.toLowerCase().includes(searchTerm) ||
-        post.tags.some(tag => tag.toLowerCase().includes(searchTerm))
-      )
-    ).pipe(delay(500));
-  }
-
-  // Get all categories with post count
-  getCategories(): Observable<{ category: string; count: number }[]> {
-    const categories = this.posts.reduce((acc, post) => {
-      const category = post.category;
-      acc[category] = (acc[category] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-
-    return of(
-      Object.entries(categories).map(([category, count]) => ({
-        category,
-        count
-      }))
-    );
-  }
-
-  // Add a new comment to a post
-  addComment(postId: string, comment: Omit<BlogComment, 'commentId' | 'date' | 'likes'>): Observable<BlogComment> {
-    const post = this.posts.find(p => p.postId === postId);
-    if (!post) {
-      return throwError(() => new Error('Post not found'));
-    }
-
-    const newComment: BlogComment = {
-      ...comment,
-      commentId: `com${Date.now()}`,
-      date: new Date(),
-      likes: 0
-    };
-
-    post.comments.push(newComment);
-    return of(newComment).pipe(delay(300));
-  }
-
-  // Like/Unlike a post
-  togglePostLike(postId: string): Observable<{ likes: number }> {
-    const post = this.posts.find(p => p.postId === postId);
-    if (!post) {
-      return throwError(() => new Error('Post not found'));
-    }
-
-    post.likes += 1; // In a real app, you'd toggle between like/unlike
-    return of({ likes: post.likes }).pipe(delay(300));
-  }
-
-  // Get all authors
-  getAuthors(): Observable<Author[]> {
-    return of(this.authors).pipe(delay(300));
-  }
-
-  // Get popular posts (by likes)
-  getPopularPosts(count: number = 5): Observable<BlogPost[]> {
-    return of(
-      [...this.posts]
-        .sort((a, b) => b.likes - a.likes)
-        .slice(0, count)
-    ).pipe(delay(300));
-  }
-
-  // Get related posts (posts with similar tags)
-  getRelatedPosts(postId: string, count: number = 3): Observable<BlogPost[]> {
-    const currentPost = this.posts.find(p => p.postId === postId);
-    if (!currentPost) {
-      return throwError(() => new Error('Post not found'));
-    }
-
-    return of(
-      this.posts
-        .filter(post => post.postId !== postId)
-        .map(post => ({
-          post,
-          commonTags: post.tags.filter(tag =>
-            currentPost.tags.includes(tag)
-          ).length
-        }))
-        .sort((a, b) => b.commonTags - a.commonTags)
-        .map(({ post }) => post)
-        .slice(0, count)
-    ).pipe(delay(300));
-  }
-
   getBlogs(): Observable<any[]> {
     const blogs = [
       { id: 1, title: 'Angular Basics', author: 'John Doe', date: '2025-01-10' },
@@ -276,5 +161,149 @@ In this article, we'll explore current AI applications in web development and lo
       { id: 4, title: 'Building Reusable Components', author: 'Emily Davis', date: '2025-01-16' },
     ];
     return of(blogs); // Simulates an API response as an observable
+  }
+
+  static API = environment.baseApiUrl;  // Assuming your API URL is set in environment
+
+  protected getApi() {
+    return BlogService.API;
+  }
+
+  http: HttpClient = inject(HttpClient);
+  toastrService: ToastrService = inject(ToastrService);
+  errorSubject = new Subject<HttpErrorResponse>();
+
+  // Create Blog
+  CreateBlog(blog: BlogPost): Observable<any> {
+    const headers = new HttpHeaders({ 'my-header': 'hello-world' });
+
+    return this.http
+      .post<{ name: string }>(this.getApi() + '/blogs.json', blog, { headers })
+      .pipe(
+        catchError((err) => {
+          // Log the error and propagate it for the component to handle
+          return throwError(() => new Error(err.message)); // Propagate error for component handling
+        })
+      );
+  }
+
+  // Delete Blog
+  DeleteBlog(id: string | undefined) {
+    this.http
+      .delete(this.getApi() + '/blogs/' + id + '.json')
+      .pipe(
+        catchError((err) => {
+          // Write the logic to log errors
+          const errorObj = {
+            statusCode: err.status,
+            errorMessage: err.message,
+            datetime: new Date(),
+          };
+          this.toastrService.error(errorObj.errorMessage);
+          return throwError(() => err);
+        })
+      )
+      .subscribe({
+        error: (err) => {
+          this.errorSubject.next(err);
+        },
+      });
+  }
+
+  // Delete All Blogs
+  DeleteAllBlogs() {
+    this.http
+      .delete(this.getApi() + '/blogs.json', { observe: 'events', responseType: 'json' })
+      .pipe(
+        tap((event) => {
+          console.log(event);
+          if (event.type === HttpEventType.Sent) {
+          }
+        }),
+        catchError((err) => {
+          // Write the logic to log errors
+          const errorObj = {
+            statusCode: err.status,
+            errorMessage: err.message,
+            datetime: new Date(),
+          };
+          this.toastrService.error(errorObj.errorMessage);
+          return throwError(() => err);
+        })
+      )
+      .subscribe({
+        error: (err) => {
+          this.errorSubject.next(err);
+        },
+      });
+  }
+
+  // Get All Blogs
+  GetAllBlogs(): Observable<BlogPost[]> {
+    let headers = new HttpHeaders();
+    headers = headers.append('content-type', 'application/json');
+    headers = headers.append('content-type', 'text/html'); // Note: Duplicate header keys are unnecessary, use one.
+
+    let queryParams = new HttpParams();
+    queryParams = queryParams.set('page', 2);
+    queryParams = queryParams.set('item', 10);
+
+    return this.http
+      .get<{ [key: string]: BlogPost }>(this.getApi() + '/blogs.json', {
+        headers: headers,
+        params: queryParams,
+        observe: 'body',
+      })
+      .pipe(
+        map((response) => {
+          // Transform the response into an array of BlogPost objects
+          const blogs: BlogPost[] = [];
+          for (let key in response) {
+            if (response.hasOwnProperty(key)) {
+              blogs.push({ ...response[key], postId: key });
+            }
+          }
+          return blogs;
+        }),
+        catchError((err) => {
+          // Pass the error to the component
+          return throwError(() => new Error(err.message));
+        })
+      );
+  }
+
+  // Update Blog
+  UpdateBlog(id: string | undefined, data: BlogPost) {
+    this.http
+      .put(this.getApi() + '/blogs/' + id + '.json', data)
+      .pipe(
+        catchError((err) => {
+          // Write the logic to log errors
+          const errorObj = {
+            statusCode: err.status,
+            errorMessage: err.message,
+            datetime: new Date(),
+          };
+          this.toastrService.error(errorObj.errorMessage);
+          return throwError(() => err);
+        })
+      )
+      .subscribe({
+        error: (err) => {
+          this.errorSubject.next(err);
+        },
+      });
+  }
+
+  // Get Blog Details
+  GetBlogDetails(id: string | undefined) {
+    return this.http.get(this.getApi() + '/blogs/' + id + '.json').pipe(
+      map((response) => {
+        console.log(response);
+        let blog = {};
+        blog = { ...response, id: id };
+        return blog;
+      })
+    );
   }
 }

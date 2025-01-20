@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {NgForOf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import {MatDialogActions, MatDialogContent, MatDialogTitle} from '@angular/material/dialog';
 import {MatButton} from '@angular/material/button';
 
@@ -12,7 +12,8 @@ import {MatButton} from '@angular/material/button';
     MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
-    MatButton
+    MatButton,
+    NgIf
   ],
   templateUrl: './add-edit-user.component.html',
   standalone: true,
@@ -27,6 +28,7 @@ export class AddEditUserComponent {
   ) {
     this.userForm = this.fb.group({
       firstName: ['', Validators.required],
+      middleName: [''],
       lastName: [''],
       role: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],

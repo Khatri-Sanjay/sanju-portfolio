@@ -1,0 +1,23 @@
+@if (text() && text().length <= wordLimit()) {
+  <span>{{ text() }}</span>
+}
+
+@if (text() && text().length > wordLimit() && !showMore) {
+  <span>
+    {{ text().substring(0, wordLimit()) }}
+    ...
+    <span (click)="showMore = true" style="color: darkgray; cursor: pointer;">
+      show more
+    </span>
+  </span>
+}
+
+@if (text() && text().length > wordLimit() && showMore) {
+  <span>
+  {{ text() }}
+    <br>
+  <span (click)="showMore = false" style="color: darkgray; cursor: pointer;">
+    show less
+  </span>
+</span>
+}

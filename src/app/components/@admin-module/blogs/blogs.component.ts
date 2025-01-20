@@ -9,6 +9,7 @@ import {
 } from '../../../common-components/dynamic-table/dynamic-table.component';
 import {BlogService} from '../../../shared-service/@api-services/blog.service';
 import {BreadcrumbsComponent} from '../../../common-components/breadcrumbs/breadcrumbs.component';
+import {ToastrService} from 'ngx-toastr';
 
 interface User {
   id: number;
@@ -40,11 +41,18 @@ export class BlogsComponent implements OnInit{
 
   columns: ColumnConfig[] = [
     {
+      key: 'sn',
+      label: 'S.N',
+      type: 'sn',
+      width: '80px'
+    },
+    {
       key: 'id',
       label: 'ID',
       type: 'number',
       sortable: true,
-      width: '80px'
+      width: '80px',
+      hidden: true
     },
     {
       key: 'title',
@@ -64,7 +72,7 @@ export class BlogsComponent implements OnInit{
       filterType: 'text',
     },
     {
-      key: 'date',
+      key: 'publishDate',
       label: 'Created at',
       type: 'date',
       sortable: true,
@@ -77,6 +85,7 @@ export class BlogsComponent implements OnInit{
     showHeader: true,
     showFooter: false,
     enableSearch: true,
+    enableAdd: true,
     enableSort: true,
     enableFilter: true,
     enablePagination: true,
@@ -87,7 +96,10 @@ export class BlogsComponent implements OnInit{
     theme: 'default',
     selectionType: 'multi',
     exportFormats: ['excel', 'pdf', 'csv'],
-    rowClass: (item) => item.status === 'inactive' ? 'bg-light' : ''
+    rowClass: (item) => item.status === 'inactive' ? 'bg-light' : '',
+    showFirstLast: true,
+    showPageJump: true,
+    showPageInfo: true
   };
 
   actionButtons: ActionButton[] = [
@@ -112,9 +124,32 @@ export class BlogsComponent implements OnInit{
     }
   ];
 
+  toastrService: ToastrService = inject(ToastrService);
+
   ngOnInit(): void {
-    this.blogDataService.getBlogs().subscribe((fetchedData) => {
-      this.data = fetchedData;
+    // this.blogDataService.getBlogs().subscribe((fetchedData) => {
+    //   this.data = fetchedData;
+    // });
+    this.fetchBlogs();
+  }
+
+  async fetchBlogs(): Promise<void> {
+    this.blogDataService.GetAllBlogs().subscribe({
+      next: (blogs) => {
+        if (Array.isArray(blogs)) {
+          this.data = blogs;
+          console.log('Fetched blogs:', blogs);
+        } else {
+          console.error('Invalid data format:', blogs);
+          this.toastrService.error('Fetched blogs are in an invalid format.');
+          this.data = [];
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching blogs:', err);
+        this.toastrService.error('Failed to fetch blogs: ' + err.message);
+        this.data = []; // Reset data in case of an error
+      },
     });
   }
 

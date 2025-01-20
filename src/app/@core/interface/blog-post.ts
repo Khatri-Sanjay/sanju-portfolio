@@ -1,16 +1,16 @@
 export interface BlogPost {
   postId: string;  // Changed from 'id' to be more specific
   title: string;
-  excerpt: string;
   content: string;
-  author: Author;
-  category: string;
-  tags: string[];
-  imageUrl: string;
-  readTime: number;
   publishDate: Date;
-  likes: number;
-  comments: BlogComment[];  // Renamed from Comment to BlogComment to avoid conflicts
+  tags: string[];
+  category: string;
+  excerpt?: string;
+  author?: Author;
+  imageUrl: string;
+  readTime?: number;
+  likes?: number;
+  comments?: BlogComment[];  // Renamed from Comment to BlogComment to avoid conflicts
 }
 
 export interface Author {

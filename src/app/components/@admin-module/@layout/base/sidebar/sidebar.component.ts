@@ -90,52 +90,45 @@ export class SidebarComponent implements OnInit, OnDestroy {
           }
         },
         {
-          id: 'blogs',
-          label: 'Blogs',
-          icon: 'bi-graph-up',
-          path: 'blogs'
-        },
-        {
           id: 'users',
           label: 'Users',
-          icon: 'bi-graph-up',
-          path: 'users'
-        }
-      ]
-    },
-    {
-      title: 'Management',
-      items: [
-        {
-          id: 'projects',
-          label: 'Projects',
-          icon: 'bi-briefcase-fill',
+          icon: 'bi bi-person-lines-fill',
           path: '',
           children: [
             {
-              id: 'all-projects',
-              label: 'All Projects',
-              icon: 'bi-circle',
-              path: '/projects/all'
+              id: 'users-list',
+              label: 'User List',
+              icon: 'bi bi-person-lines-fill',
+              path: 'users',
             },
             {
-              id: 'new-project',
-              label: 'New Project',
-              icon: 'bi-circle',
-              path: '/projects/new'
+              id: 'add-user',
+              label: 'Add User',
+              icon: 'bi bi-person-plus',
+              path: 'add-user'
             }
           ]
         },
         {
-          id: 'tasks',
-          label: 'Tasks',
-          icon: 'bi-list-check',
-          path: '/tasks',
-          badge: {
-            text: '5',
-            variant: 'danger'
-          }
-        }
+          id: 'blogs',
+          label: 'Blogs',
+          icon: 'bi bi-newspaper',
+          path: '',
+          children: [
+            {
+              id: 'blog-list',
+              label: 'Blog List',
+              icon: 'bi bi-file-earmark-text',
+              path: 'blogs',
+            },
+            {
+              id: 'add-blog',
+              label: 'Add Blog',
+              icon: 'bi bi-pencil-square',
+              path: 'add-blog'
+            }
+          ]
+        },
       ]
     },
     {

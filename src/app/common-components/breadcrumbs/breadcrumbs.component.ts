@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router, RouterLink} from '@angular/router';
 import {filter} from 'rxjs';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {Breadcrumb, BreadcrumbService} from './breadcrumb.service';
+import {animate, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-breadcrumbs',
@@ -13,40 +15,28 @@ import {NgClass, NgForOf, NgIf} from '@angular/common';
   ],
   templateUrl: './breadcrumbs.component.html',
   standalone: true,
-  styleUrl: './breadcrumbs.component.scss'
+  styleUrl: './breadcrumbs.component.scss',
+  animations: [
+    trigger('fadeSlide', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateX(-10px)' }),
+        animate('200ms ease-out', style({ opacity: 1, transform: 'translateX(0)' }))
+      ])
+    ])
+  ]
 })
 export class BreadcrumbsComponent implements OnInit{
-  breadcrumbs: Array<{ label: string, url: string }> = [];
+  breadcrumbs: Breadcrumb[] = [];
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
+  constructor(private breadcrumbService: BreadcrumbService) {}
 
-  ngOnInit(): void {
-    this.router.events
-      .pipe(
-        filter(event => event instanceof NavigationEnd)
-      )
-      .subscribe(() => {
-        this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root);
-      });
+  ngOnInit() {
+    this.breadcrumbService.breadcrumbs$.subscribe(
+      breadcrumbs => this.breadcrumbs = breadcrumbs
+    );
   }
 
-  createBreadcrumbs(route: ActivatedRoute, url: string = '', breadcrumbs: Array<{ label: string, url: string }> = []): Array<{ label: string, url: string }> {
-    const children: ActivatedRoute[] = route.children;
-
-    if (children.length === 0) {
-      return breadcrumbs;
-    }
-
-    for (const child of children) {
-      const routeURL: string = child.snapshot.url.map(segment => segment.path).join('/');
-      const nextUrl = `${url}/${routeURL}`;
-      if (child.snapshot.data['breadcrumb'] && nextUrl) {
-        breadcrumbs.push({ label: child.snapshot.data['breadcrumb'] || routeURL, url: nextUrl });
-      }
-
-      return this.createBreadcrumbs(child, nextUrl, breadcrumbs);
-    }
-
-    return breadcrumbs;
+  isLast(breadcrumb: Breadcrumb): boolean {
+    return this.breadcrumbs.indexOf(breadcrumb) === this.breadcrumbs.length - 1;
   }
 }

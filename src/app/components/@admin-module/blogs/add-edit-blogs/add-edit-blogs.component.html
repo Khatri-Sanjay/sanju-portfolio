@@ -1,0 +1,86 @@
+<div class="container-fluid">
+  <!-- Main Form Section -->
+  <div class="form-container">
+    <h2 class="text-center mb-4">Add New Blog</h2>
+
+    <form [formGroup]="blogForm" (ngSubmit)="onSubmit()" class="form-wrapper">
+
+      <!-- Blog Title and Category -->
+      <div class="mb-3">
+        <h5>Blog Details</h5>
+        <div class="row">
+          <!-- Title Field -->
+          <div class="col-12 col-md-6 mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input
+              type="text"
+              id="title"
+              class="form-control form-control-sm"
+              formControlName="title"
+              placeholder="Enter blog title"
+            />
+            <div *ngIf="blogForm.get('title')?.invalid && blogForm.get('title')?.touched" class="error-text">
+              Title is required.
+            </div>
+          </div>
+
+          <!-- Category Field -->
+          <div class="col-12 col-md-6 mb-3">
+            <label for="category" class="form-label">Category</label>
+            <input
+              type="text"
+              id="category"
+              class="form-control form-control-sm"
+              formControlName="category"
+              placeholder="Enter blog category"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Description Field -->
+      <div class="mb-3">
+        <h5>Description</h5>
+        <div class="mb-3">
+          <textarea
+            id="description"
+            class="form-control form-control-sm"
+            formControlName="description"
+            rows="4"
+            placeholder="Enter blog description"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Tags Field -->
+      <div class="mb-3">
+        <h5>Tags</h5>
+        <div class="mb-3">
+          <input
+            type="text"
+            id="tags"
+            class="form-control form-control-sm"
+            formControlName="tags"
+            placeholder="Enter tags separated by commas"
+          />
+        </div>
+      </div>
+
+      <!-- Blog Image Upload -->
+      <div class="mb-3">
+        <h5>Blog Image</h5>
+        <div class="mb-3">
+          <input
+            type="file"
+            id="image"
+            formControlName="image"
+            class="form-control form-control-sm"
+          />
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-primary w-100" [disabled]="blogForm.invalid">Submit</button>
+    </form>
+  </div>
+</div>
