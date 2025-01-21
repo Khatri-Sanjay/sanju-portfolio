@@ -223,7 +223,7 @@
                   {{ formatNumber(item[col.key], col) }}
                 }
                 @case ('date') {
-                  {{ formatDate(item[col.key], col) | date }}
+                  {{ convertToStandardDateTime(item[col.key]) | date}}
                 }
                 @case ('badge') {
                   <span class="badge" [ngClass]="getBadgeClass(item[col.key])">

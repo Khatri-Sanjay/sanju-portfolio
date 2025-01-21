@@ -10,6 +10,8 @@ import {
 import {BlogService} from '../../../shared-service/@api-services/blog.service';
 import {BreadcrumbsComponent} from '../../../common-components/breadcrumbs/breadcrumbs.component';
 import {ToastrService} from 'ngx-toastr';
+import {SpinnerService} from '../../../common-components/spinner/service/spinner.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 interface User {
   id: number;
@@ -64,15 +66,12 @@ export class BlogsComponent implements OnInit{
       cellClass: 'font-bold'
     },
     {
-      key: 'author',
-      label: 'Author',
-      type: 'text',
-      sortable: true,
-      filterable: true,
-      filterType: 'text',
+      key: 'image',
+      label: 'Image',
+      type: 'image'
     },
     {
-      key: 'publishDate',
+      key: 'createdAt',
       label: 'Created at',
       type: 'date',
       sortable: true,
@@ -125,31 +124,33 @@ export class BlogsComponent implements OnInit{
   ];
 
   toastrService: ToastrService = inject(ToastrService);
+  spinnerService: SpinnerService = inject(SpinnerService);
+  router: Router = inject(Router);
+  route: ActivatedRoute = inject(ActivatedRoute);
 
   ngOnInit(): void {
-    // this.blogDataService.getBlogs().subscribe((fetchedData) => {
-    //   this.data = fetchedData;
-    // });
     this.fetchBlogs();
   }
 
   async fetchBlogs(): Promise<void> {
-    this.blogDataService.GetAllBlogs().subscribe({
+    this.spinnerService.show();
+
+    this.blogDataService.getAllBlogs().subscribe({
       next: (blogs) => {
         if (Array.isArray(blogs)) {
           this.data = blogs;
-          console.log('Fetched blogs:', blogs);
         } else {
-          console.error('Invalid data format:', blogs);
           this.toastrService.error('Fetched blogs are in an invalid format.');
           this.data = [];
         }
+        this.spinnerService.hide();
       },
       error: (err) => {
         console.error('Error fetching blogs:', err);
         this.toastrService.error('Failed to fetch blogs: ' + err.message);
-        this.data = []; // Reset data in case of an error
-      },
+        this.data = [];
+        this.spinnerService.hide();
+      }
     });
   }
 
@@ -158,7 +159,10 @@ export class BlogsComponent implements OnInit{
   }
 
   onActionClick(event: { action: string, item: any }) {
-    console.log('Action clicked:', event);
+    if (event && event.action === 'Add') {
+      this.router.navigate(['admin/base/add-blog']);
+    }
+
   }
 
   onFilterChange(filters: any) {

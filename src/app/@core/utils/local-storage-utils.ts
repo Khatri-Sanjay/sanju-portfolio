@@ -1,6 +1,7 @@
 import { CryptoJsUtil } from './crypto-js-util';
 import { ObjectUtil } from './object-util';
 import {environment} from '../../../environment/environment';
+import {User} from '../interface/user';
 
 export class LocalStorageUtil {
   /**
@@ -77,4 +78,5 @@ export class LocalStorage {
   data: any;
   chatMessages: any;
   terminal_theme: any;
+  userData: any;
 }

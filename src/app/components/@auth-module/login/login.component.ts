@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
 import {NgStyle} from '@angular/common';
 import {environment} from '../../../../environment/environment';
 import CryptoJS from 'crypto-js';
+import {LocalStorageUtil} from '../../../@core/utils/local-storage-utils';
 
 @Component({
   selector: 'app-login',
@@ -61,6 +62,19 @@ export class LoginComponent {
         const decryptedPassword = this.decrypt(this.encryptedPassword);
 
         if (email === decryptedUsername && password === decryptedPassword) {
+          const storage = LocalStorageUtil.getStorage();
+          storage.userData = {
+            id: 'adminId',
+            name: 'Sanjay Khatri',
+            email: 'admin@admin.com',
+            phone: '9861494803',
+            role: 'admin',
+            createdAt: new Date('2025-01-21'),
+            updatedAt:  new Date('2025-01-21'),
+            isActive: true
+          };
+          LocalStorageUtil.setStorage(storage);
+
           this.router.navigate(['admin/base/dashboard']); // Navigate to dashboard
         } else {
         }

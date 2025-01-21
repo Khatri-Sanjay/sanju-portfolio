@@ -29,6 +29,8 @@ export class AddEditBlogsComponent {
   toastrService: ToastrService = inject(ToastrService);
   router: Router = inject(Router);
 
+  imageUrl: string | undefined;
+
   constructor(private fb: FormBuilder) {
     this.blogForm = this.fb.group({
       title: ['', Validators.required],
@@ -50,32 +52,50 @@ export class AddEditBlogsComponent {
   // Handle form submission
   onSubmit(): void {
     if (this.blogForm.invalid) {
+      // Mark all fields as touched to trigger validation messages
+      Object.keys(this.blogForm.controls).forEach(key => {
+        const control = this.blogForm.get(key);
+        control?.markAsTouched();
+      });
       return;
     }
+
     this.spinnerService.show();
 
     const formValues = this.blogForm.value;
 
-    // Map form data to the BlogPost interface
+    // Clean and prepare the blog data
     const blogData: BlogPost = {
       postId: this.generatePostId(),
-      title: formValues.title,
-      content: formValues.description,
-      category: formValues.category,
-      tags: formValues.tags.split(',').map((tag: string) => tag.trim()),
-      imageUrl: formValues.image,
-      publishDate: new Date(),
+      title: formValues.title?.trim() || '',
+      content: formValues.description?.trim() || '',
+      category: formValues.category?.trim(),
+      tags: formValues.tags ? formValues.tags.split(',')
+        .map((tag: string) => tag.trim())
+        .filter((tag: string) => tag.length > 0) : [],
+      imageUrl: this.imageUrl || formValues.image,
+      createdAt: new Date(),
+      updatedAt: new Date()
     };
 
-    this.blogService.CreateBlog(blogData).subscribe({
-      next: (response) => {
-        this.toastrService.success('Blog created successfully with ID:' + response?.name, 'Success');
+    // Additional validation
+    if (!blogData.title || !blogData.content) {
+      this.toastrService.error('Title and content are required');
+      this.spinnerService.hide();
+      return;
+    }
+
+    this.blogService.createBlog(blogData).subscribe({
+      next: (docId) => {
+        this.toastrService.success('Blog created successfully');
         this.spinnerService.hide();
         this.blogForm.reset();
-        this.router.navigate(['admin/base/blogs']);
+        this.blogForm.markAsPristine();
+        this.blogForm.markAsUntouched();
+        this.router.navigate(['/blogs'])
       },
       error: (err) => {
-        this.toastrService.error('Failed to create blog: ' + err.message);
+        this.toastrService.error(`Failed to create blog: ${err.message}`);
         this.spinnerService.hide();
       }
     });

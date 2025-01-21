@@ -1,10 +1,27 @@
 import {inject, Injectable} from '@angular/core';
-import {catchError, Observable, of, Subject, tap, throwError} from 'rxjs';
+import {catchError, Observable, of, Subject, tap, from, throwError} from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import {Author, BlogComment, BlogPost} from '../../@core/interface/blog-post';
 import {HttpClient, HttpErrorResponse, HttpEventType, HttpHeaders, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environment/environment';
 import {ToastrService} from 'ngx-toastr';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  doc,
+  docData,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  orderBy,
+  limit,
+  startAfter,
+  DocumentReference,
+  QueryConstraint
+} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -83,7 +100,8 @@ The article includes practical examples and real-world use cases to help you und
       tags: ['Angular', 'Web Development', 'JavaScript', 'TypeScript'],
       imageUrl: 'https://picsum.photos/seed/angular/800/400',
       readTime: 8,
-      publishDate: new Date('2024-01-10'),
+      createdAt: new Date('2024-01-10'),
+      updatedAt: new Date('2024-01-10'),
       likes: 156,
       comments: [this.comments[0], this.comments[1]]
     },
@@ -101,7 +119,8 @@ The guide includes practical examples and common layout patterns you can use in 
       tags: ['CSS', 'Web Design', 'Frontend'],
       imageUrl: 'https://picsum.photos/seed/css/800/400',
       readTime: 10,
-      publishDate: new Date('2024-01-12'),
+      createdAt: new Date('2024-01-12'),
+      updatedAt: new Date('2024-01-12'),
       likes: 234,
       comments: [this.comments[2]]
     },
@@ -117,7 +136,8 @@ In this article, we'll explore current AI applications in web development and lo
       tags: ['AI', 'Future Tech', 'Innovation'],
       imageUrl: 'https://picsum.photos/seed/ai/800/400',
       readTime: 12,
-      publishDate: new Date('2024-01-15'),
+      updatedAt: new Date('2024-01-15'),
+      createdAt: new Date('2024-01-15'),
       likes: 312,
       comments: [this.comments[3]]
     }
@@ -306,4 +326,179 @@ In this article, we'll explore current AI applications in web development and lo
       })
     );
   }
+
+  private readonly COLLECTION_NAME = 'blogs';
+
+  constructor(private firestore: Firestore) {}
+
+  // Create a new blog post
+  createBlog(blog: BlogPost): Observable<string> {
+    try {
+      const collectionRef = collection(this.firestore, this.COLLECTION_NAME);
+      const docRef = doc(collectionRef);
+      const blogWithDates = {
+        ...blog,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        likes: 0,
+        comments: []
+      };
+
+      return from(setDoc(docRef, blogWithDates)).pipe(
+        map(() => docRef.id),
+        catchError(error => {
+          console.error('Error creating blog:', error);
+          return throwError(() => new Error(`Failed to create blog: ${error.message}`));
+        })
+      );
+    } catch (error: any) {
+      return throwError(() => new Error(`Failed to create blog: ${error.message}`));
+    }
+  }
+
+  // Get all blog posts with pagination
+  getAllBlogs(page: number = 1, itemsPerPage: number = 10): Observable<BlogPost[]> {
+    try {
+      const collectionRef = collection(this.firestore, this.COLLECTION_NAME);
+      const queryConstraints: QueryConstraint[] = [
+        orderBy('createdAt', 'desc'),
+        limit(itemsPerPage)
+      ];
+
+      // If not first page, add startAfter constraint
+      if (page > 1) {
+        // Note: You'll need to implement proper pagination using the last document
+        // from the previous page as the starting point
+        queryConstraints.push(startAfter((page - 1) * itemsPerPage));
+      }
+
+      const queryRef = query(collectionRef, ...queryConstraints);
+
+      return collectionData(queryRef, { idField: 'postId' }).pipe(
+        map(blogs => blogs as BlogPost[]),
+        catchError(error => {
+          console.error('Error fetching blogs:', error);
+          return throwError(() => new Error(`Failed to fetch blogs: ${error.message}`));
+        })
+      );
+    } catch (error: any) {
+      return throwError(() => new Error(`Failed to fetch blogs: ${error.message}`));
+    }
+  }
+
+  // Get a single blog post by ID
+  getBlogById(postId: string): Observable<BlogPost> {
+    try {
+      const docRef = doc(this.firestore, `${this.COLLECTION_NAME}/${postId}`);
+      return docData(docRef, { idField: 'postId' }).pipe(
+        map(blog => blog as BlogPost),
+        catchError(error => {
+          console.error('Error fetching blog:', error);
+          return throwError(() => new Error(`Failed to fetch blog: ${error.message}`));
+        })
+      );
+    } catch (error: any) {
+      return throwError(() => new Error(`Failed to fetch blog: ${error.message}`));
+    }
+  }
+
+  // Update a blog post
+  updateBlog(postId: string, updates: Partial<BlogPost>): Observable<void> {
+    try {
+      const docRef = doc(this.firestore, `${this.COLLECTION_NAME}/${postId}`);
+      const updatedBlog = {
+        ...updates,
+        updatedAt: new Date()
+      };
+
+      return from(updateDoc(docRef, updatedBlog)).pipe(
+        catchError(error => {
+          console.error('Error updating blog:', error);
+          return throwError(() => new Error(`Failed to update blog: ${error.message}`));
+        })
+      );
+    } catch (error: any) {
+      return throwError(() => new Error(`Failed to update blog: ${error.message}`));
+    }
+  }
+
+  // Delete a blog post
+  deleteBlog(postId: string): Observable<void> {
+    try {
+      const docRef = doc(this.firestore, `${this.COLLECTION_NAME}/${postId}`);
+      return from(deleteDoc(docRef)).pipe(
+        catchError(error => {
+          console.error('Error deleting blog:', error);
+          return throwError(() => new Error(`Failed to delete blog: ${error.message}`));
+        })
+      );
+    } catch (error: any) {
+      return throwError(() => new Error(`Failed to delete blog: ${error.message}`));
+    }
+  }
+
+  // Search blogs by tag
+  searchBlogsByTag(tag: string): Observable<BlogPost[]> {
+    try {
+      const collectionRef = collection(this.firestore, this.COLLECTION_NAME);
+      const queryRef = query(collectionRef,
+        where('tags', 'array-contains', tag),
+        orderBy('createdAt', 'desc')
+      );
+
+      return collectionData(queryRef, { idField: 'postId' }).pipe(
+        map(blogs => blogs as BlogPost[]),
+        catchError(error => {
+          console.error('Error searching blogs:', error);
+          return throwError(() => new Error(`Failed to search blogs: ${error.message}`));
+        })
+      );
+    } catch (error: any) {
+      return throwError(() => new Error(`Failed to search blogs: ${error.message}`));
+    }
+  }
+
+  // Add a comment to a blog post
+  // addComment(postId: string, comment: Comment): Observable<void> {
+  //   try {
+  //     const docRef = doc(this.firestore, `${this.COLLECTION_NAME}/${postId}`);
+  //     return from(this.getBlogById(postId)).pipe(
+  //       map(blog => {
+  //         const comments = blog.comments || [];
+  //         const newComment = {
+  //           ...comment,
+  //           id: Math.random().toString(36).substr(2, 9),
+  //           createdAt: new Date()
+  //         };
+  //         comments.push(newComment);
+  //         return updateDoc(docRef, { comments });
+  //       }),
+  //       catchError(error => {
+  //         console.error('Error adding comment:', error);
+  //         return throwError(() => new Error(`Failed to add comment: ${error.message}`));
+  //       })
+  //     );
+  //   } catch (error: any) {
+  //     return throwError(() => new Error(`Failed to add comment: ${error.message}`));
+  //   }
+  // }
+  //
+  // // Like/Unlike a blog post
+  // toggleLike(postId: string): Observable<void> {
+  //   try {
+  //     const docRef = doc(this.firestore, `${this.COLLECTION_NAME}/${postId}`);
+  //     return from(this.getBlogById(postId)).pipe(
+  //       map(blog => {
+  //         const currentLikes = blog.likes || 0;
+  //         return updateDoc(docRef, { likes: currentLikes + 1 });
+  //       }),
+  //       catchError(error => {
+  //         console.error('Error toggling like:', error);
+  //         return throwError(() => new Error(`Failed to toggle like: ${error.message}`));
+  //       })
+  //     );
+  //   } catch (error: any) {
+  //     return throwError(() => new Error(`Failed to toggle like: ${error.message}`));
+  //   }
+  // }
 }

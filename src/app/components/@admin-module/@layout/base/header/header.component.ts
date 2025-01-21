@@ -3,6 +3,7 @@ import {SidebarService} from '../sidebar/sidebar.service';
 import {Router, RouterLink} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {isPlatformBrowser} from '@angular/common';
+import {LocalStorageUtil} from '../../../../../@core/utils/local-storage-utils';
 
 @Component({
   selector: 'app-header',
@@ -27,9 +28,9 @@ export class HeaderComponent implements OnInit{
 
   // Component state
   isExpanded = true;
-  userFullName = 'Sanjay Khatri';
-  userEmail = 'sanjay@example.com';
-  roleTitle = 'Super Admin';
+  userFullName = LocalStorageUtil.getStorage()?.userData?.name;
+  userEmail = LocalStorageUtil.getStorage()?.userData?.email;
+  roleTitle = LocalStorageUtil.getStorage()?.userData?.role;
   showDropdown = false;
   showNotifications = false;
   isSearchFocused = false;
@@ -144,6 +145,7 @@ export class HeaderComponent implements OnInit{
   }
 
   logout() {
+    LocalStorageUtil.clearStorage();
     this.router.navigate(['/login']);
     this.showDropdown = false;
   }

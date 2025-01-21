@@ -2,7 +2,8 @@ export interface BlogPost {
   postId: string;  // Changed from 'id' to be more specific
   title: string;
   content: string;
-  publishDate: Date;
+  createdAt: Date;
+  updatedAt: Date;
   tags: string[];
   category: string;
   excerpt?: string;

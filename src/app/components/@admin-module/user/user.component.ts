@@ -6,9 +6,8 @@ import {
   TableConfig
 } from '../../../common-components/dynamic-table/dynamic-table.component';
 import {UserService} from '../../../shared-service/@api-services/user.service';
-import {MatDialog} from '@angular/material/dialog';
-import {AddEditUserComponent} from './add-edit-user/add-edit-user.component';
 import {ActivatedRoute, Router} from '@angular/router';
+import {User} from '../../../@core/interface/user';
 
 @Component({
   selector: 'app-user',
@@ -22,11 +21,6 @@ import {ActivatedRoute, Router} from '@angular/router';
   styleUrl: './user.component.scss'
 })
 export class UserComponent implements OnInit{
-
-  userDataService: UserService = inject(UserService);
-
-  data: any;
-
 
   columns: ColumnConfig[] = [
     {
@@ -53,49 +47,42 @@ export class UserComponent implements OnInit{
       cellClass: 'font-bold'
     },
     {
-      key: 'status',
-      label: 'Status',
-      type: 'badge',
-      sortable: true,
-      filterable: true,
-      filterType: 'select',
-      filterOptions: [
-        { label: 'Active', value: 'active' },
-        { label: 'Inactive', value: 'inactive' },
-        { label: 'Pending', value: 'pending' }
-      ]
+      key: 'email',
+      label: 'Email',
+      type: 'text',
+      cellClass: 'font-bold'
     },
     {
-      key: 'progress',
-      label: 'Progress',
-      type: 'progress',
+      key: 'phone',
+      label: 'Phone',
+      type: 'text',
+      cellClass: 'font-bold'
+    },
+    {
+      key: 'role',
+      label: 'Role',
+      type: 'text',
       sortable: true,
-      footer: {
-        type: 'average',
-        formatter: (values: any[]) => `${(values.reduce((a, b) => a + b, 0) / values.length).toFixed(1)}%`
-      },
       filterable: true,
       filterType: 'text',
       cellClass: 'font-bold'
     },
     {
-      key: 'date',
-      label: 'Registration Date',
-      type: 'date',
-      sortable: true,
-      filterable: true,
-      filterType: 'dateRange',
-      formatter: (value: string | number | Date) => new Date(value).toLocaleDateString()
+      key: 'isActive',
+      label: 'Status',
+      type: 'boolean',
     },
     {
-      key: 'revenue',
-      label: 'Revenue',
-      type: 'currency',
+      key: 'createdAt',
+      label: 'Created Date',
+      type: 'date',
       sortable: true,
-      footer: {
-        type: 'sum',
-        formatter: (values) => `$${values.reduce((a, b) => a + b, 0).toLocaleString()}`
-      }
+    },
+    {
+      key: 'updatedAt',
+      label: 'Update Date',
+      type: 'date',
+      sortable: true,
     }
   ];
 
@@ -159,35 +146,24 @@ export class UserComponent implements OnInit{
 
 
   constructor(
-    private dialog: MatDialog,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private userService: UserService,
   ) {}
 
-  ngOnInit(): void {
-    this.userDataService.getData().subscribe((fetchedData) => {
-      this.data = fetchedData;
-    });
+  onActionClick(event: { action: string, item: any }) {
+    console.log('Action clicked:', event);
+    if (event && event.action.toLowerCase() === 'add') {
+      this.router.navigate(['admin/base/add-user']);
+    }
+    if (event && event.action.toLowerCase() === 'edit') {
+      const itemId = event.item.id;  // Assuming item contains an 'id' field
+      this.router.navigate([`admin/base/edit-user/${itemId}`]);
+    }
   }
 
   onRowClick(item: any) {
     console.log('Row clicked:', item);
-  }
-
-  onActionClick(event: { action: string, item: any }) {
-    console.log('Action clicked:', event);
-    if (event && event.action === 'Add') {
-      this.router.navigate(['add-user'], { relativeTo: this.route });
-      // this.dialog.open(AddEditUserComponent, {
-      //   width: '80%',            // Custom width
-      //   height: '80%',           // Custom height
-      //   panelClass: 'custom-dialog-class', // Apply custom styling class
-      //   backdropClass: 'custom-backdrop', // Custom backdrop class (optional)
-      //   disableClose: true        // Disable closing the dialog by clicking outside
-      // });
-
-    }
-
   }
 
   onFilterChange(filters: any) {
@@ -208,6 +184,39 @@ export class UserComponent implements OnInit{
 
   onRowSelect(selectedRows: any[]) {
     console.log('Selected rows:', selectedRows);
+  }
+
+  users: User[] = [];
+
+
+  async ngOnInit() {
+    this.loadUsers();
+  }
+
+  loadUsers() {
+    this.userService.getAllUsers().subscribe({
+      next: (users) => this.users = users,
+      error: (err) => console.error('Error loading users:', err),
+    });
+  }
+
+  navigateToCreate() {
+    this.router.navigate(['/users/create']);
+  }
+
+  editUser(id: string) {
+    this.router.navigate(['/users/edit', id]);
+  }
+
+  async deleteUser(id: string) {
+    if (confirm('Are you sure you want to delete this user?')) {
+      try {
+        await this.userService.deleteUser(id);
+        this.users = this.users.filter(user => user.id !== id);
+      } catch (error) {
+        console.error('Error deleting user:', error);
+      }
+    }
   }
 
 }

@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router, RouterLink} from '@angular/router';
-import {filter} from 'rxjs';
+import { RouterLink} from '@angular/router';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {Breadcrumb, BreadcrumbService} from './breadcrumb.service';
 import {animate, style, transition, trigger} from '@angular/animations';
