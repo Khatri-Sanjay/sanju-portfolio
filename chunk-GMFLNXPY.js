@@ -1,1 +1,0 @@
-import{$b as l,Hb as n,Ib as s,mb as t}from"./chunk-NC4VD6ZD.js";import"./chunk-TSRGIXR5.js";var p=class e{static \u0275fac=function(o){return new(o||e)};static \u0275cmp=t({type:e,selectors:[["app-tools"]],decls:2,vars:0,template:function(o,a){o&1&&(n(0,"p"),l(1,"tools works!"),s())},encapsulation:2})};export{p as ToolsComponent};
