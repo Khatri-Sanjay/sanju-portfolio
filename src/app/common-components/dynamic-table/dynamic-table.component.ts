@@ -14,6 +14,7 @@ import {FormsModule} from '@angular/forms';
 import {PaginationComponent} from '../pagination/pagination.component';
 import {TooltipDirective} from '../../@core/directives/tooltip.directive';
 import { Timestamp } from "firebase/firestore";
+import {ShowMoreLessComponent} from '../show-more-less/show-more-less.component';
 
 export interface ColumnConfig {
   key: string; // Field in the data source
@@ -32,6 +33,7 @@ export interface ColumnConfig {
   hidden?: boolean; // Hide column
   tooltipField?: string; // Tooltip content field
   editable?: boolean; // Editable cell
+  isTextFixedLength?: boolean
   validation?: {
     required?: boolean;
     pattern?: string;
@@ -134,7 +136,8 @@ interface ExtendedColumnConfig extends ColumnConfig {
     TitleCasePipe,
     DatePipe,
     PaginationComponent,
-    TooltipDirective
+    TooltipDirective,
+    ShowMoreLessComponent
   ],
   templateUrl: './dynamic-table.component.html',
   standalone: true,

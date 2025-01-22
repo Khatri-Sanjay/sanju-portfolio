@@ -68,7 +68,14 @@ export class BlogsComponent implements OnInit{
     {
       key: 'image',
       label: 'Image',
-      type: 'image'
+      type: 'image',
+    },
+    {
+      key: 'description',
+      label: 'Content',
+      type: 'text',
+      isTextFixedLength: true,
+      width: '22rem'
     },
     {
       key: 'createdAt',
@@ -159,10 +166,28 @@ export class BlogsComponent implements OnInit{
   }
 
   onActionClick(event: { action: string, item: any }) {
-    if (event && event.action === 'Add') {
+    console.log('Action clicked:', event);
+    if (event && event.action.toLowerCase() === 'add') {
       this.router.navigate(['admin/base/add-blog']);
     }
-
+    if (event && event.action.toLowerCase() === 'edit') {
+      const itemId = event.item.postId;  // Assuming item contains an 'id' field
+      this.router.navigate([`admin/base/edit-blog/${itemId}`]);
+    }
+    if (event && event.action.toLowerCase() === 'delete') {
+      const itemId = event.item.postId;  // Assuming item contains an 'id' field
+      this.blogDataService.deleteBlog(itemId).subscribe({
+        next: (res) => {
+          this.toastrService.success('Delete Blog Successfully.');
+          this.spinnerService.hide();
+        },
+        error: (err) => {
+          console.error('Error while deleting blogs:', err);
+          this.toastrService.error('Error while deleting blogs: ' + err.message);
+          this.spinnerService.hide();
+        }
+      });
+    }
   }
 
   onFilterChange(filters: any) {

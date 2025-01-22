@@ -90,7 +90,7 @@ export class BlogService {
       postId: 'post1',
       title: 'Getting Started with Angular 19: A Complete Guide',
       excerpt: 'Learn about the latest features and improvements in Angular 19. This comprehensive guide covers everything you need to know.',
-      content: `Angular 19 brings exciting new features and improvements to the popular framework. In this comprehensive guide, we'll explore the major updates and how to leverage them in your applications.
+      description: `Angular 19 brings exciting new features and improvements to the popular framework. In this comprehensive guide, we'll explore the major updates and how to leverage them in your applications.
 
 First, we'll look at the new control flow syntax that replaces NgIf and NgFor. Then, we'll dive into performance improvements and the new defer loading feature. We'll also cover best practices for migration from older versions.
 
@@ -109,7 +109,7 @@ The article includes practical examples and real-world use cases to help you und
       postId: 'post2',
       title: 'Mastering CSS Grid: Advanced Layout Techniques',
       excerpt: 'Discover advanced CSS Grid techniques that will transform your web layouts. From responsive designs to complex grid patterns.',
-      content: `CSS Grid has revolutionized web layout design, offering powerful capabilities for creating complex layouts with ease. In this in-depth guide, we'll explore advanced techniques that will take your CSS Grid skills to the next level.
+      description: `CSS Grid has revolutionized web layout design, offering powerful capabilities for creating complex layouts with ease. In this in-depth guide, we'll explore advanced techniques that will take your CSS Grid skills to the next level.
 
 We'll cover topics like grid template areas, auto-fit and auto-fill, and combining Grid with Flexbox. You'll learn how to create responsive layouts without media queries and handle complex grid patterns effectively.
 
@@ -128,7 +128,7 @@ The guide includes practical examples and common layout patterns you can use in 
       postId: 'post3',
       title: 'The Future of AI in Web Development',
       excerpt: 'Explore how artificial intelligence is shaping the future of web development and what it means for developers.',
-      content: `Artificial Intelligence is rapidly transforming the web development landscape. From AI-powered code completion to automated testing and deployment, the impact of AI on web development is profound and far-reaching.
+      description: `Artificial Intelligence is rapidly transforming the web development landscape. From AI-powered code completion to automated testing and deployment, the impact of AI on web development is profound and far-reaching.
 
 In this article, we'll explore current AI applications in web development and look at emerging trends that will shape the future. We'll discuss tools like GitHub Copilot, AI-driven design systems, and automated optimization techniques.`,
       author: this.authors[2],

@@ -217,7 +217,14 @@
                 }
                 <!-- Text -->
                 @case ('text') {
-                  {{ formatValue(item[col.key], col) }}
+                  @if (col.isTextFixedLength) {
+                    <app-show-more-less
+                      [text]="item[col.key]"
+                      [wordLimit]="10"
+                    ></app-show-more-less>
+                  } @else {
+                    {{ formatValue(item[col.key], col) }}
+                  }
                 }
                 @case ('number') {
                   {{ formatNumber(item[col.key], col) }}

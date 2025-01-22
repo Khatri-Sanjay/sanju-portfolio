@@ -28,7 +28,11 @@ export class BreadcrumbService {
     'base': 'bi bi-grid',
     'dashboard': 'bi bi-speedometer2',
     'blogs': 'bi bi-pencil-square',
-    'users': 'bi bi-people'
+    'users': 'bi bi-people',
+    'add-user': 'bi bi-pencil-square',
+    'edit-user': 'bi bi-pencil-square',
+    'add-blog': 'bi bi-pencil-square',
+    'edit-blog': 'bi bi-pencil-square',
   };
 
   constructor(

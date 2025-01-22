@@ -113,13 +113,13 @@ export class UserComponent implements OnInit{
       icon: 'bi bi-pencil',
       class: 'btn btn-sm btn-outline-primary',
       action: 'edit',
-      visible: (item) => item.status !== 'inactive'
     },
     {
       label: 'Delete',
       icon: 'bi bi-trash',
       class: 'btn btn-sm btn-outline-danger',
-      action: 'delete'
+      action: 'delete',
+      visible: (item) => item.role !== 'admin'
     },
     {
       label: 'View',

@@ -1,10 +1,9 @@
 <div class="container-fluid">
   <!-- Main Form Section -->
   <div class="form-container">
-    <h2 class="text-center mb-4">Add New Blog</h2>
+    <h2 class="text-center mb-4">{{ editMode ? 'Edit Blog' : 'Add New Blog' }}</h2>
 
     <form [formGroup]="blogForm" (ngSubmit)="onSubmit()" class="form-wrapper">
-
       <!-- Blog Title and Category -->
       <div class="mb-3">
         <h5>Blog Details</h5>
@@ -73,14 +72,26 @@
           <input
             type="file"
             id="image"
-            formControlName="image"
             class="form-control form-control-sm"
+            accept="image/*"
           />
+
+          <!-- Image Preview -->
+          <div *ngIf="imagePreviewUrl" class="mt-2">
+            <img
+              [src]="imagePreviewUrl"
+              class="img-preview"
+              alt="Preview"
+              style="max-width: 200px; max-height: 200px; object-fit: contain;"
+            />
+          </div>
         </div>
       </div>
 
       <!-- Submit Button -->
-      <button type="submit" class="btn btn-primary w-100" [disabled]="blogForm.invalid">Submit</button>
+      <button type="submit" class="btn btn-primary w-100" [disabled]="blogForm.invalid">
+        {{ editMode ? 'Update Blog' : 'Submit' }}
+      </button>
     </form>
   </div>
 </div>
