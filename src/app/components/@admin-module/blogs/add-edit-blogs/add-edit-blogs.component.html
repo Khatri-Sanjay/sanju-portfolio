@@ -37,9 +37,25 @@
         </div>
       </div>
 
+      <div class="mb-3">
+        <h5>Image URL</h5>
+        <div class="mb-3">
+          <input
+            type="text"
+            id="imageURl"
+            class="form-control form-control-sm"
+            formControlName="imageUrl"
+            placeholder="Enter blog image URL"
+          />
+          <div *ngIf="blogForm.get('imageUrl')?.invalid && blogForm.get('imageUrl')?.touched" class="error-text">
+            ImageURl is required.
+          </div>
+        </div>
+      </div>
+
       <!-- Description Field -->
       <div class="mb-3">
-        <h5>Description</h5>
+        <h5>Short Description</h5>
         <div class="mb-3">
           <textarea
             id="description"
@@ -65,30 +81,43 @@
         </div>
       </div>
 
-      <!-- Blog Image Upload -->
       <div class="mb-3">
-        <h5>Blog Image</h5>
-        <div class="mb-3">
-          <input
-            type="file"
-            id="image"
-            class="form-control form-control-sm"
-            accept="image/*"
-          />
-
-          <!-- Image Preview -->
-          <div *ngIf="imagePreviewUrl" class="mt-2">
-            <img
-              [src]="imagePreviewUrl"
-              class="img-preview"
-              alt="Preview"
-              style="max-width: 200px; max-height: 200px; object-fit: contain;"
-            />
-          </div>
-        </div>
+        <h5>Detailed Description</h5>
+        <quill-editor formControlName="detailDescription" [modules]="quillConfig" theme="snow" style="height: 400px;"></quill-editor>
       </div>
 
-      <!-- Submit Button -->
+      <div class="mb-3">
+        <h5>Comments</h5>
+        <div formArrayName="comments">
+          <div *ngFor="let comment of comments.controls; let i = index" [formGroupName]="i" class="mb-3 p-3 border rounded">
+            <div class="row">
+              <div class="col-10">
+                <!-- Author Name -->
+                <div formGroupName="author">
+                  <input type="text" class="form-control" placeholder="Author Name" formControlName="name" />
+                </div>
+                <!-- Comment Content -->
+                <textarea class="form-control mt-2" placeholder="Comment" formControlName="content"></textarea>
+                <!-- Likes Section -->
+                <div class="d-flex align-items-center mt-2">
+                  <span class="me-2">❤️</span>
+                  <span class="me-2">{{ comment.get('likes')?.value || 0 }} Likes</span>
+                  <button type="button" class="btn btn-sm btn-outline-primary" (click)="increaseLikes(i)">
+                    👍 Like
+                  </button>
+                </div>
+              </div>
+              <div class="col-2 d-flex align-items-center">
+                <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeComment(i)">Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-secondary mt-2" (click)="addComment()">Add Comment</button>
+      </div>
+
+
+
       <button type="submit" class="btn btn-primary w-100" [disabled]="blogForm.invalid">
         {{ editMode ? 'Update Blog' : 'Submit' }}
       </button>

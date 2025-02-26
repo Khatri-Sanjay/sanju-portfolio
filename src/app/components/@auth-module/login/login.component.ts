@@ -1,10 +1,11 @@
-import {Component} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
 import {NgStyle} from '@angular/common';
 import {environment} from '../../../../environment/environment';
 import CryptoJS from 'crypto-js';
 import {LocalStorageUtil} from '../../../@core/utils/local-storage-utils';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -23,6 +24,8 @@ export class LoginComponent {
   showPassword = false;
 
   private secretKey = environment.LOCAL_STORAGE_KEY;
+
+  toastrService: ToastrService = inject(ToastrService);
 
   private encryptedUsername = CryptoJS.AES.encrypt('admin@admin.com', this.secretKey).toString();
   private encryptedPassword = CryptoJS.AES.encrypt('admin1234', this.secretKey).toString();
@@ -77,6 +80,7 @@ export class LoginComponent {
 
           this.router.navigate(['admin/base/dashboard']); // Navigate to dashboard
         } else {
+          this.toastrService.error('Username or Password is wrong', 'Error');
         }
       } catch (error) {
         console.error('Login error:', error);

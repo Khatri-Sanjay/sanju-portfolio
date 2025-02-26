@@ -6,8 +6,7 @@ import {LocalStorageUtil} from '../../@core/utils/local-storage-utils';
 })
 export class AuthService {
   isAuthenticated(): boolean {
-    // Check if user has valid token in localStorage
     const userData = LocalStorageUtil.getStorage().userData;
-    return !!userData; // Return true if token exists
+    return !!userData;
   }
 }

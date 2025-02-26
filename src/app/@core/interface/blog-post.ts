@@ -2,6 +2,7 @@ export interface BlogPost {
   postId: string;  // Changed from 'id' to be more specific
   title: string;
   description: string;
+  detailDescription?: string;
   createdAt: Date;
   updatedAt: Date;
   tags: string[];
@@ -24,7 +25,7 @@ export interface Author {
 export interface BlogComment {  // Renamed from Comment to BlogComment
   commentId: string;  // Changed from 'id' to be more specific
   content: string;
-  author: Author;
+  author?: Author;
   date: Date;
   likes: number;
 }

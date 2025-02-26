@@ -66,9 +66,9 @@ export class BlogsComponent implements OnInit{
       cellClass: 'font-bold'
     },
     {
-      key: 'image',
-      label: 'Image',
-      type: 'image',
+      key: 'category',
+      label: 'Category',
+      type: 'text',
     },
     {
       key: 'description',
@@ -84,6 +84,12 @@ export class BlogsComponent implements OnInit{
       sortable: true,
       filterable: true,
       filterType: 'date',
+    },
+    {
+      key: 'likes',
+      label: 'Likes',
+      type: 'number',
+      sortable: true
     }
   ];
 

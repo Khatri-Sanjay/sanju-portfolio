@@ -6,7 +6,7 @@ import {
   Router,
   CanActivateChild
 } from '@angular/router';
-import {AuthService} from '../../shared-service/@api-services/auth.service';
+import { AuthService } from '../../shared-service/@api-services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,23 +21,30 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    return this.checkAuth();
+    return this.checkAuth(route);
   }
 
   canActivateChild(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    return this.canActivate(route, state);
+    return this.checkAuth(route);
   }
 
-  private checkAuth(): boolean {
+  private checkAuth(route: ActivatedRouteSnapshot): boolean {
     if (this.authService.isAuthenticated()) {
+      if (route.routeConfig?.path === 'login') {
+        this.router.navigate(['admin/base/dashboard']);
+        return false;
+      }
       return true;
     }
 
-    // Redirect to login page if not authenticated
-    this.router.navigate(['auth/login']);
-    return false;
+    if (route.routeConfig?.path !== 'login') {
+      this.router.navigate(['auth/login']);
+      return false;
+    }
+
+    return true;
   }
 }

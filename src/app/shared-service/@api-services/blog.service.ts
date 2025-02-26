@@ -143,44 +143,12 @@ In this article, we'll explore current AI applications in web development and lo
     }
   ];
 
-  // Get all blog posts with optional pagination
-  getPosts(page: number = 1, limit: number = 10): Observable<{
-    posts: BlogPost[];
-    total: number;
-    currentPage: number;
-    totalPages: number;
-  }> {
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + limit;
-    const paginatedPosts = this.posts.slice(startIndex, endIndex);
-    const total = this.posts.length;
-    const totalPages = Math.ceil(total / limit);
-
-    return of({
-      posts: paginatedPosts,
-      total,
-      currentPage: page,
-      totalPages
-    }).pipe(delay(500)); // Simulate network delay
-  }
-
-  // Get a single post by ID
   getPostById(postId: string): Observable<BlogPost> {
     const post = this.posts.find(p => p.postId === postId);
     if (!post) {
       return throwError(() => new Error('Post not found'));
     }
     return of(post).pipe(delay(300));
-  }
-
-  getBlogs(): Observable<any[]> {
-    const blogs = [
-      { id: 1, title: 'Angular Basics', author: 'John Doe', date: '2025-01-10' },
-      { id: 2, title: 'Getting Started with RxJS', author: 'Jane Smith', date: '2025-01-12' },
-      { id: 3, title: 'State Management with NgRx', author: 'Mike Johnson', date: '2025-01-15' },
-      { id: 4, title: 'Building Reusable Components', author: 'Emily Davis', date: '2025-01-16' },
-    ];
-    return of(blogs); // Simulates an API response as an observable
   }
 
   static API = environment.baseApiUrl;  // Assuming your API URL is set in environment
@@ -193,145 +161,10 @@ In this article, we'll explore current AI applications in web development and lo
   toastrService: ToastrService = inject(ToastrService);
   errorSubject = new Subject<HttpErrorResponse>();
 
-  // Create Blog
-  CreateBlog(blog: BlogPost): Observable<any> {
-    const headers = new HttpHeaders({ 'my-header': 'hello-world' });
-
-    return this.http
-      .post<{ name: string }>(this.getApi() + '/blogs.json', blog, { headers })
-      .pipe(
-        catchError((err) => {
-          // Log the error and propagate it for the component to handle
-          return throwError(() => new Error(err.message)); // Propagate error for component handling
-        })
-      );
-  }
-
-  // Delete Blog
-  DeleteBlog(id: string | undefined) {
-    this.http
-      .delete(this.getApi() + '/blogs/' + id + '.json')
-      .pipe(
-        catchError((err) => {
-          // Write the logic to log errors
-          const errorObj = {
-            statusCode: err.status,
-            errorMessage: err.message,
-            datetime: new Date(),
-          };
-          this.toastrService.error(errorObj.errorMessage);
-          return throwError(() => err);
-        })
-      )
-      .subscribe({
-        error: (err) => {
-          this.errorSubject.next(err);
-        },
-      });
-  }
-
-  // Delete All Blogs
-  DeleteAllBlogs() {
-    this.http
-      .delete(this.getApi() + '/blogs.json', { observe: 'events', responseType: 'json' })
-      .pipe(
-        tap((event) => {
-          console.log(event);
-          if (event.type === HttpEventType.Sent) {
-          }
-        }),
-        catchError((err) => {
-          // Write the logic to log errors
-          const errorObj = {
-            statusCode: err.status,
-            errorMessage: err.message,
-            datetime: new Date(),
-          };
-          this.toastrService.error(errorObj.errorMessage);
-          return throwError(() => err);
-        })
-      )
-      .subscribe({
-        error: (err) => {
-          this.errorSubject.next(err);
-        },
-      });
-  }
-
-  // Get All Blogs
-  GetAllBlogs(): Observable<BlogPost[]> {
-    let headers = new HttpHeaders();
-    headers = headers.append('content-type', 'application/json');
-    headers = headers.append('content-type', 'text/html'); // Note: Duplicate header keys are unnecessary, use one.
-
-    let queryParams = new HttpParams();
-    queryParams = queryParams.set('page', 2);
-    queryParams = queryParams.set('item', 10);
-
-    return this.http
-      .get<{ [key: string]: BlogPost }>(this.getApi() + '/blogs.json', {
-        headers: headers,
-        params: queryParams,
-        observe: 'body',
-      })
-      .pipe(
-        map((response) => {
-          // Transform the response into an array of BlogPost objects
-          const blogs: BlogPost[] = [];
-          for (let key in response) {
-            if (response.hasOwnProperty(key)) {
-              blogs.push({ ...response[key], postId: key });
-            }
-          }
-          return blogs;
-        }),
-        catchError((err) => {
-          // Pass the error to the component
-          return throwError(() => new Error(err.message));
-        })
-      );
-  }
-
-  // Update Blog
-  UpdateBlog(id: string | undefined, data: BlogPost) {
-    this.http
-      .put(this.getApi() + '/blogs/' + id + '.json', data)
-      .pipe(
-        catchError((err) => {
-          // Write the logic to log errors
-          const errorObj = {
-            statusCode: err.status,
-            errorMessage: err.message,
-            datetime: new Date(),
-          };
-          this.toastrService.error(errorObj.errorMessage);
-          return throwError(() => err);
-        })
-      )
-      .subscribe({
-        error: (err) => {
-          this.errorSubject.next(err);
-        },
-      });
-  }
-
-  // Get Blog Details
-  GetBlogDetails(id: string | undefined) {
-    return this.http.get(this.getApi() + '/blogs/' + id + '.json').pipe(
-      map((response) => {
-        console.log(response);
-        let blog = {};
-        blog = { ...response, id: id };
-        return blog;
-      })
-    );
-  }
-
   private readonly COLLECTION_NAME = 'blogs';
 
   constructor(private firestore: Firestore) {}
 
-  // Create a new blog post
   createBlog(blog: BlogPost): Observable<string> {
     try {
       const collectionRef = collection(this.firestore, this.COLLECTION_NAME);
@@ -340,7 +173,6 @@ In this article, we'll explore current AI applications in web development and lo
         ...blog,
         createdAt: new Date(),
         updatedAt: new Date(),
-        likes: 0,
         comments: []
       };
 
@@ -356,7 +188,6 @@ In this article, we'll explore current AI applications in web development and lo
     }
   }
 
-  // Get all blog posts with pagination
   getAllBlogs(page: number = 1, itemsPerPage: number = 10): Observable<BlogPost[]> {
     try {
       const collectionRef = collection(this.firestore, this.COLLECTION_NAME);
@@ -365,10 +196,7 @@ In this article, we'll explore current AI applications in web development and lo
         limit(itemsPerPage)
       ];
 
-      // If not first page, add startAfter constraint
       if (page > 1) {
-        // Note: You'll need to implement proper pagination using the last document
-        // from the previous page as the starting point
         queryConstraints.push(startAfter((page - 1) * itemsPerPage));
       }
 
@@ -386,7 +214,6 @@ In this article, we'll explore current AI applications in web development and lo
     }
   }
 
-  // Get a single blog post by ID
   getBlogById(postId: string): Observable<BlogPost> {
     try {
       const docRef = doc(this.firestore, `${this.COLLECTION_NAME}/${postId}`);

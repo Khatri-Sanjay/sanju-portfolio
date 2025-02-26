@@ -1,6 +1,122 @@
+$gradient-start: #0984e3;
+$gradient-end: #00b894;
+
 .transition-hover {
   transition: transform 0.2s ease-in-out;
 }
 .transition-hover:hover {
   transform: translateY(-5px);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $gradient-start, $gradient-end);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Ensures the image is contained within the circle */
+  border: 3px solid green; /* Green border around the avatar */
+  position: relative; /* To position the green dot inside the avatar */
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Heart Animation */
+.like-button {
+  position: relative;
+  color: #888;
+  transition: all 0.2s ease;
+}
+
+.like-button.liked {
+  color: #ed4956; /* Instagram red */
+}
+
+.like-button.liked i {
+  animation: heartBeat 0.5s ease-in-out;
+}
+
+@keyframes heartBeat {
+  0% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(1.3);
+  }
+  30% {
+    transform: scale(0.95);
+  }
+  45% {
+    transform: scale(1.2);
+  }
+  60% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Double-click Heart Animation */
+.image-container {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.floating-heart {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 80px;
+  opacity: 0;
+  color: white;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  animation: instagramHeart 1s ease-in-out forwards;
+  z-index: 10;
+}
+
+@keyframes instagramHeart {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  15% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  45% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  80% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+
+/* Post card highlight when liked */
+.post-card {
+  transition: all 0.3s ease;
+}
+
+.post-card.liked-post {
+  box-shadow: 0 0.5rem 1rem rgba(237, 73, 86, 0.1) !important;
 }

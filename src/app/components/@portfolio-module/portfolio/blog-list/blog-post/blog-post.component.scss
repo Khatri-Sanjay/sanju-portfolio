@@ -1,0 +1,22 @@
+$gradient-start: #0984e3;
+$gradient-end: #00b894;
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $gradient-start, $gradient-end);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Ensures the image is contained within the circle */
+  border: 3px solid green; /* Green border around the avatar */
+  position: relative; /* To position the green dot inside the avatar */
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}

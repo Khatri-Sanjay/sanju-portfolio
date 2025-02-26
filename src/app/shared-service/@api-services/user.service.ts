@@ -15,7 +15,6 @@ import {
 } from '@angular/fire/firestore';
 import {User} from '../../@core/interface/user';
 import {map, catchError, Observable, throwError, from} from 'rxjs';
-import {BlogPost} from '../../@core/interface/blog-post';
 
 @Injectable({
   providedIn: 'root',
@@ -66,7 +65,7 @@ export class UserService {
       const queryRef = query(collectionRef, ...queryConstraints);
 
       return collectionData(queryRef, {idField: 'id'}).pipe(
-        map(blogs => blogs as User[]),
+        map(user => user as User[]),
         catchError(error => {
           console.error('Error fetching users:', error);
           return throwError(() => new Error(`Failed to fetch users: ${error.message}`));
@@ -77,32 +76,32 @@ export class UserService {
     }
   }
 
-  // Get a single blog post by ID
-  getUserById(postId: string): Observable<User> {
+  // Get a single user by ID
+  getUserById(id: string): Observable<User> {
     try {
-      const docRef = doc(this.firestore, `${this.USER_COLLECTION_NAME}/${postId}`);
-      return docData(docRef, { idField: 'postId' }).pipe(
-        map(blog => blog as User),
+      const docRef = doc(this.firestore, `${this.USER_COLLECTION_NAME}/${id}`);
+      return docData(docRef, { idField: 'userId' }).pipe(
+        map(user => user as User),
         catchError(error => {
-          console.error('Error fetching blog:', error);
-          return throwError(() => new Error(`Failed to fetch blog: ${error.message}`));
+          console.error('Error fetching user:', error);
+          return throwError(() => new Error(`Failed to fetch user: ${error.message}`));
         })
       );
     } catch (error: any) {
-      return throwError(() => new Error(`Failed to fetch blog: ${error.message}`));
+      return throwError(() => new Error(`Failed to fetch user: ${error.message}`));
     }
   }
 
-  // Update a blog post
+  // Update a user post
   updateUser(id: string, updates: Partial<User>): Observable<void> {
     try {
       const docRef = doc(this.firestore, `${this.USER_COLLECTION_NAME}/${id}`);
-      const updatedBlog = {
+      const updatedUser = {
         ...updates,
         updatedAt: new Date()
       };
 
-      return from(updateDoc(docRef, updatedBlog)).pipe(
+      return from(updateDoc(docRef, updatedUser)).pipe(
         catchError(error => {
           console.error('Error updating user:', error);
           return throwError(() => new Error(`Failed to update user: ${error.message}`));
@@ -124,7 +123,7 @@ export class UserService {
         })
       );
     } catch (error: any) {
-      return throwError(() => new Error(`Failed to delete blog: ${error.message}`));
+      return throwError(() => new Error(`Failed to delete user: ${error.message}`));
     }
   }
 
