@@ -81,7 +81,7 @@
                     <div>
                       <h6 class="mb-0">{{comment?.author?.name}}</h6>
                       <small class="text-muted">
-                        {{comment.date | date:'mediumDate'}}
+                        {{comment.date | convertToStandardDateTime | date:'medium'}}
                       </small>
                     </div>
                   </div>
