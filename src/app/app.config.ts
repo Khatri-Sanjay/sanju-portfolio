@@ -13,6 +13,7 @@ import {getFirestore, provideFirestore} from '@angular/fire/firestore';
 import {getAuth, provideAuth} from '@angular/fire/auth';
 import {getStorage, provideStorage} from '@angular/fire/storage';
 import {environment} from '../environment/environment';
+import {QuillModule} from 'ngx-quill';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,5 +29,6 @@ export const appConfig: ApplicationConfig = {
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
     provideStorage(() => getStorage()),
+    QuillModule,
   ]
 };

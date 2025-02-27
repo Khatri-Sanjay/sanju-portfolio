@@ -48,6 +48,8 @@
     "ngx-print": "^2.0.0",
     "ngx-quill": "^27.0.1",
     "ngx-toastr": "^19.0.0",
+    "prismjs": "^1.29.0",
+    "quill": "^2.0.3",
     "quill-mention": "^6.0.2",
     "quill-table": "^1.0.0",
     "rxjs": "~7.8.0",

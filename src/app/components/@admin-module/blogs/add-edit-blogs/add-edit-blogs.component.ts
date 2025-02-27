@@ -1,13 +1,22 @@
-import {AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, Renderer2} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Inject,
+  inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  Renderer2
+} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import {isPlatformBrowser, NgClass, NgForOf, NgIf} from '@angular/common';
 import {ToastrService} from 'ngx-toastr';
 import {BlogService} from '../../../../shared-service/@api-services/blog.service';
 import {SpinnerService} from '../../../../common-components/spinner/service/spinner.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FileStorageService} from '../../../../shared-service/@api-services/file-storage.service';
-import {QuillEditorComponent, QuillModule} from 'ngx-quill';
-import {Author} from '../../../../@core/interface/blog-post';
+import {QuillModule} from 'ngx-quill';
 
 @Component({
   selector: 'app-add-edit-blogs',
@@ -108,7 +117,8 @@ export class AddEditBlogsComponent implements OnInit, OnDestroy, AfterViewInit{
 
   constructor(
     private fb: FormBuilder,
-    private renderer: Renderer2, private el: ElementRef
+    private renderer: Renderer2, private el: ElementRef,
+    @Inject(PLATFORM_ID) private platformId: object
   ) {
     this.blogForm = this.fb.group({
       title: ['', Validators.required],
@@ -130,6 +140,12 @@ export class AddEditBlogsComponent implements OnInit, OnDestroy, AfterViewInit{
         this.loadBlogData(this.blogId);
       }
     });
+
+    if (isPlatformBrowser(this.platformId)) {
+      import('quill').then((Quill) => {
+        (window as any).Quill = Quill;
+      });
+    }
   }
 
   loadBlogData(id: string): void {
