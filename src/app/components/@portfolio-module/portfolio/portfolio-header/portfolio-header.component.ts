@@ -21,8 +21,8 @@ export class PortfolioHeaderComponent {
     this.isScrolled = window.scrollY > 50;
   }
 
-  openInNewTab() {
-    const url = this.router.serializeUrl(this.router.createUrlTree(['/portfolio/terminal']));
+  openInNewTab(path: string) {
+    const url = this.router.serializeUrl(this.router.createUrlTree([path]));
     window.open(url, '_blank');
   }
 }

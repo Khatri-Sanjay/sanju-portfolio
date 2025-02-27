@@ -36,10 +36,10 @@
           <a class="nav-link" routerLink="contact" routerLinkActive="active" data-bs-toggle="collapse" data-bs-target="#navbarNav">Contact</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/tools" routerLinkActive="active" data-bs-toggle="collapse" data-bs-target="#navbarNav">Tools</a>
+          <a class="nav-link" (click)="openInNewTab('/tools')" routerLinkActive="active" data-bs-toggle="collapse" data-bs-target="#navbarNav">Tools</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" (click)="openInNewTab()" data-bs-toggle="collapse" data-bs-target="#navbarNav">Terminal</a>
+          <a class="nav-link" (click)="openInNewTab('/portfolio/terminal')" data-bs-toggle="collapse" data-bs-target="#navbarNav">Terminal</a>
         </li>
         <li class="nav-item ms-lg-3">
           <a class="nav-link resume-btn" routerLink="resume" routerLinkActive="active" data-bs-toggle="collapse" data-bs-target="#navbarNav">Resume</a>

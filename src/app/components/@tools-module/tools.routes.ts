@@ -13,7 +13,7 @@ export const ToolsRoutes: Routes = [
         (m) => m.ToolsComponent
       ),
     data: {
-      title: 'Dashboard',
+      title: 'Tools Dashboard',
       description: 'Welcome to Tools',
     },
   },

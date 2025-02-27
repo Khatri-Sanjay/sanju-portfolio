@@ -1,0 +1,71 @@
+.tools-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f7f7f7;
+  position: relative;
+  overflow: hidden;
+}
+
+.coming-soon-message {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  padding-right: 10px;
+  background: linear-gradient(90deg, #ff6347, #32cd32, #1e90ff, #ff1493);
+  background-size: 300% 300%; /* Smooth transition of gradient */
+  animation: typingEffect 4s steps(30) 1s forwards, moveGradient 8s ease infinite, subtleGlow 2s ease-in-out infinite alternate;
+  -webkit-background-clip: text;
+  color: transparent; /* Gradient fills the text */
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Soft glowing effect */
+}
+
+/* Typing effect animation */
+@keyframes typingEffect {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* Smooth moving gradient animation */
+@keyframes moveGradient {
+  0% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Subtle glow effect */
+@keyframes subtleGlow {
+  0% {
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6), 0 0 15px rgba(255, 255, 255, 0.3);
+  }
+  100% {
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Make it responsive */
+@media (max-width: 768px) {
+  .coming-soon-message {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .coming-soon-message {
+    font-size: 1.2rem;
+  }
+}
