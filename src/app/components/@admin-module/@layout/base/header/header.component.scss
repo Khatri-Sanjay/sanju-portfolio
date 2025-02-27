@@ -94,39 +94,133 @@
   background-color: #f8f9fa;
 }
 
+// Variables
+$mobile-breakpoint: 767px;
+$notification-width-desktop: 320px;
+$notification-border-radius: 8px;
+
+// Base styles
 .notifications-dropdown {
   position: absolute;
   top: 100%;
   right: 0;
-  width: 320px;
+  width: $notification-width-desktop;
   background: white;
-  border-radius: 8px;
+  border-radius: $notification-border-radius;
   margin-top: 10px;
   z-index: 1000;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
 .notifications-body {
   max-height: 360px;
   overflow-y: auto;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
 }
 
-.notification-item.unread {
-  background-color: #f8f9fa;
+.notification-item {
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+
+  &.unread {
+    background-color: #f8f9fa;
+  }
+}
+
+.notification-content {
+  flex: 1;
+  min-width: 0; // Prevent content from overflowing
+}
+
+.notification-message {
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .notification-icon {
-  width: 40px;
+  min-width: 40px;
   height: 40px;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .notification-icon.info { background-color: #cfe2ff; color: #0d6efd; }
 .notification-icon.success { background-color: #d1e7dd; color: #198754; }
 .notification-icon.warning { background-color: #fff3cd; color: #ffc107; }
 .notification-icon.danger { background-color: #f8d7da; color: #dc3545; }
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: #6c757d;
+}
+
+.smallest {
+  font-size: 0.75rem;
+}
+
+// Mobile responsive styles
+@media (max-width: $mobile-breakpoint) {
+  .mobile-notifications {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin-top: 0;
+    border-radius: 0;
+    z-index: 1050;
+    display: flex;
+    flex-direction: column;
+
+    .notifications-header {
+      padding: 1rem;
+    }
+
+    .notifications-body {
+      flex: 1;
+      max-height: none;
+    }
+
+    .notification-item {
+      padding: 1rem;
+    }
+  }
+}
+
+// Animation for mobile notifications
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@media (max-width: $mobile-breakpoint) {
+  .mobile-notifications {
+    animation: slideUp 0.3s ease-out;
+  }
+}
 
 .smallest {
   font-size: 0.75rem;

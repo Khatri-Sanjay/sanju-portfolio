@@ -4,6 +4,7 @@ import {Router, RouterLink} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {isPlatformBrowser} from '@angular/common';
 import {LocalStorageUtil} from '../../../../../@core/utils/local-storage-utils';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-header',
@@ -37,15 +38,23 @@ export class HeaderComponent implements OnInit{
   searchQuery = '';
   private isBrowser: boolean;
 
+  isMobile = signal<boolean>(false);
+
   constructor(
     private sidebarService: SidebarService,
-    @Inject(PLATFORM_ID) platformId: Object
+    @Inject(PLATFORM_ID) platformId: Object,
+    private breakpointObserver: BreakpointObserver
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
 
     this.sidebarService.isExpanded$.subscribe(
       (isExpanded) => this.isExpanded = isExpanded
     );
+
+    this.breakpointObserver.observe([Breakpoints.HandsetPortrait])
+      .subscribe(result => {
+        this.isMobile.set(result.matches);
+      });
 
     this.initializeNotifications();
   }
@@ -123,6 +132,7 @@ export class HeaderComponent implements OnInit{
       notifications.map(notification => ({ ...notification, read: true }))
     );
     this.unreadNotifications.set(0);
+    this.toggleNotifications();
   }
 
   handleImageError() {
