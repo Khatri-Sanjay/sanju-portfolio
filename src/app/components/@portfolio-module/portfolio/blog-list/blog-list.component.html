@@ -4,7 +4,7 @@
     <p class="lead text-muted w-lg-75 mx-auto">Discover insightful articles and stay updated with our latest content</p>
   </header>
 
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
     @for (post of posts; track post.postId) {
       <div class="col">
         <article class="card h-100 shadow-sm border-0 transition-hover post-card"
@@ -48,16 +48,23 @@
             </div>
 
             <h5 class="card-title fw-bold mb-3">{{post.title}}</h5>
-            <p class="card-text text-muted flex-grow-1">{{post.description}}</p>
+            <p class="card-text text-muted flex-grow-1 truncate-text">{{post.description}}</p>
 
             <div class="mt-3">
               <div class="d-flex flex-wrap gap-2 mb-3">
-                @for (tag of post.tags; track tag) {
+                @for (tag of post.tags.slice(0, 5); track tag) {
                   <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill">
-                    {{tag}}
+                    {{ tag }}
+                  </span>
+                }
+
+                @if (post.tags.length > 5) {
+                  <span class="badge bg-secondary px-3 py-2 rounded-pill">
+                    +{{ post.tags.length - 5 }} more
                   </span>
                 }
               </div>
+
 
               <div class="d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center gap-3">

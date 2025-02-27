@@ -9,6 +9,7 @@ import {UniqueValueGeneratorService} from '../../../../../shared-service/unique-
 import {ToastrService} from 'ngx-toastr';
 import {SpinnerService} from '../../../../../common-components/spinner/service/spinner.service';
 import {animate, keyframes, state, style, transition, trigger} from '@angular/animations';
+import {QuillViewComponent, QuillViewHTMLComponent} from 'ngx-quill';
 
 @Component({
   selector: 'app-blog-post',
@@ -16,7 +17,9 @@ import {animate, keyframes, state, style, transition, trigger} from '@angular/an
     DatePipe,
     ConvertToStandardDateTimePipe,
     ReactiveFormsModule,
-    NgIf
+    NgIf,
+    QuillViewComponent,
+    QuillViewHTMLComponent
   ],
   templateUrl: './blog-post.component.html',
   standalone: true,

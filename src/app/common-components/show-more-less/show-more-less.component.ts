@@ -1,4 +1,4 @@
-import {Component, input, InputSignal, signal} from '@angular/core';
+import {Component, computed, input, InputSignal, signal} from '@angular/core';
 
 @Component({
   selector: 'app-show-more-less',
@@ -8,19 +8,27 @@ import {Component, input, InputSignal, signal} from '@angular/core';
   styleUrl: './show-more-less.component.scss'
 })
 export class ShowMoreLessComponent {
+// Input signals
+  text = input.required<string>();
+  wordLimit = input.required<number>();
 
-  text: InputSignal<string> = input.required<string>();
-  wordLimit: InputSignal<number> = input.required<number>();
+  // State management
+  showMore = signal<boolean>(false);
 
-  showMore: boolean | false | undefined;
+  // Computed values
+  truncatedText = computed(() => {
+    if (!this.text() || this.text().length <= this.wordLimit()) {
+      return this.text();
+    }
+    return this.text().substring(0, this.wordLimit());
+  });
 
-  constructor() {
-  }
+  isTextTruncated = computed(() => {
+    return this.text().length > this.wordLimit();
+  });
 
-  ngOnInit(): void {
-  }
-
-  showMoreLess() {
-    this.showMore = true
+  // Toggle function
+  toggleShowMore(): void {
+    this.showMore.update(current => !current);
   }
 }

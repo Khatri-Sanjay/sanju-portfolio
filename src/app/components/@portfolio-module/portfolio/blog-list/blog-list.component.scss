@@ -120,3 +120,12 @@ $gradient-end: #00b894;
 .post-card.liked-post {
   box-shadow: 0 0.5rem 1rem rgba(237, 73, 86, 0.1) !important;
 }
+
+.truncate-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 5; /* Show only 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+

@@ -34,6 +34,7 @@ export interface ColumnConfig {
   tooltipField?: string; // Tooltip content field
   editable?: boolean; // Editable cell
   isTextFixedLength?: boolean
+  wordLimit?: number,
   validation?: {
     required?: boolean;
     pattern?: string;

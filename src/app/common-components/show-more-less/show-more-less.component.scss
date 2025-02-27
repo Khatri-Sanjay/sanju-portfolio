@@ -1,0 +1,48 @@
+.show-more-container {
+  display: block;
+  line-height: 1.6;
+
+  .text-content {
+    display: inline;
+    word-wrap: break-word;
+
+    &.expanded {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
+
+  .ellipsis {
+    margin-right: 4px;
+  }
+
+  .toggle-button {
+    display: inline-block;
+    background: none;
+    border: none;
+    color: #6c757d;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 2px 6px;
+    margin-left: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+
+    &:hover {
+      color: #495057;
+      background-color: rgba(108, 117, 125, 0.1);
+      text-decoration: underline;
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(108, 117, 125, 0.25);
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+}

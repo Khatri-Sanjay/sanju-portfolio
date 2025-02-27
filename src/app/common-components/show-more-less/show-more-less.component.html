@@ -1,23 +1,32 @@
-@if (text() && text().length <= wordLimit()) {
-  <span>{{ text() }}</span>
-}
+<div class="show-more-container">
+  @if (!isTextTruncated()) {
+    <span class="text-content">{{ text() }}</span>
+  }
 
-@if (text() && text().length > wordLimit() && !showMore) {
-  <span>
-    {{ text().substring(0, wordLimit()) }}
-    ...
-    <span (click)="showMore = true" style="color: darkgray; cursor: pointer;">
-      show more
+  @if (isTextTruncated() && !showMore()) {
+    <span class="text-content">
+      {{ truncatedText() }}
+      <span class="ellipsis">...</span>
+      <button
+        type="button"
+        class="toggle-button"
+        (click)="toggleShowMore()"
+        aria-expanded="false">
+        show more
+      </button>
     </span>
-  </span>
-}
+  }
 
-@if (text() && text().length > wordLimit() && showMore) {
-  <span>
-  {{ text() }}
-    <br>
-  <span (click)="showMore = false" style="color: darkgray; cursor: pointer;">
-    show less
-  </span>
-</span>
-}
+  @if (isTextTruncated() && showMore()) {
+    <span class="text-content expanded">
+      {{ text() }}
+      <button
+        type="button"
+        class="toggle-button"
+        (click)="toggleShowMore()"
+        aria-expanded="true">
+        show less
+      </button>
+    </span>
+  }
+</div>

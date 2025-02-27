@@ -46,7 +46,7 @@ export class BlogsComponent implements OnInit{
       key: 'sn',
       label: 'S.N',
       type: 'sn',
-      width: '80px'
+      width: '30px'
     },
     {
       key: 'id',
@@ -69,12 +69,14 @@ export class BlogsComponent implements OnInit{
       key: 'category',
       label: 'Category',
       type: 'text',
+      width: '100px',
     },
     {
       key: 'description',
       label: 'Content',
       type: 'text',
       isTextFixedLength: true,
+      wordLimit: 40,
       width: '22rem'
     },
     {
@@ -84,12 +86,14 @@ export class BlogsComponent implements OnInit{
       sortable: true,
       filterable: true,
       filterType: 'date',
+      width: '150px',
     },
     {
       key: 'likes',
       label: 'Likes',
       type: 'number',
-      sortable: true
+      sortable: true,
+      width: '80px',
     }
   ];
 

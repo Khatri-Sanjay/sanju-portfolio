@@ -20,13 +20,13 @@
       </header>
 
       <div class="row justify-content-center">
-        <div class="col-lg-8">
+        <div class="col-lg-12">
           <div class="content">
-            <p class="lead">{{post.description}}</p>
+            <p class="lead text-justify">{{post.description}}</p>
           </div>
 
           <div class="content">
-            <p class="lead" [innerHTML]="post.detailDescription"></p>
+            <p class="lead text-wrap text-break px-3" [innerHTML]="post.detailDescription"></p>
           </div>
 
           <div class="tags mt-4">
