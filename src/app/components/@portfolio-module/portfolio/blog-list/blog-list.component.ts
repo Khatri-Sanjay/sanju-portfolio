@@ -31,8 +31,6 @@ export class BlogListComponent implements OnInit{
   animatingPosts: { [postId: string]: boolean } = {};
 
   ngOnInit(): void {
-    // this.blogService.getPosts().subscribe((posts) => this.posts = posts.posts
-    // );
     this.blogService.getAllBlogs().subscribe(
       (res) => {
         this.posts = res

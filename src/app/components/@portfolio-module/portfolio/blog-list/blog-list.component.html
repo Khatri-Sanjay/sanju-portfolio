@@ -1,10 +1,10 @@
-<div class="container-fluid container-lg py-4 py-lg-5">
+<div class="container-fluid container-lg py-5 py-lg-5">
   <header class="text-center mb-4 mb-lg-5">
     <h1 class="display-4 fw-bold mb-3">Latest Blog Posts</h1>
     <p class="lead text-muted w-lg-75 mx-auto">Discover insightful articles and stay updated with our latest content</p>
   </header>
 
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
     @for (post of posts; track post.postId) {
       <div class="col">
         <article class="card h-100 shadow-sm border-0 transition-hover post-card"

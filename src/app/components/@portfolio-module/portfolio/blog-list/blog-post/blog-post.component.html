@@ -47,12 +47,12 @@
                   <div class="mb-3">
                       <textarea
                         class="form-control"
-                        rows="3"
+                        rows="4"
                         formControlName="comment"
                         placeholder="Write your comment...">
                       </textarea>
-                    <div *ngIf="isInvalid('comment')" class="error-text">
-                      Comment is required.
+                    <div *ngIf="isInvalid('comment')" class="text-danger text-sm-start">
+                      * Comment is required.
                     </div>
                   </div>
 
@@ -61,8 +61,8 @@
                       class="form-control"
                       formControlName="authorName"
                       placeholder="Author Name..."/>
-                    <div *ngIf="isInvalid('authorName')" class="error-text">
-                      Author Name is required.
+                    <div *ngIf="isInvalid('authorName')" class="text-danger text-sm-start">
+                      * Author Name is required.
                     </div>
                   </div>
 
@@ -86,8 +86,15 @@
                     </div>
                   </div>
                   <p class="card-text">{{comment.content}}</p>
-                  <button class="btn btn-sm btn-outline-primary" (click)="increaseLikes(comment.commentId)">
-                    <i class="bi bi-hand-thumbs-up"></i> {{ comment?.likes || 0 }}
+                  <button class="btn btn-sm"
+                          [class.btn-primary]="likedComments[comment.commentId]"
+                          [class.btn-outline-primary]="!likedComments[comment.commentId]"
+                          (click)="increaseLikes(comment.commentId, $event)">
+                    <i class="bi"
+                       [class.bi-hand-thumbs-up-fill]="likedComments[comment.commentId]"
+                       [class.bi-hand-thumbs-up]="!likedComments[comment.commentId]"
+                       [@likeAnimation]="animationStates[comment.commentId] || 'inactive'"></i>
+                    {{ comment?.likes || 0 }}
                   </button>
                 </div>
               </div>

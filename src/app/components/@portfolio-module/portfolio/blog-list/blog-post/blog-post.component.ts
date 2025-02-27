@@ -8,6 +8,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {UniqueValueGeneratorService} from '../../../../../shared-service/unique-value-generator.service';
 import {ToastrService} from 'ngx-toastr';
 import {SpinnerService} from '../../../../../common-components/spinner/service/spinner.service';
+import {animate, keyframes, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-blog-post',
@@ -19,13 +20,36 @@ import {SpinnerService} from '../../../../../common-components/spinner/service/s
   ],
   templateUrl: './blog-post.component.html',
   standalone: true,
-  styleUrl: './blog-post.component.scss'
+  styleUrl: './blog-post.component.scss',
+  animations: [
+    trigger('likeAnimation', [
+      state('inactive', style({
+        transform: 'scale(1)',
+        color: 'inherit'
+      })),
+      state('active', style({
+        transform: 'scale(1)',
+        color: 'inherit'
+      })),
+      transition('inactive => active', [
+        animate('500ms ease-out', keyframes([
+          style({ transform: 'scale(1)', offset: 0 }),
+          style({ transform: 'scale(1.5)', color: '#ff2b56', offset: 0.3 }),
+          style({ transform: 'scale(1.5) translateY(-10px)', color: '#ff2b56', offset: 0.5 }),
+          style({ transform: 'scale(1.2) translateY(-5px)', color: '#ff2b56', offset: 0.7 }),
+          style({ transform: 'scale(1)', offset: 1 })
+        ]))
+      ])
+    ])
+  ]
 })
 export class BlogPostComponent implements OnInit{
   blogForm: FormGroup = new FormGroup<any>({});
 
   post?: BlogPost;
   blogId: any;
+  animationStates: {[key: string]: string} = {};
+  likedComments: {[key: string]: boolean} = {};
 
   route: ActivatedRoute = inject(ActivatedRoute);
   blogService: BlogService = inject(BlogService);
@@ -46,6 +70,12 @@ export class BlogPostComponent implements OnInit{
 
     });
 
+    if (this.post && this.post.comments) {
+      this.post.comments.forEach(comment => {
+        this.animationStates[comment.commentId] = 'inactive';
+        this.likedComments[comment.commentId] = false;
+      });
+    }
 
     this.blogForm = this.formBuilder.group({
       comment: ['', Validators.required],
@@ -107,14 +137,40 @@ export class BlogPostComponent implements OnInit{
     return !!(control?.invalid && control?.touched);
   }
 
-  increaseLikes(commentId: any) {
+  increaseLikes(commentId: any, event: Event) {
+    event.stopPropagation(); // Prevent double-click event from firing
+
     if (!this.post || !this.post.comments) return;
 
-    const updatedComments = this.post.comments.map(comment =>
-      comment.commentId === commentId ? { ...comment, likes: comment.likes + 1 } : comment
-    );
+    const comment = this.post.comments.find(c => c.commentId === commentId);
+    if (!comment) return;
 
-    this.post = { ...this.post, comments: updatedComments };
+    if (this.likedComments[commentId]) {
+      // Unlike: User already liked this comment, so remove the like
+      const updatedComments = this.post.comments.map(c =>
+        c.commentId === commentId ? { ...c, likes: Math.max(0, c.likes - 1) } : c
+      );
+
+      this.post = { ...this.post, comments: updatedComments };
+      this.likedComments[commentId] = false;
+    } else {
+      // Like: User hasn't liked this comment yet
+      if(this.animationStates[commentId] !== 'active') {
+        this.animationStates[commentId] = 'active';
+
+        const updatedComments = this.post.comments.map(c =>
+          c.commentId === commentId ? { ...c, likes: c.likes + 1 } : c
+        );
+
+        this.post = { ...this.post, comments: updatedComments };
+        this.likedComments[commentId] = true;
+
+        setTimeout(() => {
+          this.animationStates[commentId] = 'inactive';
+        }, 500);
+      }
+    }
+
     this.saveBlogData(this.post, true);
   }
 
