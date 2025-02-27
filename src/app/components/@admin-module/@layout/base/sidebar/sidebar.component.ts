@@ -144,7 +144,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
           id: 'messages',
           label: 'Messages',
           icon: 'bi-chat-dots',
-          path: '/messages',
+          path: 'messages',
           badge: {
             text: '3',
             variant: 'success'

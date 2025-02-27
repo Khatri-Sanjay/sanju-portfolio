@@ -6,6 +6,7 @@ import {UserComponent} from './user/user.component';
 import {AddEditUserComponent} from './user/add-edit-user/add-edit-user.component';
 import {AddEditBlogsComponent} from './blogs/add-edit-blogs/add-edit-blogs.component';
 import {AuthGuard} from '../../@core/guard/auth.guard';
+import {MessagesComponent} from './messages/messages.component';
 
 export const AdminRoute: Routes = [
   {
@@ -49,6 +50,11 @@ export const AdminRoute: Routes = [
         path: 'edit-blog/:id',
         component: AddEditBlogsComponent,
         data: { title: 'Edit Blog', breadcrumb: 'Edit Blog' }
+      },
+      {
+        path: 'messages',
+        component: MessagesComponent,
+        data: { title: 'Messages', breadcrumb: 'Messages' }
       }
     ]
   }

@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <div class="row align-items-center">
+    <div class="row align-items-center" [formGroup]="messageForm">
       <!-- Contact Form -->
       <div class="col-lg-6">
         <div class="card shadow border-0">
@@ -20,6 +20,7 @@
               <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
                 <input
+                  formControlName="name"
                   type="text"
                   class="form-control"
                   id="name"
@@ -30,6 +31,7 @@
               <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
                 <input
+                  formControlName="email"
                   type="email"
                   class="form-control"
                   id="email"
@@ -40,6 +42,7 @@
               <div class="mb-3">
                 <label for="message" class="form-label">Message</label>
                 <textarea
+                  formControlName="message"
                   class="form-control"
                   id="message"
                   rows="5"
@@ -47,7 +50,7 @@
                   required
                 ></textarea>
               </div>
-              <button type="submit" class="btn btn-primary w-100">
+              <button type="submit" class="btn btn-primary w-100" (click)="sendMessage()">
                 Send Message
               </button>
             </form>
