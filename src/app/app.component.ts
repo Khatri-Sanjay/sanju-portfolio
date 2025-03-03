@@ -64,7 +64,12 @@ export class AppComponent implements OnInit{
               description = route.snapshot.data['description'];
             }
           }
-          this.titleService.setTitle('Sanjay Khatri - ' + title || 'Sanjay Khatri');
+          const formattedTitle = title?.trim().toLowerCase();
+          const pageTitle = (formattedTitle !== 'home' && formattedTitle !== 'portfolio')
+            ? `Sanjay Khatri - ${title}`
+            : 'Sanjay Khatri';
+
+          this.titleService.setTitle(pageTitle);
         })
       )
       .subscribe();
