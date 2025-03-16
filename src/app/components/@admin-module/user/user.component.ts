@@ -8,6 +8,7 @@ import {
 import {UserService} from '../../../shared-service/@api-services/user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {User} from '../../../@core/interface/user';
+import {SpinnerService} from '../../../common-components/spinner/service/spinner.service';
 
 @Component({
   selector: 'app-user',
@@ -149,6 +150,7 @@ export class UserComponent implements OnInit{
     private router: Router,
     private route: ActivatedRoute,
     private userService: UserService,
+    private spinnerService: SpinnerService,
   ) {}
 
   onActionClick(event: { action: string, item: any }) {
@@ -194,9 +196,16 @@ export class UserComponent implements OnInit{
   }
 
   loadUsers() {
+    this.spinnerService.show();
     this.userService.getAllUsers().subscribe({
-      next: (users) => this.users = users,
-      error: (err) => console.error('Error loading users:', err),
+      next: (users) => {
+        this.users = users;
+        this.spinnerService.hide(); // Move inside the success block
+      },
+      error: (err) => {
+        console.error('Error loading users:', err);
+        this.spinnerService.hide(); // Ensure spinner is hidden even on error
+      }
     });
   }
 

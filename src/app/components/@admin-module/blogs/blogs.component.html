@@ -13,3 +13,12 @@
   [actionButtons]="actionButtons"
   (actionClick)="onActionClick($event)"
 ></app-dynamic-table>
+
+<app-pop-up
+  [title]="'Delete Blog'"
+  [message]="'Are you sure you want to delete this blog?'"
+  [size]="'lg'"
+  [isVisible]="isPopupVisible"
+  (confirm)="confirmDelete()"
+  (close)="closePopup()">
+</app-pop-up>

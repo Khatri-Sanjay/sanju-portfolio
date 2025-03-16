@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {DatePipe, NgIf} from '@angular/common';
 import {BlogComment, BlogPost} from '../../../../../@core/interface/blog-post';
@@ -47,6 +47,9 @@ import {QuillViewComponent, QuillViewHTMLComponent} from 'ngx-quill';
   ]
 })
 export class BlogPostComponent implements OnInit{
+
+  @Input() postId: any;
+
   blogForm: FormGroup = new FormGroup<any>({});
 
   post?: BlogPost;
@@ -62,16 +65,28 @@ export class BlogPostComponent implements OnInit{
   spinnerService: SpinnerService = inject(SpinnerService);
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.blogId = params['postId'];
+
+    if (this.postId) {
+      this.blogId = this.postId;
       this.blogService.getBlogById(this.blogId).subscribe(
         post => {
           this.post = post;
           console.log('this.post', this.post);
         }
       );
+    } else {
+      this.route.params.subscribe(params => {
+        this.blogId = params['postId'];
+        this.blogService.getBlogById(this.blogId).subscribe(
+          post => {
+            this.post = post;
+            console.log('this.post', this.post);
+          }
+        );
+      });
+    }
 
-    });
+
 
     if (this.post && this.post.comments) {
       this.post.comments.forEach(comment => {

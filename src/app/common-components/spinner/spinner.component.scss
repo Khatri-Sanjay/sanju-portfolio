@@ -25,14 +25,14 @@
 /* Background circle */
 .background-circle {
   position: absolute;
-  background-color: rgba(255, 0, 0, 0.1); /* Subtle red */
+  background-color: rgba(24, 149, 161, 0.1); /* Subtle red */
   border-radius: 50%;
   animation: smooth-pulse 1.5s infinite ease-in-out;
 }
 
 /* Dashed circle */
 .dashed-circle {
-  border: 4px dashed red;
+  border: 4px dashed #0388fa;
   border-radius: 50%;
   animation: rotate 2s linear infinite;
 }

@@ -12,6 +12,9 @@ import {BreadcrumbsComponent} from '../../../common-components/breadcrumbs/bread
 import {ToastrService} from 'ngx-toastr';
 import {SpinnerService} from '../../../common-components/spinner/service/spinner.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {PopUpComponent} from '../../../common-components/pop-up/pop-up.component';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {BlogPostComponent} from '../../@portfolio-module/portfolio/blog-list/blog-post/blog-post.component';
 
 interface User {
   id: number;
@@ -32,6 +35,7 @@ interface User {
     SlicePipe,
     DynamicTableComponent,
     BreadcrumbsComponent,
+    PopUpComponent,
   ],
   templateUrl: './blogs.component.html',
   standalone: true,
@@ -144,6 +148,10 @@ export class BlogsComponent implements OnInit{
   spinnerService: SpinnerService = inject(SpinnerService);
   router: Router = inject(Router);
   route: ActivatedRoute = inject(ActivatedRoute);
+  modalService: NgbModal = inject(NgbModal)
+
+  isPopupVisible = false;
+  itemToDelete: any = null; // Store the item to delete
 
   ngOnInit(): void {
     this.fetchBlogs();
@@ -185,18 +193,20 @@ export class BlogsComponent implements OnInit{
       this.router.navigate([`admin/base/edit-blog/${itemId}`]);
     }
     if (event && event.action.toLowerCase() === 'delete') {
+      this.itemToDelete = event.item; // Store the item
+      this.isPopupVisible = true; // Show confirmation popup
+    }
+    if (event && event.action.toLowerCase() === 'view') {
       const itemId = event.item.postId;  // Assuming item contains an 'id' field
-      this.blogDataService.deleteBlog(itemId).subscribe({
-        next: (res) => {
-          this.toastrService.success('Delete Blog Successfully.');
-          this.spinnerService.hide();
-        },
-        error: (err) => {
-          console.error('Error while deleting blogs:', err);
-          this.toastrService.error('Error while deleting blogs: ' + err.message);
-          this.spinnerService.hide();
-        }
+
+      console.log('view ');
+      const modalRef = this.modalService.open(BlogPostComponent, {
+        size: 'xl',
+        backdrop: true,
+        centered: true
       });
+
+      modalRef.componentInstance.postId = itemId;
     }
   }
 
@@ -218,6 +228,33 @@ export class BlogsComponent implements OnInit{
 
   onRowSelect(selectedRows: any[]) {
     console.log('Selected rows:', selectedRows);
+  }
+
+  confirmDelete() {
+    if (this.itemToDelete) {
+      const itemId = this.itemToDelete.postId; // Assuming postId is correct
+      this.spinnerService.show();
+
+      this.blogDataService.deleteBlog(itemId).subscribe({
+        next: (res) => {
+          this.toastrService.success('Delete Blog Successfully.');
+          this.spinnerService.hide();
+          this.isPopupVisible = false;
+          this.itemToDelete = null; // Reset item after deletion
+        },
+        error: (err) => {
+          console.error('Error while deleting blog:', err);
+          this.toastrService.error('Error while deleting blog: ' + err.message);
+          this.spinnerService.hide();
+          this.isPopupVisible = false;
+        }
+      });
+    }
+  }
+
+  closePopup() {
+    this.isPopupVisible = false;
+    this.itemToDelete = null; // Reset the stored item
   }
 
 }

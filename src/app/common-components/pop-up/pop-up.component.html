@@ -1,0 +1,21 @@
+<!-- Modal -->
+<div class="modal fade" [class.show]="isVisible" [class.d-block]="isVisible" tabindex="-1" role="dialog" *ngIf="isVisible">
+  <div class="modal-dialog" [ngClass]="getModalSizeClass()" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ title }}</h5>
+        <button type="button" class="btn-close" (click)="onClose()"></button>
+      </div>
+      <div class="modal-body text-center">
+        <p>{{ message }}</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-danger" (click)="onConfirm()">Confirm</button>
+        <button class="btn btn-outline-secondary" (click)="onClose()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Backdrop -->
+<div class="modal-backdrop fade show" *ngIf="isVisible"></div>

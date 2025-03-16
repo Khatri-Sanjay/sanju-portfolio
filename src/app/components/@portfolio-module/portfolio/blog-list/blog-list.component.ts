@@ -31,15 +31,19 @@ export class BlogListComponent implements OnInit{
   animatingPosts: { [postId: string]: boolean } = {};
 
   ngOnInit(): void {
+    this.spinnerService.show();
     this.blogService.getAllBlogs().subscribe(
       (res) => {
-        this.posts = res
+        this.posts = res;
         console.log('Blogs received:', res);
+        this.spinnerService.hide();
       },
       (error) => {
+        this.spinnerService.hide();
         console.error('Error fetching blogs:', error);
       },
       () => {
+        this.spinnerService.hide();
         console.log('Blog request completed');
       }
     );
