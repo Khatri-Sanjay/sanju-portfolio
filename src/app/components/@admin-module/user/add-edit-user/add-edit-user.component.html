@@ -33,6 +33,48 @@
         </div>
       </div>
 
+      <div class="mb-3" *ngIf="isEditMode">
+        <div class="form-check">
+          <input
+            type="checkbox"
+            id="isUpdatePassword"
+            class="form-check-input"
+            [(ngModel)]="isUpdatePasswordEnable"
+            [ngModelOptions]="{ standalone: true }"
+          />
+          <label for="isUpdatePassword" class="form-check-label">
+            Do you want to update Password?
+          </label>
+        </div>
+      </div>
+
+      <div class="mb-3" *ngIf="isUpdatePasswordEnable || !isEditMode">
+        <label for="password" class="form-label">Password</label>
+        <div class="input-group">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            class="form-control form-control-sm"
+            formControlName="password"
+            placeholder="Enter password"
+          />
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="showPassword = !showPassword"
+            aria-label="Toggle password visibility"
+          >
+            <i class="bi" [class]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
+        </div>
+        <div
+          *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched"
+          class="text-danger small mt-1"
+        >
+          A valid password is required.
+        </div>
+      </div>
+
       <!-- Phone Field -->
       <div class="mb-3">
         <label for="phone" class="form-label">Phone</label>

@@ -222,6 +222,8 @@
                       [text]="item[col.key]"
                       [wordLimit]="col.wordLimit || 20"
                     ></app-show-more-less>
+                  } @else if (col.isTitleCase) {
+                    {{ (formatValue(item[col.key], col) | titlecase) }}
                   } @else {
                     {{ formatValue(item[col.key], col) }}
                   }
@@ -253,6 +255,11 @@
                   <ng-container *ngTemplateOutlet="col.customComponent;
                                                  context: { $implicit: item }">
                   </ng-container>
+                }
+                @case ('boolean') {
+                  <span class="badge" [ngClass]="isTrueOrFalse(formatValue(item[col.key], col)) ? 'bg-success' : 'bg-danger'">
+                    {{ isTrueOrFalse(formatValue(item[col.key], col)) ? 'Active' : 'Inactive' }}
+                  </span>
                 }
                 @default {
                   {{ item[col.key] }}

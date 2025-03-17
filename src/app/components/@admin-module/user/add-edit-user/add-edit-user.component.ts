@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NgForOf, NgIf} from '@angular/common';
 import {MatDialogActions, MatDialogContent, MatDialogTitle} from '@angular/material/dialog';
 import {MatButton} from '@angular/material/button';
@@ -7,17 +7,15 @@ import {UserService} from '../../../../shared-service/@api-services/user.service
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {SpinnerService} from '../../../../common-components/spinner/service/spinner.service';
+import {EncryptDecryptService} from '../../../../shared-service/encrypt-decrypt.service';
+import {User} from '../../../../@core/interface/user';
 
 @Component({
   selector: 'app-add-edit-user',
   imports: [
     ReactiveFormsModule,
-    NgForOf,
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatButton,
-    NgIf
+    NgIf,
+    FormsModule
   ],
   templateUrl: './add-edit-user.component.html',
   standalone: true,
@@ -28,8 +26,12 @@ export class AddEditUserComponent implements OnInit{
   isEditMode = false;
   userId: string | null = null;
 
+  showPassword: boolean = false;
+  isUpdatePasswordEnable: boolean = false;
+
   toastrService: ToastrService = inject(ToastrService);
   spinnerService: SpinnerService = inject(SpinnerService);
+  encryptDecryptService: EncryptDecryptService = inject(EncryptDecryptService);
 
   constructor(
     private fb: FormBuilder,
@@ -51,7 +53,8 @@ export class AddEditUserComponent implements OnInit{
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required, Validators.pattern(/^\+?[\d\s-]{10,}$/)]],
       role: ['user', Validators.required],
-      isActive: [true]
+      isActive: [true],
+      password: ['', Validators.required]
     });
   }
 
@@ -71,7 +74,10 @@ export class AddEditUserComponent implements OnInit{
     this.userService.getUserById(userId).subscribe({
       next: (user) => {
         if (user) {
-          this.userForm.patchValue(user);
+          this.userForm.patchValue({
+            ...user,
+            password: this.encryptDecryptService.decrypt(user.password)
+          });
           this.spinnerService.hide();
         } else {
           this.toastrService.error('User not found.');
@@ -101,7 +107,16 @@ export class AddEditUserComponent implements OnInit{
 
   // Create a new user
   private createUser(): void {
-    this.userService.createUser(this.userForm.value).subscribe({
+    const user: User = {
+      name: this.userForm.value.name,
+      email: this.userForm.value.email,
+      phone: this.userForm.value.phone,
+      role: this.userForm.value.role,
+      isActive: this.userForm.value.isActive,
+      password: this.encryptDecryptService.encrypt(this.userForm.value.password)
+    };
+
+    this.userService.createUser(user).subscribe({
       next: () => {
         this.toastrService.success('User created successfully');
         this.router.navigate(['admin/base/users']);

@@ -34,6 +34,7 @@ export interface ColumnConfig {
   tooltipField?: string; // Tooltip content field
   editable?: boolean; // Editable cell
   isTextFixedLength?: boolean
+  isTitleCase?: boolean,
   wordLimit?: number,
   validation?: {
     required?: boolean;
@@ -500,6 +501,11 @@ export class DynamicTableComponent implements OnInit, OnChanges {
       return column.formatter(value);
     }
     return String(value);
+  }
+
+  isTrueOrFalse(value: any): boolean {
+    const falseValues = new Set(['0', 0, 'false', 'FALSE', 'False']);
+    return !falseValues.has(value);
   }
 
   formatNumber(value: number, column: ColumnConfig): string {

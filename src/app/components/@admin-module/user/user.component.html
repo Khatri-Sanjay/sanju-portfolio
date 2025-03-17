@@ -21,3 +21,12 @@
   (exportData)="onExportData($event)"
   (rowSelect)="onRowSelect($event)">
 </app-dynamic-table>
+
+<app-pop-up
+  [title]="'Delete User'"
+  [message]="'Are you sure you want to delete this user?'"
+  [size]="'lg'"
+  [isVisible]="isPopupVisible"
+  (confirm)="confirmDelete()"
+  (close)="closePopup()">
+</app-pop-up>

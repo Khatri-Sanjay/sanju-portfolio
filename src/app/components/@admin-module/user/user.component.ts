@@ -9,6 +9,8 @@ import {UserService} from '../../../shared-service/@api-services/user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {User} from '../../../@core/interface/user';
 import {SpinnerService} from '../../../common-components/spinner/service/spinner.service';
+import {PopUpComponent} from '../../../common-components/pop-up/pop-up.component';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-user',
@@ -16,6 +18,7 @@ import {SpinnerService} from '../../../common-components/spinner/service/spinner
     MatButton,
     DynamicTableComponent,
     DynamicTableComponent,
+    PopUpComponent,
   ],
   templateUrl: './user.component.html',
   standalone: true,
@@ -66,7 +69,8 @@ export class UserComponent implements OnInit{
       sortable: true,
       filterable: true,
       filterType: 'text',
-      cellClass: 'font-bold'
+      cellClass: 'font-bold',
+      isTitleCase: true
     },
     {
       key: 'isActive',
@@ -146,11 +150,16 @@ export class UserComponent implements OnInit{
   ];
 
 
+  isPopupVisible = false;
+  itemToDelete: any = null; // Store the item to delete
+
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private userService: UserService,
     private spinnerService: SpinnerService,
+    private toastrService: ToastrService,
   ) {}
 
   onActionClick(event: { action: string, item: any }) {
@@ -161,6 +170,10 @@ export class UserComponent implements OnInit{
     if (event && event.action.toLowerCase() === 'edit') {
       const itemId = event.item.id;  // Assuming item contains an 'id' field
       this.router.navigate([`admin/base/edit-user/${itemId}`]);
+    }
+    if (event && event.action.toLowerCase() === 'delete') {
+      this.itemToDelete = event.item; // Store the item
+      this.isPopupVisible = true; // Show confirmation popup
     }
   }
 
@@ -209,23 +222,30 @@ export class UserComponent implements OnInit{
     });
   }
 
-  navigateToCreate() {
-    this.router.navigate(['/users/create']);
-  }
-
-  editUser(id: string) {
-    this.router.navigate(['/users/edit', id]);
-  }
-
-  async deleteUser(id: string) {
-    if (confirm('Are you sure you want to delete this user?')) {
-      try {
-        await this.userService.deleteUser(id);
-        this.users = this.users.filter(user => user.id !== id);
-      } catch (error) {
-        console.error('Error deleting user:', error);
-      }
+  confirmDelete() {
+    if (this.itemToDelete) {
+      const itemId = this.itemToDelete.id; // Assuming postId is correct
+      this.spinnerService.show();
+      this.userService.deleteUser(itemId).subscribe({
+        next: (res) => {
+          this.toastrService.success('Delete User Successfully.');
+          this.spinnerService.hide();
+          this.isPopupVisible = false;
+          this.itemToDelete = null; // Reset item after deletion
+        },
+        error: (err) => {
+          console.error('Error while deleting user:', err);
+          this.toastrService.error('Error while deleting user: ' + err.message);
+          this.spinnerService.hide();
+          this.isPopupVisible = false;
+        }
+      });
     }
+  }
+
+  closePopup() {
+    this.isPopupVisible = false;
+    this.itemToDelete = null; // Reset the stored item
   }
 
 }
