@@ -48,7 +48,7 @@
         <div class="message" [class.bot]="msg.isBot" @widgetAnimation>
           <div class="message-content">
             <p [class.typing]="msg.isTyping">
-              {{msg.isTyping ? 'typing . . .' : msg.text}}
+              <span [innerHTML]="msg.isTyping ? 'typing . . .' : msg.text"></span>
             </p>
             <span class="timestamp">{{msg.timestamp | date:'shortTime'}}</span>
           </div>
