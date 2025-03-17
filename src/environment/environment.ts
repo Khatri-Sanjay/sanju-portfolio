@@ -4,7 +4,7 @@ export const environment = {
   PRODUCT_NAME: 'Sanju Portfolio',
   PRODUCT_SLOGAN: 'Be Yourself',
   baseApiUrl: 'https://personal-website-209f0-default-rtdb.firebaseio.com/',
-  openRouterApiKey: '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',
+  openRouterApiKey: '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',
   firebase: {
     apiKey: "AIzaSyC93GF3Tj0gOcFLr9hXeZ-tc0Sb48mePGU",
     authDomain: "personal-website-209f0.firebaseapp.com",
