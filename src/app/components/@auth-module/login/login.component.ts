@@ -27,8 +27,8 @@ export class LoginComponent {
 
   toastrService: ToastrService = inject(ToastrService);
 
-  private encryptedUsername = CryptoJS.AES.encrypt('admin@admin.com', this.secretKey).toString();
-  private encryptedPassword = CryptoJS.AES.encrypt('admin1234', this.secretKey).toString();
+  private encryptedUsername = CryptoJS.AES.encrypt('sanju@admin.com', this.secretKey).toString();
+  private encryptedPassword = CryptoJS.AES.encrypt('Sanju@Admin123', this.secretKey).toString();
 
   constructor(
     private fb: FormBuilder,
