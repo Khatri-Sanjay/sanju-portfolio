@@ -288,9 +288,12 @@ export class AddEditBlogsComponent implements OnInit, OnDestroy, AfterViewInit{
       next: () => {
         this.toastrService.success('Blog created successfully');
         this.router.navigate(['admin/base/blogs']);
+        this.spinnerService.hide();
       },
-      error: (error) => this.handleError(error, 'Failed to create blog.'),
-      complete: () => this.spinnerService.hide()
+      error: (error) => {
+        this.handleError(error, 'Failed to create blog.');
+        this.spinnerService.hide();
+      },
     });
   }
 
@@ -304,16 +307,16 @@ export class AddEditBlogsComponent implements OnInit, OnDestroy, AfterViewInit{
       formData.tags = formData.tags.split(',').map((tag: string) => tag.trim());
     }
 
-    console.log('formData', formData);
-
-
     this.blogService.updateBlog(blogId, formData).subscribe({
       next: () => {
         this.toastrService.success('Blog updated successfully');
         this.router.navigate(['admin/base/blogs']);
+        this.spinnerService.hide();
       },
-      error: (error) => this.handleError(error, 'Failed to update user.'),
-      complete: () => this.spinnerService.hide()
+      error: (error) => {
+        this.handleError(error, 'Failed to update user.');
+        this.spinnerService.hide();
+      }
     });
   }
 

@@ -30,7 +30,7 @@ export class ChatService {
 
 
   private readonly API_URL = "https://openrouter.ai/api/v1/chat/completions";
-  private readonly API_KEY = environment.openRouterApiKey;
+  private readonly API_KEY = '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';
 
   constructor() {
     if (this.messages().length === 0) {
@@ -226,6 +226,7 @@ export class ChatService {
       if (!response.ok) throw new Error(`API request failed: ${response.statusText}`);
 
       const data = await response.json();
+      console.log('data', data);
       return data.choices?.[0]?.message?.content || "No response from AI.";
     } catch (error) {
       console.error("Error fetching AI response:", error);

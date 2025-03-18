@@ -120,9 +120,12 @@ export class AddEditUserComponent implements OnInit{
       next: () => {
         this.toastrService.success('User created successfully');
         this.router.navigate(['admin/base/users']);
+        this.spinnerService.hide();
       },
-      error: (error) => this.handleError(error, 'Failed to create user.'),
-      complete: () => this.spinnerService.hide()
+      error: (error) => {
+        this.handleError(error, 'Failed to create user.');
+        this.spinnerService.hide();
+      },
     });
   }
 
@@ -132,9 +135,12 @@ export class AddEditUserComponent implements OnInit{
       next: () => {
         this.toastrService.success('User updated successfully');
         this.router.navigate(['admin/base/users']);
+        this.spinnerService.hide();
       },
-      error: (error) => this.handleError(error, 'Failed to update user.'),
-      complete: () => this.spinnerService.hide()
+      error: (error) => {
+        this.handleError(error, 'Failed to update user.');
+        this.spinnerService.hide();
+      },
     });
   }
 
