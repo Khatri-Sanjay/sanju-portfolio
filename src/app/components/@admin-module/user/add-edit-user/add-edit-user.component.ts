@@ -82,9 +82,13 @@ export class AddEditUserComponent implements OnInit{
         } else {
           this.toastrService.error('User not found.');
           this.router.navigate(['admin/base/users']);
+          this.spinnerService.hide();
         }
       },
-      error: (error) => this.handleError(error, 'Failed to load user details.'),
+      error: (error) => {
+        this.handleError(error, 'Failed to load user details.');
+        this.spinnerService.hide();
+      },
       complete: () => this.spinnerService.hide()
     });
   }

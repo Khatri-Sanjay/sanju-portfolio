@@ -299,9 +299,6 @@ export class AddEditBlogsComponent implements OnInit, OnDestroy, AfterViewInit{
 
   private updateBlog(blogId: string): void {
     let formData = { ...this.blogForm.value };
-    console.log('this.blogForm.value', this.blogForm.value);
-    console.log('formData', formData);
-
 
     if (formData.tags && typeof formData.tags === 'string') {
       formData.tags = formData.tags.split(',').map((tag: string) => tag.trim());
@@ -321,7 +318,6 @@ export class AddEditBlogsComponent implements OnInit, OnDestroy, AfterViewInit{
   }
 
   private handleError(error: any, userMessage: string): void {
-    console.error(error);
     this.toastrService.error(userMessage);
     this.spinnerService.hide();
   }
