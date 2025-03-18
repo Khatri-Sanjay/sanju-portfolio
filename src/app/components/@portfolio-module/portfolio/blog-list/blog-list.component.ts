@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {DatePipe, NgClass} from '@angular/common';
-import {Router, RouterLink} from '@angular/router';
+import {Router} from '@angular/router';
 import {BlogPost} from '../../../../@core/interface/blog-post';
 import {BlogService} from '../../../../shared-service/@api-services/blog.service';
 import {ConvertToStandardDateTimePipe} from '../../../../@core/pipe/convert-to-standard-date-time.pipe';
@@ -11,7 +11,6 @@ import {SpinnerService} from '../../../../common-components/spinner/service/spin
   selector: 'app-blog-list',
   imports: [
     DatePipe,
-    RouterLink,
     ConvertToStandardDateTimePipe,
     NgClass
   ],
@@ -21,6 +20,7 @@ import {SpinnerService} from '../../../../common-components/spinner/service/spin
 })
 export class BlogListComponent implements OnInit{
   posts: BlogPost[] = [];
+  filterPost: BlogPost[] = [];
 
   blogService: BlogService = inject(BlogService);
   router: Router = inject(Router);
@@ -30,11 +30,14 @@ export class BlogListComponent implements OnInit{
   likedPosts: { [postId: string]: boolean } = {};
   animatingPosts: { [postId: string]: boolean } = {};
 
+  searchTerm: string = '';
+
   ngOnInit(): void {
     this.spinnerService.show();
     this.blogService.getAllBlogs().subscribe(
       (res) => {
         this.posts = res;
+        this.filterPost = res;
         console.log('Blogs received:', res);
         this.spinnerService.hide();
       },
@@ -48,6 +51,24 @@ export class BlogListComponent implements OnInit{
       }
     );
 
+  }
+
+  onFilterPost(event: Event): void {
+    this.searchTerm = (event.target as HTMLInputElement).value.toLowerCase();
+    this.applyFilters();
+  }
+
+  private applyFilters(): void {
+    console.log('this.searchTerm', this.searchTerm);
+    if (!this.searchTerm.trim()) {
+      debugger
+      this.filterPost = [...this.posts];
+    } else {
+      this.filterPost = this.posts.filter(post => {
+        return post.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          post.description.toLowerCase().includes(this.searchTerm.toLowerCase());
+      });
+    }
   }
 
   navigateToPost(postId: string): void {

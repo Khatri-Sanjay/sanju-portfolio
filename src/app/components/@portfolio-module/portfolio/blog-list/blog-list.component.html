@@ -4,8 +4,19 @@
     <p class="lead text-muted w-lg-75 mx-auto">Discover insightful articles and stay updated with our latest content</p>
   </header>
 
+  <div class="row justify-content-center mb-4">
+    <div class="col-12 col-md-6">
+      <input
+        type="text"
+        class="form-control search-input"
+        placeholder="Search blog posts..."
+        (input)="onFilterPost($event)"
+        aria-label="Search blog posts">
+    </div>
+  </div>
+
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    @for (post of posts; track post.postId) {
+    @for (post of filterPost; track post.postId) {
       <div class="col">
         <article class="card h-100 shadow-sm border-0 transition-hover post-card"
                  (dblclick)="handleDoubleClick(post)"
