@@ -30,7 +30,7 @@ export class ChatService {
 
 
   private readonly API_URL = "https://openrouter.ai/api/v1/chat/completions";
-  private readonly API_KEY = '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';
+  private readonly API_KEY = '';
 
   constructor() {
     if (this.messages().length === 0) {
@@ -139,7 +139,7 @@ export class ChatService {
       return this.getQuoteByCategory(lowerCaseMessage.split(' ')[1]);
     }
 
-    return await this.fetchAIResponse(userMessage);
+    return await this.openRouterMessage(userMessage);
   }
 
   private getRandomJoke(): string {
@@ -209,7 +209,7 @@ export class ChatService {
     this.saveMessages();
   }
 
-  private async fetchAIResponse(text: string): Promise<string> {
+  private async openRouterMessage(text: string): Promise<string> {
     try {
       const response = await fetch(this.API_URL, {
         method: "POST",
