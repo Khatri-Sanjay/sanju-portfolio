@@ -29,8 +29,9 @@ export class ChatService {
   typing$ = computed(() => this.typing());
 
 
-  private readonly API_URL = "https://openrouter.ai/api/v1/chat/completions";
-  private readonly API_KEY = '';
+  private readonly API_URL = environment.openRouter.URL;
+  private readonly API_KEY = environment.openRouter.KEY;
+  private readonly API_MODEL = environment.openRouter.MODEL;
 
   constructor() {
     if (this.messages().length === 0) {
@@ -209,28 +210,57 @@ export class ChatService {
     this.saveMessages();
   }
 
-  private async openRouterMessage(text: string): Promise<string> {
+  private async fetchAIResponse(endpoint: string, body: any): Promise<any> {
     try {
-      const response = await fetch(this.API_URL, {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${this.API_KEY}`,
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          "model": "google/gemma-3-4b-it:free",
-          "messages": [{ "role": "user", "content": text }]
-        })
+        body: JSON.stringify(body)
       });
 
-      if (!response.ok) throw new Error(`API request failed: ${response.statusText}`);
+      if (!response.ok) {
+        const errorBody = await response.text();
+        throw new Error(`API request failed: ${response.statusText}, Response Body: ${errorBody}`);
+      }
 
-      const data = await response.json();
-      console.log('data', data);
-      return data.choices?.[0]?.message?.content || "No response from AI.";
+      return await response.json();
     } catch (error) {
       console.error("Error fetching AI response:", error);
+      throw new Error("An error occurred while fetching AI response.");
+    }
+  }
+
+  private async openRouterMessage(text: string): Promise<string> {
+    const body = {
+      model: this.API_MODEL,
+      messages: [{ role: "user", content: text }]
+    };
+
+    try {
+      const data = await this.fetchAIResponse(this.API_URL, body);
+      console.log('Data from openRouterMessage:', data);
+      return data.choices?.[0]?.message?.content || "No response from AI.";
+    } catch (error) {
       return "An error occurred while fetching AI response.";
     }
   }
+
+  private async huggingChatMessage(text: string): Promise<string> {
+    const body = {
+      inputs: text,
+      parameters: { max_new_tokens: 30 }
+    };
+
+    try {
+      const data = await this.fetchAIResponse(`${this.API_URL}/${this.API_MODEL}`, body);
+      console.log('HuggingChat Response:', data);
+      return data[0]?.generated_text || "No response from AI.";
+    } catch (error) {
+      return `An error occurred: ${error}`;
+    }
+  }
+
 }
