@@ -1,0 +1,58 @@
+<div class="social-sidebar">
+  <div class="social-links-container">
+    <ul class="social-links">
+      <li>
+        <a [href]="socialLink.faceBook"
+           target="_blank"
+           class="social-link facebook"
+           [@hoverAnimation]="hoverStates.facebook"
+           (mouseenter)="onMouseEnter('facebook')"
+           (mouseleave)="onMouseLeave('facebook')"
+           (click)="trackSocialClick('facebook')"
+           aria-label="Visit our Facebook page">
+          <i class="fab fa-facebook-f" [@iconAnimation]="hoverStates.facebook"></i>
+          <span class="link-text" [@textAnimation]="hoverStates.facebook">Facebook</span>
+        </a>
+      </li>
+      <li>
+        <a [href]="socialLink.instagram"
+           target="_blank"
+           class="social-link instagram"
+           [@hoverAnimation]="hoverStates.instagram"
+           (mouseenter)="onMouseEnter('instagram')"
+           (mouseleave)="onMouseLeave('instagram')"
+           (click)="trackSocialClick('instagram')"
+           aria-label="Check our Instagram profile">
+          <i class="fab fa-instagram" [@iconAnimation]="hoverStates.instagram"></i>
+          <span class="link-text" [@textAnimation]="hoverStates.instagram">Instagram</span>
+        </a>
+      </li>
+      <li>
+        <a [href]="socialLink.linkedIn"
+           target="_blank"
+           class="social-link linkedin"
+           [@hoverAnimation]="hoverStates.linkedin"
+           (mouseenter)="onMouseEnter('linkedin')"
+           (mouseleave)="onMouseLeave('linkedin')"
+           (click)="trackSocialClick('linkedin')"
+           aria-label="Connect on LinkedIn">
+          <i class="fab fa-linkedin-in" [@iconAnimation]="hoverStates.linkedin"></i>
+          <span class="link-text" [@textAnimation]="hoverStates.linkedin">LinkedIn</span>
+        </a>
+      </li>
+      <li>
+        <a [href]="socialLink.gitHub"
+           target="_blank"
+           class="social-link github"
+           [@hoverAnimation]="hoverStates.github"
+           (mouseenter)="onMouseEnter('github')"
+           (mouseleave)="onMouseLeave('github')"
+           (click)="trackSocialClick('github')"
+           aria-label="View our GitHub repositories">
+          <i class="fab fa-github" [@iconAnimation]="hoverStates.github"></i>
+          <span class="link-text" [@textAnimation]="hoverStates.github">Github</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

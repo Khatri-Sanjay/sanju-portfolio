@@ -1,0 +1,195 @@
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+
+// Social media brand colors with proper opacity options
+$facebook-color: #1877F2;
+$instagram-color: #E1306C;
+$linkedin-color: #0A66C2;
+$github-color: #24292e;
+
+// Enhanced dark overlay for gradient effect
+$overlay-dark: rgba(0, 0, 0, 0.2);
+
+// Common animation timing
+$transition-speed: 0.3s;
+
+.social-sidebar {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 1030;
+
+  .social-links-container {
+    position: relative;
+  }
+
+  .social-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 8px;
+      position: relative;
+      overflow: visible;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 13px 15px;
+      color: white;
+      border-radius: 30px 0 0 30px;
+      text-decoration: none;
+      transition: all $transition-speed ease;
+      position: relative;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 50px;
+      overflow: hidden;
+
+      // Gradient overlay for depth
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, $overlay-dark 100%);
+        z-index: 0;
+      }
+
+      i {
+        font-size: 1.25rem;
+        position: relative;
+        z-index: 2;
+        margin-left: 0; // Fixed position
+        transition: transform $transition-speed ease;
+      }
+
+      .link-text {
+        position: absolute;
+        white-space: nowrap;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        font-size: 0.95rem;
+        opacity: 0;
+        visibility: hidden;
+        left: 20px; // Position text relative to the link container
+        transition: all $transition-speed ease;
+        z-index: 2;
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+
+      // Individual social media styling with enhanced gradients
+      &.facebook {
+        background: linear-gradient(45deg, darken($facebook-color, 10%) 0%, $facebook-color 100%);
+        box-shadow: 0 4px 12px rgba($facebook-color, 0.4);
+      }
+
+      &.instagram {
+        background: linear-gradient(45deg, #F56040, #E1306C, #C13584, #833AB4);
+        box-shadow: 0 4px 12px rgba($instagram-color, 0.4);
+      }
+
+      &.linkedin {
+        background: linear-gradient(45deg, darken($linkedin-color, 10%) 0%, $linkedin-color 100%);
+        box-shadow: 0 4px 12px rgba($linkedin-color, 0.4);
+      }
+
+      &.github {
+        background: linear-gradient(45deg, #171515, $github-color);
+        box-shadow: 0 4px 12px rgba($github-color, 0.4);
+      }
+    }
+  }
+
+  @include media-breakpoint-down(md) {
+    right: 0;
+    top: 20rem;
+    transform: none;
+    padding: 8px 0;
+
+    .social-links {
+      .social-link {
+        justify-content: center;
+        border-radius: 50%;
+        margin-right: 5px;
+        width: 40px !important;
+        padding: 10px !important;
+
+        i {
+          margin: 0;
+          font-size: 1.2rem;
+          transform: none !important;
+        }
+
+        .link-text {
+          position: absolute;
+          top: -40px;
+          left: 50%;
+          transform: translateX(-50%) translateY(10px) !important;
+          background-color: #333;
+          color: white;
+          padding: 5px 10px;
+          border-radius: 5px;
+          font-size: 0.85rem;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+          transition: all 0.25s ease;
+
+          &:after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid #333;
+          }
+        }
+      }
+    }
+  }
+
+}
+
+@keyframes pulse {
+  0% {
+    transform: translateX(0) scale(1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  50% {
+    transform: translateX(-5px) scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.social-links li:nth-child(1) { animation: slideIn 0.5s ease 0.1s forwards; }
+.social-links li:nth-child(2) { animation: slideIn 0.5s ease 0.2s forwards; }
+.social-links li:nth-child(3) { animation: slideIn 0.5s ease 0.3s forwards; }
+.social-links li:nth-child(4) { animation: slideIn 0.5s ease 0.4s forwards; }
+.social-links li { opacity: 0; }

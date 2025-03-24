@@ -7,6 +7,7 @@ import {animate, query, style, transition, trigger} from '@angular/animations';
 import {PortfolioFooterComponent} from './portfolio-footer/portfolio-footer.component';
 import {ChatWindowComponent} from './chat-window/chat-window.component';
 import {ChatService} from '../../../shared-service/chat.service';
+import {SideLinkComponent} from './side-link/side-link.component';
 
 @Component({
   selector: 'app-portfolio',
@@ -15,7 +16,8 @@ import {ChatService} from '../../../shared-service/chat.service';
     RouterOutlet,
     ScrollToTopComponent,
     PortfolioFooterComponent,
-    ChatWindowComponent
+    ChatWindowComponent,
+    SideLinkComponent
   ],
   templateUrl: './portfolio.component.html',
   standalone: true,
