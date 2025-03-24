@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import {PersonalDetails} from '../../../../@core/data/personal-details';
-import {skills} from '../../../../@core/data/skills';
+import {Skills} from '../../../../@core/data/skills';
 
 @Component({
   selector: 'app-about-me',
@@ -30,7 +30,7 @@ export class AboutMeComponent implements OnInit {
   typingSpeed: number = 100;
   isVisible: boolean = false;
   personalDetails = PersonalDetails;
-  skills = skills.getWithOutCategory();
+  skills = Skills.getAllSkills();
 
   @HostListener('window:scroll', ['$event'])
   onScroll() {

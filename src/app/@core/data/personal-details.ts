@@ -23,14 +23,15 @@ export const PersonalDetails = {
     personalWebsite: 'https://khatrisanjay.com.np/'
   },
 
-  greetingMessage: 'Namaste, I am Sanjay Khatri, a developer with over two years of experience in Java and Angular.' +
-    ' I am eager to contribute my skills and problem-solving ability to a dynamic team.' +
-    ' I have a strong understanding of both front-end and back-end development,' +
-    ' using Angular to build interactive interfaces and Java to create scalable backend systems.',
+  summaryMessage: 'I am a passionate and results-driven Frontend Developer with over 2 years of hands-on experience in Angular,\n' +
+    '    TypeScript, and JavaScript. I specialize in creating dynamic, responsive, and high-performance user interfaces,\n' +
+    '    ensuring seamless and optimized user experiences. With a strong background in collaborating with cross-functional\n' +
+    '    teams, I deliver high-quality web applications within deadlines. Now, I am seeking to leverage my\n' +
+    '    skills and creativity in a dynamic development team.',
 
   education: [
     {
-      college: 'Aadim National College',
+      institutionName: 'Aadim National College',
       board: 'TU',
       course: 'Bachelor in Computer Application',
       location: 'Chabahil, Kathmandu, Nepal',
@@ -38,15 +39,15 @@ export const PersonalDetails = {
       passYear: '2024'
     },
     {
-      college: 'Nobel Academy Secondary School',
+      institutionName: 'Nobel Academy School +2',
       board: 'National Education Board',
-      course: 'Computer Science',
+      course: 'Computer Science in Management',
       location: 'New-Baneshowr, Kathmandu, Nepal',
       startYear: '2017',
       passYear: '2019'
     },
     {
-      college: 'Global Academy English School',
+      institutionName: 'Global Academy English School',
       board: '',
       course: '',
       location: 'Bhaktapur, Nepal',
@@ -54,6 +55,37 @@ export const PersonalDetails = {
       passYear: '2017'
     }
 
+  ],
+
+  skills: [
+    {
+      title: 'Frontend Technologies & Frameworks',
+      details: 'Angular, Angular Material, TypeScript, JavaScript, HTML5, CSS3, Bootstrap, Responsive Design'
+    },
+    {
+      title: 'Backend & Spring Framework',
+      details: 'Spring Boot (RESTful APIs), PHP, C'
+    },
+    {
+      title: 'Databases',
+      details: 'MySQL, MSSQL, Oracle'
+    },
+    {
+      title: 'API & Web Services',
+      details: 'RESTful APIs, JSON, Third-Party API Integration (RestTemplate)'
+    },
+    {
+      title: 'Version Control',
+      details: 'Git, Bitbucket'
+    },
+    {
+      title: 'Project Management Tools',
+      details: 'Jira'
+    },
+    {
+      title: 'IDEs & Development Tools',
+      details: 'IntelliJ IDEA, Eclipse, VS Code'
+    }
   ],
 
   experience: [
