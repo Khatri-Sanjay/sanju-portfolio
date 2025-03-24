@@ -1,6 +1,7 @@
 import {computed, Injectable, signal} from '@angular/core';
 import {LocalStorageUtil} from '../@core/utils/local-storage-utils';
 import {environment} from '../../environment/environment';
+import {TensorFlowService} from './tensor-flow.service';
 
 export interface ChatMessage {
   text: string;
@@ -33,7 +34,9 @@ export class ChatService {
   private readonly API_KEY = environment.openRouter.KEY;
   private readonly API_MODEL = environment.openRouter.MODEL;
 
-  constructor() {
+  constructor(
+    private tfService: TensorFlowService
+  ) {
     if (this.messages().length === 0) {
       this.sendBotInitialMessage();
     }
@@ -111,8 +114,8 @@ export class ChatService {
     const lowerCaseMessage = userMessage.toLowerCase().trim();
 
     const commandResponses: { [key: string]: string | (() => string) } = {
-      'hello': '👋 Hi! How can I help you today?',
-      'hi': '👋 Hi! How can I help you today?',
+      // 'hello': '👋 Hi! How can I help you today?',
+      // 'hi': '👋 Hi! How can I help you today?',
       'help': `<p>Here are some commands you can use:
                     <br>- help: Show this help message
                     <br>- info: Get app info
@@ -123,8 +126,8 @@ export class ChatService {
                 </p>`,
       'info': 'This is a Portfolio Chat App v1.0 belongs to Sanju.',
       'about': 'This is a Portfolio Chat App v1.0 belongs to Sanju.',
-      'who are you': 'I am Sanjay Khatri, your friendly chatbot. How can I assist you today?',
-      'how are you': 'I’m doing great, thanks for asking! How about you?',
+      // 'who are you': 'I am Sanjay Khatri, your friendly chatbot. How can I assist you today?',
+      // 'how are you': 'I’m doing great, thanks for asking! How about you?',
       'clear': () => { this.clearChat(); return 'Chat history cleared!'; },
       'joke': () => this.getRandomJoke(),
       'quote': () => this.getRandomQuote(),
@@ -140,7 +143,8 @@ export class ChatService {
       return this.getQuoteByCategory(lowerCaseMessage.split(' ')[1]);
     }
 
-    return await this.openRouterMessage(userMessage);
+    // return await this.openRouterMessage(userMessage);
+    return await this.tensorFlow(userMessage);
   }
 
   private getRandomJoke(): string {
@@ -260,6 +264,15 @@ export class ChatService {
       return data[0]?.generated_text || "No response from AI.";
     } catch (error) {
       return `An error occurred: ${error}`;
+    }
+  }
+
+  private async tensorFlow(userMessage: string): Promise<string> {
+    try {
+      return await this.tfService.getResponse(userMessage); // Simply return the response without delay
+    } catch (error) {
+      console.error('Error getting response:', error);
+      return 'Sorry, I encountered an error. Please try again later.';
     }
   }
 
