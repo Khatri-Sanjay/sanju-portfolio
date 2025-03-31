@@ -1,0 +1,288 @@
+/* 404.component.scss */
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+
+:host {
+  display: block;
+}
+
+.error-page-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  overflow: hidden;
+  position: relative;
+}
+
+.error-content {
+  padding: 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.error-code {
+  font-size: 8rem;
+  font-weight: 900;
+  color: white;
+  margin-bottom: 0;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  animation: pulse 2s infinite;
+
+  @include media-breakpoint-down(md) {
+    font-size: 6rem;
+  }
+}
+
+.error-message {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: white;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+
+  @include media-breakpoint-down(md) {
+    font-size: 1.8rem;
+  }
+}
+
+.error-description {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+.error-actions {
+  margin-top: 2rem;
+
+  .btn {
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 50px;
+
+    &.btn-primary {
+      background-color: #ff6b6b;
+      border-color: #ff6b6b;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: darken(#ff6b6b, 10%);
+        border-color: darken(#ff6b6b, 10%);
+        transform: translateY(-2px);
+      }
+    }
+
+    &.btn-outline-secondary {
+      color: white;
+      border-color: rgba(255, 255, 255, 0.5);
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}
+
+// Space theme animation
+.error-illustration {
+  position: relative;
+  height: 250px;
+  margin: 2rem 0;
+}
+
+.planet {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: inset -20px -10px 50px rgba(0, 0, 0, 0.2), 0 0 50px rgba(255, 154, 158, 0.5);
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    top: 30px;
+    left: 30px;
+  }
+}
+
+.stars {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow:
+      70px 35px 0 0 rgba(255, 255, 255, 0.7),
+      100px 80px 0 0 rgba(255, 255, 255, 0.9),
+      200px 40px 0 0 rgba(255, 255, 255, 0.8),
+      300px 90px 0 0 rgba(255, 255, 255, 0.6),
+      400px 60px 0 0 rgba(255, 255, 255, 0.5),
+      -70px 35px 0 0 rgba(255, 255, 255, 0.7),
+      -100px 80px 0 0 rgba(255, 255, 255, 0.9),
+      -200px 40px 0 0 rgba(255, 255, 255, 0.8),
+      -300px 90px 0 0 rgba(255, 255, 255, 0.6),
+      -400px 60px 0 0 rgba(255, 255, 255, 0.5);
+    animation: twinkle 3s infinite alternate;
+  }
+
+  &::after {
+    animation-delay: 1.5s;
+  }
+}
+
+.astronaut {
+  position: absolute;
+  width: 40px;
+  height: 60px;
+  left: calc(50% + 80px);
+  top: calc(50% - 30px);
+  animation: float 5s infinite ease-in-out;
+}
+
+.astronaut-backpack {
+  position: absolute;
+  width: 24px;
+  height: 30px;
+  background-color: #e3e3e3;
+  left: 8px;
+  top: 10px;
+  border-radius: 8px;
+}
+
+.astronaut-head {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  background-color: white;
+  border-radius: 50%;
+  left: 6px;
+  top: 2px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 14px;
+    background-color: #b6e1fc;
+    border-radius: 50% / 70% 70% 40% 40%;
+    top: 6px;
+    left: 5px;
+  }
+}
+
+.astronaut-body {
+  position: absolute;
+  width: 30px;
+  height: 25px;
+  background-color: white;
+  border-radius: 8px;
+  left: 5px;
+  top: 30px;
+}
+
+.astronaut-arm {
+  position: absolute;
+  width: 8px;
+  height: 18px;
+  background-color: white;
+  border-radius: 8px;
+
+  &.arm-left {
+    left: -3px;
+    top: 32px;
+    transform: rotate(20deg);
+  }
+
+  &.arm-right {
+    right: -3px;
+    top: 32px;
+    transform: rotate(-20deg);
+  }
+}
+
+.astronaut-leg {
+  position: absolute;
+  width: 8px;
+  height: 20px;
+  background-color: white;
+  border-radius: 8px;
+  bottom: -10px;
+
+  &.leg-left {
+    left: 8px;
+  }
+
+  &.leg-right {
+    right: 8px;
+  }
+}
+
+// Animations
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translate(0, 0) rotate(5deg);
+  }
+  50% {
+    transform: translate(10px, -15px) rotate(-5deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(5deg);
+  }
+}
+
+@keyframes twinkle {
+  0% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+// Add media query for responsiveness
+@include media-breakpoint-down(sm) {
+  .error-illustration {
+    height: 200px;
+  }
+
+  .planet {
+    width: 100px;
+    height: 100px;
+  }
+
+  .astronaut {
+    transform: scale(0.8);
+  }
+}

@@ -41,15 +41,19 @@ export const routes: Routes = [
     data: { preload: true, title: 'Tools Page' }
   },
   {
+    path: '404',
+    loadComponent: () => import('../app/components/page-not-found/page-not-found.component').then(m => m.PageNotFoundComponent),
+    data: { title: '404 Page Not Found', breadcrumb: '' }
+  },
+  {
     path: '**',
     resolve: {
       logRoute: () => {
         console.error('Unknown route accessed!');
-        // Log route details to an analytics service here
         return null;
       },
     },
-    redirectTo: 'portfolio', // Or a 404 page
+    redirectTo: '404',
     pathMatch: 'full'
   }
 

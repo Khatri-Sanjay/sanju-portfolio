@@ -55,6 +55,15 @@ export const AdminRoute: Routes = [
         path: 'messages',
         component: MessagesComponent,
         data: { title: 'Messages', breadcrumb: 'Messages' }
+      },
+      {
+        path: '404',
+        loadComponent: () => import('../page-not-found/page-not-found.component').then(m => m.PageNotFoundComponent),
+        data: { title: '404 Page Not Found', breadcrumb: '' }
+      },
+      {
+        path: '**',
+        redirectTo: '404'
       }
     ]
   }

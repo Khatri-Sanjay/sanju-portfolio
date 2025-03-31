@@ -1,0 +1,31 @@
+<!-- 404.component.html -->
+<div class="error-page-container">
+  <div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100">
+      <div class="col-md-8 text-center">
+        <div class="error-content">
+          <h1 class="error-code">404</h1>
+          <div class="error-illustration">
+            <div class="astronaut">
+              <div class="astronaut-backpack"></div>
+              <div class="astronaut-head"></div>
+              <div class="astronaut-body"></div>
+              <div class="astronaut-arm arm-left"></div>
+              <div class="astronaut-arm arm-right"></div>
+              <div class="astronaut-leg leg-left"></div>
+              <div class="astronaut-leg leg-right"></div>
+            </div>
+            <div class="planet"></div>
+            <div class="stars"></div>
+          </div>
+          <h2 class="error-message">Page Not Found</h2>
+          <p class="error-description">The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
+          <div class="error-actions">
+            <button class="btn btn-primary me-2" (click)="goHome()">Go to {{ isAdminPageNotFound ? 'Dashboard' : 'Homepage'}}</button>
+            <button class="btn btn-outline-secondary" (click)="goBack()">Go Back</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
