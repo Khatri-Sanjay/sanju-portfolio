@@ -110,7 +110,7 @@
       <!-- Profile -->
       <div class="profile-container position-relative"
            (mouseover)="showDropdown = true"
-           (mouseleave)="showDropdown = false">
+      >
         <div class="d-flex align-items-center cursor-pointer">
           <div class="position-relative">
             <img [src]="userAvatar()"
@@ -128,7 +128,10 @@
         </div>
 
         @if (showDropdown) {
-          <div class="profile-dropdown shadow">
+          <div class="profile-dropdown shadow"
+               (mouseover)="showDropdown = true"
+               (mouseleave)="showDropdown = false"
+          >
             <div class="p-3 border-bottom">
               <div class="d-flex align-items-center">
                 <img [src]="userAvatar()"

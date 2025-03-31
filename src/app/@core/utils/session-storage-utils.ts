@@ -1,18 +1,17 @@
 import { CryptoJsUtil } from './crypto-js-util';
 import { ObjectUtil } from './object-util';
 import {environment} from '../../../environment/environment';
-import {User} from '../interface/user';
 
-export class LocalStorageUtil {
+export class SessionStorageUtil {
   /**
    * @description
-   * Saves data into localStorage with encryption under the specified key.
+   * Saves data into sessionStorage with encryption under the specified key.
    * Handles any type of data (string, number, object, etc.).
    * @param data The data to store.
    */
   public static setStorage(data: any): void {
-    if (typeof window === 'undefined' || !window.localStorage) {
-      console.warn('localStorage is not available. Data will not be saved.');
+    if (typeof window === 'undefined' || !window.sessionStorage) {
+      console.warn('sessionStorage is not available. Data will not be saved.');
       return;
     }
     try {
@@ -28,7 +27,7 @@ export class LocalStorageUtil {
       };
       const stringifyData = JSON.stringify(storageData);
       const encryptedData = CryptoJsUtil.encrypt(stringifyData);
-      localStorage.setItem(environment.STORAGE_NAME, encryptedData);
+      sessionStorage.setItem(environment.STORAGE_NAME, encryptedData);
     } catch (error) {
       console.error('Failed to encrypt or save data:', error);
     }
@@ -36,45 +35,45 @@ export class LocalStorageUtil {
 
   /**
    * @description
-   * Retrieves data from localStorage using the specified key.
+   * Retrieves data from sessionStorage using the specified key.
    * If data is encrypted, it decrypts it and parses the JSON.
-   * @returns The stored data, or an empty LocalStorage instance if no data is found.
+   * @returns The stored data, or an empty sessionStorage instance if no data is found.
    */
-  public static getStorage(): LocalStorage {
-    if (typeof window === 'undefined' || !window.localStorage) {
-      return new LocalStorage();
+  public static getStorage(): SessionStorage {
+    if (typeof window === 'undefined' || !window.sessionStorage) {
+      return new SessionStorage();
     }
-    const storedData = localStorage.getItem(environment.STORAGE_NAME);
+    const storedData = sessionStorage.getItem(environment.STORAGE_NAME);
     if (ObjectUtil.isEmpty(storedData)) {
-      return new LocalStorage();
+      return new SessionStorage();
     }
     try {
       const decryptedData = CryptoJsUtil.decrypt(storedData);
-      return JSON.parse(decryptedData) as LocalStorage;
+      return JSON.parse(decryptedData) as SessionStorage;
     } catch (error) {
       console.error('Failed to decrypt or parse data:', error);
-      return new LocalStorage();
+      return new SessionStorage();
     }
   }
 
   /**
    * @description
-   * Clears the storage by setting an empty LocalStorage instance.
+   * Clears the storage by setting an empty sessionStorage instance.
    */
   public static clearStorage(): void {
-    LocalStorageUtil.setStorage(new LocalStorage());
+    SessionStorageUtil.setStorage(new SessionStorage());
   }
 
   public static removeKey(key: string): void {
-    if (typeof window === 'undefined' || !window.localStorage) {
-      console.warn('localStorage is not available. Key will not be removed.');
+    if (typeof window === 'undefined' || !window.sessionStorage) {
+      console.warn('sessionStorage is not available. Key will not be removed.');
       return;
     }
-    localStorage.removeItem(key);
+    sessionStorage.removeItem(key);
   }
 }
 
-export class LocalStorage {
+export class SessionStorage {
   data: any;
   chatMessages: any;
   terminal_theme: any;

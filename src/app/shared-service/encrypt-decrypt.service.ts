@@ -7,7 +7,7 @@ import {environment} from '../../environment/environment';
 })
 export class EncryptDecryptService {
 
-  private secretKey = environment.LOCAL_STORAGE_KEY;
+  private secretKey = environment.STORAGE_KEY;
 
   constructor() { }
 

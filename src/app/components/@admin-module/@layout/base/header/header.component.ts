@@ -5,6 +5,7 @@ import {FormsModule} from '@angular/forms';
 import {isPlatformBrowser} from '@angular/common';
 import {LocalStorageUtil} from '../../../../../@core/utils/local-storage-utils';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {SessionStorageUtil} from '../../../../../@core/utils/session-storage-utils';
 
 @Component({
   selector: 'app-header',
@@ -154,9 +155,16 @@ export class HeaderComponent implements OnInit{
     this.showDropdown = false;
   }
 
+  onMouseLeave() {
+    setTimeout( () => {
+      this.showDropdown = false;
+    }, 3000)
+  }
+
   logout() {
     LocalStorageUtil.clearStorage();
-    this.router.navigate(['/login']);
+    SessionStorageUtil.clearStorage();
+    this.router.navigate(['/auth/login']);
     this.showDropdown = false;
   }
 }

@@ -1,5 +1,4 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {MatButton} from '@angular/material/button';
 import {
   ActionButton, ColumnConfig,
   DynamicTableComponent,
@@ -15,7 +14,6 @@ import {ToastrService} from 'ngx-toastr';
 @Component({
   selector: 'app-user',
   imports: [
-    MatButton,
     DynamicTableComponent,
     DynamicTableComponent,
     PopUpComponent,
