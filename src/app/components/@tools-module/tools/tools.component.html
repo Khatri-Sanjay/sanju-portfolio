@@ -1,5 +1,317 @@
-<div class="tools-container">
-  <div class="coming-soon-message">
-    <span [innerHTML]="typedText"></span>
+<!-- tool-cards.component.html -->
+<div class="container-fluid tool-cards-container">
+  <h2 class="text-center mb-2">My Creative Tools</h2>
+  <p class="text-center text-muted mb-4">A collection of powerful tools built for designers and developers</p>
+
+  <!-- Search and Filter -->
+  <div class="tool-filters mb-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-6">
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-search"></i></span>
+          <input type="text" class="form-control" placeholder="Search tools..."
+                 (input)="searchTools()"
+                 [(ngModel)]="searchQuery" (keyup.enter)="searchTools()">
+          <button class="btn btn-primary" (click)="searchTools()">Search</button>
+        </div>
+      </div>
+      <div class="col-12 col-md-4 mt-3 mt-md-0">
+        <div class="category-filter">
+          <button class="filter-btn" [ngClass]="{'active': activeCategory === 'all'}"
+                  (click)="setCategory('all')">All</button>
+          <button class="filter-btn" [ngClass]="{'active': activeCategory === 'design'}"
+                  (click)="setCategory('design')">Design</button>
+          <button class="filter-btn" [ngClass]="{'active': activeCategory === 'development'}"
+                  (click)="setCategory('development')">Development</button>
+          <button class="filter-btn" [ngClass]="{'active': activeCategory === 'analytics'}"
+                  (click)="setCategory('analytics')">Analytics</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if(isLoading) {
+    <div class="loading-container">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">Loading tools...</p>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if(!isLoading && filteredTools.length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">
+        <i class="bi bi-search"></i>
+      </div>
+      <h4>No tools found</h4>
+      <p>Try adjusting your search or filters</p>
+      <button class="btn btn-outline-primary" (click)="searchQuery = ''; activeCategory = 'all'; searchTools()">
+        Reset Filters
+      </button>
+    </div>
+  }
+
+  @if(!isLoading && filteredTools.length > 0) {
+    <div class="row g-4">
+      <div *ngFor="let tool of filteredTools" class="col-12 col-sm-6 col-lg-4">
+        <div class="card tool-card h-100" (click)="openToolDetails(tool)">
+          <!-- Card Top: Image or Icon Header -->
+          @if (hasValidImage(tool)) {
+            <div class="tool-image-container">
+              <img [src]="tool.mainImage" class="card-img-top" [alt]="tool.name" loading="lazy">
+              <div class="tool-category-badge" [ngClass]="'category-' + tool.category">
+                {{tool.category}}
+              </div>
+              <div class="tool-icon-badge">
+                <i class="bi bi-{{tool.icon}}"></i>
+              </div>
+            </div>
+          } @else {
+            <div class="tool-text-header" [ngClass]="'category-bg-' + tool.category">
+              <div class="tool-category-badge" [ngClass]="'category-' + tool.category">
+                {{tool.category}}
+              </div>
+              <div class="tool-icon-large">
+                <i class="{{tool.icon}}"></i>
+              </div>
+              <h4 class="text-header-title">{{tool.name}}</h4>
+            </div>
+          }
+
+          <!-- Card Body -->
+          <div class="card-body">
+            <!-- Only show title again if we're using the image version -->
+            @if (hasValidImage(tool)) {
+              <h5 class="card-title">{{tool.name}}</h5>
+            }
+            <p class="card-subtitle mb-3">{{tool.shortDescription}}</p>
+
+            <div class="tool-figure" [ngClass]="tool.figureType">
+
+                @switch (tool.figureType) {
+                  @case ('chart') {
+                    <div class="chart-container">
+                      <div class="chart-bars">
+                        <div class="bar" style="height: 60%"><span class="bar-label">60%</span></div>
+                        <div class="bar" style="height: 80%"><span class="bar-label">80%</span></div>
+                        <div class="bar" style="height: 40%"><span class="bar-label">40%</span></div>
+                        <div class="bar" style="height: 90%"><span class="bar-label">90%</span></div>
+                        <div class="bar" style="height: 70%"><span class="bar-label">70%</span></div>
+                      </div>
+                    </div>
+                  }
+
+                  @case ('graph') {
+                    <div class="graph-container">
+                      <svg viewBox="0 0 100 50" preserveAspectRatio="none">
+                        <polyline points="0,50 20,30 40,35 60,15 80,25 100,10"
+                                  fill="none" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="0" cy="50" r="2" class="data-point" />
+                        <circle cx="20" cy="30" r="2" class="data-point" />
+                        <circle cx="40" cy="35" r="2" class="data-point" />
+                        <circle cx="60" cy="15" r="2" class="data-point" />
+                        <circle cx="80" cy="25" r="2" class="data-point" />
+                        <circle cx="100" cy="10" r="2" class="data-point" />
+                      </svg>
+                    </div>
+                  }
+                  @case ('diagram') {
+                    <div class="diagram-container">
+                      <div class="diagram-node central">
+                        <div class="node-icon"><i class="bi bi-box"></i></div>
+                      </div>
+                      <div class="diagram-lines">
+                        <div class="line line-1"></div>
+                        <div class="line line-2"></div>
+                        <div class="line line-3"></div>
+                      </div>
+                      <div class="diagram-node node-1">
+                        <div class="node-icon"><i class="bi bi-circle"></i></div>
+                      </div>
+                      <div class="diagram-node node-2">
+                        <div class="node-icon"><i class="bi bi-triangle"></i></div>
+                      </div>
+                      <div class="diagram-node node-3">
+                        <div class="node-icon"><i class="bi bi-square"></i></div>
+                      </div>
+                    </div>
+                  }
+                  @case ('stats') {
+                    <div class="stats-container">
+                      <div class="stat-item">
+                        <div class="stat-value">92%</div>
+                        <div class="stat-bar">
+                          <div class="stat-fill" style="width: 92%"></div>
+                        </div>
+                      </div>
+                      <div class="stat-item">
+                        <div class="stat-value">67%</div>
+                        <div class="stat-bar">
+                          <div class="stat-fill" style="width: 67%"></div>
+                        </div>
+                      </div>
+                      <div class="stat-item">
+                        <div class="stat-value">45%</div>
+                        <div class="stat-bar">
+                          <div class="stat-fill" style="width: 45%"></div>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                }
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="tool-tech">
+                @if (tool.technologies && tool.technologies.length > 0) {
+                  <span class="tech-badge">{{tool.technologies[0]}}</span>
+                  @if (tool.technologies.length > 1) {
+                    <span class="tech-more">+{{tool.technologies.length - 1}}</span>
+                  }
+                }
+              </div>
+              <div class="action-buttons">
+                @if (tool.demo) {
+                  <button class="btn btn-sm btn-primary"
+                          (click)="navigateToDemo(tool.demo, $event)">
+                    <i class="bi bi-play-circle"></i>
+                  </button>
+                }
+
+                @if (tool.code) {
+                  <button class="btn btn-sm btn-outline-dark"
+                          (click)="navigateToDemo(tool.code, $event)">
+                    <i class="bi bi-code-slash"></i>
+                  </button>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+<div class="modal fade" [ngClass]="{'show': selectedTool, 'd-block': selectedTool}" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-{{selectedTool?.icon}} me-2"></i>
+          {{selectedTool?.name}}
+        </h5>
+        <button type="button" class="btn-close" (click)="closeToolDetails()"></button>
+      </div>
+
+      @if (selectedTool) {
+        <div class="modal-body">
+          <div class="row mb-4">
+            <div class="col-md-7">
+              @if (hasValidImage(selectedTool) && selectedTool.otherImages && selectedTool.otherImages.length > 0) {
+                  <div class="image-gallery">
+                    <div class="gallery-main">
+                      <img [src]="selectedTool.otherImages[currentImageIndex]" class="img-fluid rounded" [alt]="selectedTool.name" loading="lazy">
+                    </div>
+                    <div class="gallery-nav">
+                      <button class="gallery-nav-btn prev" (click)="prevImage()">
+                        <i class="bi bi-chevron-left"></i>
+                      </button>
+                      @if (selectedTool.mainImage && selectedTool.otherImages.length) {
+                        <div class="gallery-indicators">
+                          @for (img of getAllImages(selectedTool.mainImage, selectedTool.otherImages); track img; let i = $index) {
+                            <span [ngClass]="{'active': i === currentImageIndex}" (click)="currentImageIndex = i"></span>
+                          }
+                        </div>
+                      }
+                      <button class="gallery-nav-btn next" (click)="nextImage()">
+                        <i class="bi bi-chevron-right"></i>
+                      </button>
+                    </div>
+                  </div>
+              } @else {
+                @if (hasValidImage(selectedTool)) {
+                  <img [src]="selectedTool.mainImage" class="img-fluid rounded" [alt]="selectedTool.name" loading="lazy">
+                } @else {
+                  <div class="modal-icon-display mb-3" [ngClass]="'category-bg-' + selectedTool.category">
+                    <i class="{{selectedTool.icon}}"></i>
+                  </div>
+                }
+              }
+            </div>
+
+            <div class="col-md-5">
+              <div class="tool-meta">
+                <div class="tool-category" [ngClass]="'category-' + selectedTool.category">
+                  <i class="bi bi-tag"></i> {{selectedTool.category}}
+                </div>
+
+                <h5 class="mb-3">About this tool</h5>
+                <p class="tool-description">{{selectedTool.shortDescription}}</p>
+
+                <div class="tool-cta mt-4">
+                  @if (selectedTool.demo) {
+                    <button class="btn btn-primary w-100 mb-2"
+                            (click)="navigateToDemo(selectedTool.demo)">
+                      <i class="bi bi-play-circle me-2"></i> Try Demo
+                    </button>
+                  }
+                  @if (selectedTool.code) {
+                    <button class="btn btn-outline-dark w-100"
+                            (click)="navigateToDemo(selectedTool.code)">
+                      <i class="bi bi-github me-2"></i> View Code
+                    </button>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Features and Technologies -->
+          <div class="row">
+            <div class="col-md-12">
+              <p class="tool-description text-justify">{{selectedTool.description}}</p>
+            </div>
+            <div class="col-md-12">
+              <div class="features-section">
+                <h5><i class="bi bi-check-circle me-2"></i> Features</h5>
+                <ul class="feature-list">
+                  @for (feature of selectedTool.features; track feature) {
+                    <li>
+                      <i class="bi bi-check-circle-fill text-success"></i>
+                      {{feature}}
+                    </li>
+                  }
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="tech-section">
+                <h5><i class="bi bi-code-square me-2"></i> Technologies</h5>
+                <div class="technologies">
+                  @for (tech of selectedTool.technologies; track tech) {
+                    <span class="badge bg-primary me-2 mb-2">{{tech}}</span>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeToolDetails()">Close</button>
+      </div>
+    </div>
   </div>
 </div>
+
+@if (selectedTool) {
+  <div class="modal-backdrop fade" [ngClass]="{'show': selectedTool}" (click)="closeToolDetails()"></div>
+}

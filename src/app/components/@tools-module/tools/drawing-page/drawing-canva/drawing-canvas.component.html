@@ -1,0 +1,17 @@
+<div class="canvas-container">
+  <canvas id="drawingCanvas" #canvas [width]="width" [height]="height"></canvas>
+  @if (isTextMode) {
+    <div class="text-editor"
+         [style.left.px]="textPosition.x"
+         [style.top.px]="textPosition.y"
+    >
+      <input #textInput type="text"
+             class="paint-textbox"
+             [style.font]="textFont"
+             [style.color]="textColor"
+             (keyup.enter)="confirmText(textInput.value)"
+             (blur)="confirmText(textInput.value)"
+             autofocus>
+    </div>
+  }
+</div>

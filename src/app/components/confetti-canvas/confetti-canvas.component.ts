@@ -27,30 +27,28 @@ export class ConfettiCanvasComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      // Browser-only code here
       this.initConfetti();
     }
   }
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      // Browser-only code here
       this.initConfetti();
     }
   }
 
   private initConfetti(): void {
-    const canvas = this.confettiCanvas.nativeElement;
+    const canvas = this.confettiCanvas?.nativeElement;
     if (canvas) {
       confetti.create(canvas, {
-        resize: true, // will fit all screen sizes
-        useWorker: true, // improves performance
+        resize: true,
+        useWorker: true,
       })();
     }
   }
 
   private launchConfetti(): void {
-    const duration = 5000; // in milliseconds
+    const duration = 5000;
     const end = Date.now() + duration;
 
     const interval = setInterval(() => {

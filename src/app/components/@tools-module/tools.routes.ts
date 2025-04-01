@@ -1,10 +1,10 @@
-import {Routes} from '@angular/router';
+import { Routes } from '@angular/router';
 
 export const ToolsRoutes: Routes = [
   {
     path: '',
     redirectTo: 'dashboard',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'dashboard',
@@ -12,9 +12,13 @@ export const ToolsRoutes: Routes = [
       import('../../components/@tools-module/tools/tools.component').then(
         (m) => m.ToolsComponent
       ),
-    data: {
-      title: 'Tools Dashboard',
-      description: 'Welcome to Tools',
-    },
+    data: { title: 'Tools Dashboard', description: 'Welcome to Tools' }
+  },
+  {
+    path: 'drawing',
+    loadComponent: () =>
+      import('../@tools-module/tools/drawing-page/drawing-page.component')
+        .then((m) => m.DrawingPageComponent),
+    data: { title: 'Drawing Tool', description: 'Draw your thoughts' },
   },
 ];

@@ -1,0 +1,424 @@
+<div class="canvas-page-container">
+  <div class="toolbar-sidebar" [ngClass]="{'collapsed': isToolbarCollapsed}">
+    <div class="toolbar-toggle" (click)="toggleToolbar()">
+      <i class="bi" [ngClass]="isToolbarCollapsed ? 'bi-chevron-right' : 'bi-chevron-left'"></i>
+    </div>
+
+    <div class="toolbar-content">
+      <div class="accordion" id="toolsAccordion">
+        <!-- Drawing Tools Section -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="drawingToolsHeading">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#drawingToolsCollapse" aria-expanded="true" aria-controls="drawingToolsCollapse">
+              <i class="bi bi-pencil-fill me-2"></i> Drawing Tools
+            </button>
+          </h2>
+          <div id="drawingToolsCollapse" class="accordion-collapse collapse show" aria-labelledby="drawingToolsHeading">
+            <div class="accordion-body">
+              <div class="btn-group w-100 mb-3">
+                <button type="button" ngbTooltip="Brush" class="btn btn-sm" [ngClass]="{'btn-primary': currentMode === DrawingMode.Brush, 'btn-outline-primary': currentMode !== DrawingMode.Brush}" (click)="setDrawingMode(DrawingMode.Brush)">
+                  <i class="bi bi-brush me-1"></i>
+                </button>
+                <button type="button" ngbTooltip="Eraser" class="btn btn-sm" [ngClass]="{'btn-primary': currentMode === DrawingMode.Eraser, 'btn-outline-primary': currentMode !== DrawingMode.Eraser}" (click)="setDrawingMode(DrawingMode.Eraser)">
+                  <i class="bi bi-eraser me-1"></i>
+                </button>
+                <button type="button" ngbTooltip="Shape" class="btn btn-sm" [ngClass]="{'btn-primary': currentMode === DrawingMode.Shape, 'btn-outline-primary': currentMode !== DrawingMode.Shape}" (click)="setDrawingMode(DrawingMode.Shape)">
+                  <i class="bi bi-hexagon me-1"></i>
+                </button>
+                <button type="button" ngbTooltip="Text" class="btn btn-sm" [ngClass]="{'btn-primary': currentMode === DrawingMode.Text, 'btn-outline-primary': currentMode !== DrawingMode.Text}" (click)="setDrawingMode(DrawingMode.Text)">
+                  <i class="bi bi-type me-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shape Options Section -->
+        @if (currentMode === DrawingMode.Shape) {
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="shapeOptionsHeading">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#shapeOptionsCollapse" aria-expanded="true" aria-controls="shapeOptionsCollapse">
+                <i class="bi bi-shapes me-2"></i> Shape Options
+              </button>
+            </h2>
+            <div id="shapeOptionsCollapse" class="accordion-collapse collapse show" aria-labelledby="shapeOptionsHeading">
+              <div class="accordion-body">
+                <div class="btn-group w-100 mb-3">
+                  <button type="button" ngbTooltip="Line" class="btn btn-sm" [ngClass]="{'btn-primary': currentShapeType === ShapeType.Line, 'btn-ouShapeType.Line-primary': currentShapeType !== ShapeType.Line}" (click)="setShapeType(ShapeType.Line)">
+                    <i class="bi bi-slash-lg"></i>
+                  </button>
+                  <button type="button" ngbTooltip="Square" class="btn btn-sm" [ngClass]="{'btn-primary': currentShapeType === ShapeType.Rect, 'btn-outline-primary': currentShapeType !== ShapeType.Rect}" (click)="setShapeType(ShapeType.Rect)">
+                    <i class="bi bi-square"></i>
+                  </button>
+                  <button type="button" ngbTooltip="Circle" class="btn btn-sm" [ngClass]="{'btn-primary': currentShapeType === ShapeType.Circle, 'btn-outline-primary': currentShapeType !== ShapeType.Circle}" (click)="setShapeType(ShapeType.Circle)">
+                    <i class="bi bi-circle"></i>
+                  </button>
+                  <button type="button" ngbTooltip="Triangle" class="btn btn-sm" [ngClass]="{'btn-primary': currentShapeType === ShapeType.Triangle, 'btn-outline-primary': currentShapeType !== ShapeType.Triangle}" (click)="setShapeType(ShapeType.Triangle)">
+                    <i class="bi bi-triangle"></i>
+                  </button>
+                  <button type="button" ngbTooltip="Star" class="btn btn-sm" [ngClass]="{'btn-primary': currentShapeType === ShapeType.Star, 'btn-outline-primary': currentShapeType !== ShapeType.Star}" (click)="setShapeType(ShapeType.Star)">
+                    <i class="bi bi-star"></i>
+                  </button>
+                  <button type="button" ngbTooltip="Ellipse" class="btn btn-sm" [ngClass]="{'btn-primary': currentShapeType === ShapeType.Ellipse, 'btn-outline-primary': currentShapeType !== ShapeType.Ellipse}" (click)="setShapeType(ShapeType.Ellipse)"
+                  >
+                    <img src="assets/image/ellipse.png" alt="Ellipse"
+                         style="width: 18px; height: 18px; transition: filter 0.3s ease, transform 0.3s ease, filter 0.3s ease;;
+                        filter: brightness(0) saturate(100%) invert(35%) sepia(60%) saturate(460%) hue-rotate(190deg);"
+                         [style.filter]="currentShapeType === 'ellipse' ? 'brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg)' : 'brightness(0) saturate(100%) invert(35%) sepia(60%) saturate(460%) hue-rotate(190deg)'"
+                         [style.transform]="currentShapeType === 'ellipse' ? 'scale(1.2)' : 'scale(1)'"
+                         onmouseover="this.style.filter='brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg)'"
+                         onmouseout="this.style.filter='brightness(0) saturate(100%) invert(35%) sepia(60%) saturate(460%) hue-rotate(190deg)'"/>
+                  </button>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="fillShapeCheck" [(ngModel)]="fillShape">
+                  <label class="form-check-label" for="fillShapeCheck">
+                    Fill Shape
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Brush Styles Section -->
+        @if (currentMode === DrawingMode.Brush) {
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="brushStylesHeading">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#brushStylesCollapse" aria-expanded="true" aria-controls="brushStylesCollapse">
+                <i class="bi bi-brush me-2"></i> Brush Styles
+              </button>
+            </h2>
+            <div id="brushStylesCollapse" class="accordion-collapse collapse show" aria-labelledby="brushStylesHeading">
+              <div class="accordion-body">
+                <div class="btn-group-vertical w-100">
+                  @for (style of brushStyleKeys; track style) {
+                    <button
+                      type="button"
+                      class="btn btn-sm mb-1"
+                      [ngClass]="{'btn-primary': currentBrushStyle === style.value, 'btn-outline-primary': currentBrushStyle !== style.value}"
+                      (click)="setBrushStyle(style.value)">
+                      {{ style.key }}
+                    </button>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Color & Size Section -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="colorSizeHeading">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#colorSizeCollapse" aria-expanded="true" aria-controls="colorSizeCollapse">
+              <i class="bi bi-palette me-2"></i> Color & Size
+            </button>
+          </h2>
+          <div id="colorSizeCollapse" class="accordion-collapse collapse show" aria-labelledby="colorSizeHeading">
+            <div class="accordion-body">
+              <div class="mb-3">
+                <label class="form-label d-flex justify-content-between align-items-center">
+                  <span>Line Color:</span>
+                  <input type="color" class="form-control form-control-color" [(ngModel)]="lineColor" (change)="updateCanvasOptions()">
+                </label>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Line Width: {{ lineWidth }}px</label>
+                <input type="range" class="form-range" min="1" max="50" [(ngModel)]="lineWidth" (change)="updateCanvasOptions()">
+              </div>
+
+              @if (currentMode === DrawingMode.Text) {
+                <div>
+                  <div class="mb-3">
+                    <label class="form-label d-flex justify-content-between align-items-center">
+                      <span>Text Color:</span>
+                      <input type="color" class="form-control form-control-color" [(ngModel)]="textColor" (change)="updateTextOptions()">
+                    </label>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Font Size:</label>
+                    <select class="form-select" [(ngModel)]="fontSize" (change)="updateTextOptions()">
+                      <option value="10">10px</option>
+                      <option value="12">12px</option>
+                      <option value="14">14px</option>
+                      <option value="16">16px</option>
+                      <option value="20">20px</option>
+                      <option value="24">24px</option>
+                      <option value="32">32px</option>
+                      <option value="48">48px</option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Font Family:</label>
+                    <select class="form-select" [(ngModel)]="fontFamily" (change)="updateTextOptions()">
+                      <option value="Arial">Arial</option>
+                      <option value="Helvetica">Helvetica</option>
+                      <option value="Times New Roman">Times New Roman</option>
+                      <option value="Courier New">Courier New</option>
+                      <option value="Georgia">Georgia</option>
+                      <option value="Verdana">Verdana</option>
+                    </select>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Actions Section -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="actionsHeading">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#actionsCollapse" aria-expanded="true" aria-controls="actionsCollapse">
+              <i class="bi bi-lightning-charge me-2"></i> Actions
+            </button>
+          </h2>
+          <div id="actionsCollapse" class="accordion-collapse collapse show" aria-labelledby="actionsHeading">
+            <div class="accordion-body">
+              <div class="d-grid gap-2">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-outline-secondary" (click)="undo()">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i> Undo
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary" (click)="redo()">
+                    <i class="bi bi-arrow-clockwise me-1"></i> Redo
+                  </button>
+                </div>
+                <button type="button" class="btn btn-outline-danger" (click)="clear()">
+                  <i class="bi bi-trash me-1"></i> Clear
+                </button>
+                <button type="button" class="btn btn-primary" (click)="saveImage()">
+                  <i class="bi bi-download me-1"></i> Save Image
+                </button>
+                <!--<button type="button" class="btn btn-primary" (click)="saveVideo()">
+                  <i class="bi bi-download me-1"></i> Save Video
+                </button>-->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Effects Section -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="effectsHeading">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#effectsCollapse" aria-expanded="false" aria-controls="effectsCollapse">
+              <i class="bi bi-magic me-2"></i> Effects
+            </button>
+          </h2>
+          <div id="effectsCollapse" class="accordion-collapse collapse" aria-labelledby="effectsHeading">
+            <div class="accordion-body">
+              <div class="d-grid gap-2">
+                <button type="button" class="btn btn-outline-secondary" (click)="applyFilter(ImageFilter.Grayscale)">
+                  <i class="bi bi-filter me-1"></i> Grayscale
+                </button>
+                <button type="button" class="btn btn-outline-secondary" (click)="applyFilter(ImageFilter.Invert)">
+                  <i class="bi bi-filter me-1"></i> Invert
+                </button>
+                <button type="button" class="btn btn-outline-secondary" (click)="applyFilter(ImageFilter.Sepia)">
+                  <i class="bi bi-filter me-1"></i> Sepia
+                </button>
+                <button type="button" class="btn btn-outline-secondary" (click)="applyFilter(ImageFilter.Blur)">
+                  <i class="bi bi-filter me-1"></i> Blur
+                </button>
+                <button type="button" class="btn btn-outline-secondary" (click)="applyFilter(ImageFilter.Sharpen)">
+                  <i class="bi bi-filter me-1"></i> Sharpen
+                </button>
+                <button type="button" class="btn btn-outline-secondary" (click)="applyFilter(ImageFilter.Emboss)">
+                  <i class="bi bi-filter me-1"></i> Emboss
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Background Section -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="backgroundHeading">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#backgroundCollapse" aria-expanded="false" aria-controls="backgroundCollapse">
+              <i class="bi bi-back me-2"></i> Background Color
+            </button>
+          </h2>
+          <div id="backgroundCollapse" class="accordion-collapse collapse" aria-labelledby="backgroundHeading">
+            <div class="accordion-body">
+              <div class="mb-3">
+                <label class="form-label d-flex justify-content-between align-items-center">
+                  <span>Color:</span>
+                  <input type="color" class="form-control form-control-color" [(ngModel)]="backgroundColor" (change)="updateBackGroundColor()">
+                </label>
+              </div>
+              <div class="mb-3">
+                <label class="form-label d-flex justify-content-between align-items-center">
+                  <span>Gradiant Color:</span>
+                  <input type="color" class="form-control form-control-color" [(ngModel)]="gradiantColorOne">
+                  <input type="color" class="form-control form-control-color" [(ngModel)]="gradiantColorTwo">
+                  <input type="color" class="form-control form-control-color" [(ngModel)]="gradiantColorThree">
+                </label>
+              </div>
+              <div class="d-grid gap-2">
+                <button type="button" class="btn btn-outline-secondary" (click)="applyGradient(GradientType.LinearHorizontal)">
+                  <i class="bi bi-arrow-left-right me-1"></i> Horizontal Gradient
+                </button>
+                <button type="button" class="btn btn-outline-secondary" (click)="applyGradient(GradientType.LinearVertical)">
+                  <i class="bi bi-arrow-down-up me-1"></i> Vertical Gradient
+                </button>
+                <button type="button" class="btn btn-outline-secondary" (click)="applyGradient(GradientType.Radial)">
+                  <i class="bi bi-record-circle me-1"></i> Radial Gradient
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Canvas Size Section -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="canvasSizeHeading">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#canvasSizeCollapse" aria-expanded="false" aria-controls="canvasSizeCollapse">
+              <i class="bi bi-aspect-ratio me-2"></i> Canvas Size
+            </button>
+          </h2>
+          <div id="canvasSizeCollapse" class="accordion-collapse collapse" aria-labelledby="canvasSizeHeading">
+            <div class="accordion-body">
+              <div class="mb-3">
+                <label class="form-label">Width:</label>
+                <input type="number" class="form-control" [(ngModel)]="canvasWidth" min="300" max="3000">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Height:</label>
+                <input type="number" class="form-control" [(ngModel)]="canvasHeight" min="300" max="3000">
+              </div>
+              <button type="button" class="btn btn-primary w-100" (click)="resizeCanvas()">
+                <i class="bi bi-arrows-fullscreen me-1"></i> Resize
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grid Options Section -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="gridOptionsHeading">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#gridOptionsCollapse" aria-expanded="false" aria-controls="gridOptionsCollapse">
+              <i class="bi bi-grid-3x3 me-2"></i> Grid Options
+            </button>
+          </h2>
+          <div id="gridOptionsCollapse" class="accordion-collapse collapse" aria-labelledby="gridOptionsHeading">
+            <div class="accordion-body">
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="showGridCheck" [(ngModel)]="showGrid" (change)="toggleGrid()">
+                <label class="form-check-label" for="showGridCheck">
+                  Show Grid
+                </label>
+              </div>
+              @if (showGrid) {
+                <div class="mb-3">
+                  <label class="form-label">Grid Size: {{ gridSize }}px</label>
+                  <input type="range" class="form-range" min="5" max="100" [(ngModel)]="gridSize" (change)="toggleGrid()">
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Image Adjustments Section -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="imageAdjustmentsHeading">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#imageAdjustmentsCollapse" aria-expanded="false" aria-controls="imageAdjustmentsCollapse">
+              <i class="bi bi-sliders me-2"></i> Image Adjustments
+            </button>
+          </h2>
+          <div id="imageAdjustmentsCollapse" class="accordion-collapse collapse" aria-labelledby="imageAdjustmentsHeading">
+            <div class="accordion-body">
+              <div class="mb-3">
+                <label class="form-label">Brightness: {{ brightness }}</label>
+                <input type="range" class="form-range" min="-100" max="100" [(ngModel)]="brightness" (change)="adjustImage()">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Contrast: {{ contrast }}</label>
+                <input type="range" class="form-range" min="-100" max="100" [(ngModel)]="contrast" (change)="adjustImage()">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Saturation: {{ saturation }}</label>
+                <input type="range" class="form-range" min="-100" max="100" [(ngModel)]="saturation" (change)="adjustImage()">
+              </div>
+              <button type="button" class="btn btn-outline-secondary w-100" (click)="resetAdjustments()">
+                <i class="bi bi-arrow-repeat me-1"></i> Reset
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add Image Section -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="addImageHeading">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#addImageCollapse" aria-expanded="false" aria-controls="addImageCollapse">
+              <i class="bi bi-image me-2"></i> Add Image
+            </button>
+          </h2>
+          <div id="addImageCollapse" class="accordion-collapse collapse" aria-labelledby="addImageHeading">
+            <div class="accordion-body">
+              <div class="mb-3">
+                <label for="imageUpload" class="form-label">Upload Image:</label>
+                <input class="form-control" type="file" id="imageUpload" #imageInput accept="image/*" (change)="handleImageUpload($event)">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Special Effects Section -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="specialEffectsHeading">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#specialEffectsCollapse" aria-expanded="false" aria-controls="specialEffectsCollapse">
+              <i class="bi bi-stars me-2"></i> Special Effects
+            </button>
+          </h2>
+          <div id="specialEffectsCollapse" class="accordion-collapse collapse" aria-labelledby="specialEffectsHeading">
+            <div class="accordion-body">
+              <button type="button" class="btn btn-outline-primary w-100" (click)="createParticleEffect()">
+                <i class="bi bi-snow me-1"></i> Particle Effect
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="canvas-area">
+
+    <div class="info-marquee">
+      <div class="scrolling-text-container">
+        @for (array of myArray; track array) {
+          <div class="scrolling-text">
+            <span class="icon"></span> Draw anything you want! Use the toolbar to select colors, shapes, and brushes.
+          </div>
+        }
+      </div>
+    </div>
+
+
+
+    @if (isToolbarCollapsed) {
+      <div class="floating-toolbar d-lg-none">
+        <button class="btn btn-sm btn-primary" (click)="toggleToolbar()">
+          <i class="bi bi-palette"></i>
+        </button>
+
+        <div class="mt-2 mx-3">
+          Draw Any thing as you want.
+        </div>
+      </div>
+    }
+
+    <app-drawing-canvas
+      #canvasComponent
+      [width]="canvasWidth"
+      [height]="canvasHeight"
+      [backgroundColor]="backgroundColor"
+      [lineColor]="lineColor"
+      [lineWidth]="lineWidth"
+      [drawingMode]="currentMode"
+      [shapeType]="currentShapeType"
+      [fillShape]="fillShape"
+      [brushStyle]="currentBrushStyle"
+      (canvasChanged)="onCanvasChanged()">
+    </app-drawing-canvas>
+  </div>
+</div>

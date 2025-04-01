@@ -1,71 +1,637 @@
-.tools-container {
+/* tool-cards.component.scss */
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+
+// Custom variables
+$card-border-radius: 1rem;
+$card-transition: all 0.3s ease;
+$primary-gradient: linear-gradient(135deg, $primary, lighten($primary, 15%));
+
+// Category-specific colors
+$category-colors: (
+  'design': #4c6ef5,
+  'development': #38b2ac,
+  'analytics': #805ad5,
+  'other': #f59e0b
+);
+
+.tool-cards-container {
+  padding: 3rem 1rem;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+
+  @include media-breakpoint-up(md) {
+    padding: 4rem 2rem;
+  }
+
+  h2 {
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: $gray-800;
+    font-size: 2.5rem;
+  }
+}
+
+// Category styles
+@each $category, $color in $category-colors {
+  .category-#{$category} {
+    background-color: $color;
+    color: white;
+  }
+
+  .category-bg-#{$category} {
+    background: linear-gradient(135deg, $color, lighten($color, 15%));
+    color: white;
+  }
+}
+
+// Loading and empty states
+.loading-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 100vh;
-  background-color: #f7f7f7;
-  position: relative;
-  overflow: hidden;
+  justify-content: center;
+  padding: 3rem;
+  color: $gray-600;
 }
 
-.coming-soon-message {
-  font-size: 2rem;
-  font-weight: bold;
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
   text-align: center;
-  padding-right: 10px;
-  background: linear-gradient(90deg, #ff6347, #32cd32, #1e90ff, #ff1493);
-  background-size: 300% 300%; /* Smooth transition of gradient */
-  animation: typingEffect 4s steps(30) 1s forwards, moveGradient 8s ease infinite, subtleGlow 2s ease-in-out infinite alternate;
-  -webkit-background-clip: text;
-  color: transparent; /* Gradient fills the text */
-  text-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Soft glowing effect */
-}
 
-/* Typing effect animation */
-@keyframes typingEffect {
-  from {
-    width: 0;
+  .empty-icon {
+    font-size: 3rem;
+    color: $gray-400;
+    margin-bottom: 1rem;
   }
-  to {
-    width: 100%;
-  }
-}
 
-/* Smooth moving gradient animation */
-@keyframes moveGradient {
-  0% {
-    background-position: 100% 50%;
+  h4 {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
   }
-  50% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 100% 50%;
+
+  p {
+    color: $gray-600;
+    margin-bottom: 1.5rem;
   }
 }
 
-/* Subtle glow effect */
-@keyframes subtleGlow {
-  0% {
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+// Filter and search styles
+.tool-filters {
+  .input-group {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border-radius: 0.75rem;
+    overflow: hidden;
+
+    .input-group-text {
+      background-color: white;
+      border: none;
+      border-right: none;
+      padding-left: 1.25rem;
+    }
+
+    .form-control {
+      border: none;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+
+      &:focus {
+        box-shadow: none;
+      }
+    }
+
+    .btn {
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
   }
-  50% {
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6), 0 0 15px rgba(255, 255, 255, 0.3);
-  }
-  100% {
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+
+  .category-filter {
+    display: flex;
+    background-color: white;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+    .filter-btn {
+      flex: 1;
+      border: none;
+      background: none;
+      padding: 0.75rem 0.5rem;
+      transition: all 0.2s ease;
+      font-weight: 500;
+      color: $gray-600;
+
+      &:hover {
+        background-color: rgba($primary, 0.05);
+        color: $primary;
+      }
+
+      &.active {
+        background-color: $primary;
+        color: white;
+      }
+    }
   }
 }
 
-/* Make it responsive */
-@media (max-width: 768px) {
-  .coming-soon-message {
-    font-size: 1.5rem;
+// Card styles
+.tool-card {
+  transition: $card-transition;
+  border-radius: $card-border-radius;
+  overflow: hidden;
+  border: none;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
+
+    .tool-image-container img {
+      transform: scale(1.05);
+    }
+  }
+
+  // Image-based header
+  .tool-image-container {
+    position: relative;
+    height: 180px;
+    overflow: hidden;
+
+    @include media-breakpoint-down(md) {
+      height: 160px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .tool-icon-badge {
+      position: absolute;
+      bottom: -20px;
+      right: 20px;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: $primary-gradient;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba($primary, 0.3);
+      border: 3px solid white;
+      z-index: 2;
+
+      i {
+        font-size: 1.5rem;
+      }
+    }
+
+    .tool-category-badge {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      padding: 0.35rem 0.75rem;
+      border-radius: 2rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  // Text-based header (when no image)
+  .tool-text-header {
+    position: relative;
+    padding: 2.5rem 1.5rem;
+    background: $primary-gradient;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    .tool-icon-large {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      height: 64px;
+      width: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      i {
+        font-size: 2.5rem;
+      }
+    }
+
+    .text-header-title {
+      font-weight: 700;
+      margin-bottom: 0;
+    }
+
+    .tool-category-badge {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      padding: 0.35rem 0.75rem;
+      border-radius: 2rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .card-body {
+    padding: 1.5rem;
+
+    .card-title {
+      font-weight: 700;
+      margin-top: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-subtitle {
+      color: $gray-600;
+      font-size: 0.875rem;
+    }
+
+    // Tool figures (chart, graph, diagram, stats)
+    .tool-figure {
+      margin: 1.5rem 0 0.5rem;
+      height: 120px;
+      border-radius: 0.5rem;
+      overflow: hidden;
+
+      &.chart {
+        .chart-container {
+          height: 100%;
+          display: flex;
+          align-items: flex-end;
+
+          .chart-bars {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            width: 100%;
+            height: 100%;
+            padding: 0.5rem;
+
+            .bar {
+              width: 18%;
+              background-color: rgba($primary, 0.7);
+              border-radius: 4px 4px 0 0;
+              position: relative;
+
+              .bar-label {
+                position: absolute;
+                top: -20px;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 0.7rem;
+                color: $gray-600;
+              }
+            }
+          }
+        }
+      }
+
+      &.graph {
+        .graph-container {
+          height: 100%;
+          padding: 0.5rem;
+
+          svg {
+            width: 100%;
+            height: 100%;
+
+            polyline {
+              stroke: $primary;
+            }
+
+            .data-point {
+              fill: $primary;
+            }
+          }
+        }
+      }
+
+      &.diagram {
+        .diagram-container {
+          height: 100%;
+          position: relative;
+
+          .diagram-node {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            border: 2px solid $primary;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+
+            &.central {
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              width: 50px;
+              height: 50px;
+              background-color: $primary;
+              color: white;
+            }
+
+            &.node-1 {
+              top: 20%;
+              left: 20%;
+            }
+
+            &.node-2 {
+              top: 70%;
+              left: 30%;
+            }
+
+            &.node-3 {
+              top: 40%;
+              left: 75%;
+            }
+
+            .node-icon {
+              font-size: 1.2rem;
+            }
+          }
+
+          .diagram-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+
+            .line {
+              position: absolute;
+              height: 2px;
+              background-color: rgba($primary, 0.4);
+              z-index: 1;
+
+              &.line-1 {
+                width: 35%;
+                top: 35%;
+                left: 25%;
+                transform: rotate(-25deg);
+              }
+
+              &.line-2 {
+                width: 30%;
+                top: 60%;
+                left: 35%;
+                transform: rotate(35deg);
+              }
+
+              &.line-3 {
+                width: 35%;
+                top: 45%;
+                left: 50%;
+                transform: rotate(-10deg);
+              }
+            }
+          }
+        }
+      }
+
+      &.stats {
+        .stats-container {
+          height: 100%;
+          padding: 0.5rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+
+          .stat-item {
+            display: flex;
+            align-items: center;
+
+            .stat-value {
+              font-weight: 600;
+              width: 40px;
+              font-size: 0.9rem;
+            }
+
+            .stat-bar {
+              flex: 1;
+              height: 8px;
+              background-color: $gray-200;
+              border-radius: 4px;
+              overflow: hidden;
+
+              .stat-fill {
+                height: 100%;
+                background-color: $primary;
+                border-radius: 4px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .card-footer {
+    background-color: white;
+    border-top: 1px solid $gray-200;
+    padding: 1rem 1.5rem;
+
+    .tool-tech {
+      .tech-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        background-color: $gray-200;
+        border-radius: 0.25rem;
+        color: $gray-700;
+      }
+
+      .tech-more {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        color: $gray-600;
+      }
+    }
+
+    .action-buttons {
+      .btn {
+        margin-left: 0.5rem;
+      }
+    }
   }
 }
 
-@media (max-width: 480px) {
-  .coming-soon-message {
-    font-size: 1.2rem;
+// Modal styling
+.modal {
+  .modal-header {
+    border-bottom: 1px solid $gray-200;
+    padding: 1.25rem 1.5rem;
+
+    .modal-title {
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+
+      i {
+        margin-right: 0.75rem;
+        font-size: 1.25rem;
+      }
+    }
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+
+    .modal-icon-display {
+      height: 200px;
+      border-radius: $card-border-radius;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      i {
+        font-size: 5rem;
+      }
+    }
+
+    .image-gallery {
+      .gallery-main {
+        border-radius: $card-border-radius;
+        overflow: hidden;
+        margin-bottom: 1rem;
+
+        img {
+          width: 100%;
+          height: auto;
+        }
+      }
+
+      .gallery-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .gallery-nav-btn {
+          background: none;
+          border: none;
+          font-size: 1.5rem;
+          color: $gray-600;
+          cursor: pointer;
+          padding: 0.25rem;
+
+          &:hover {
+            color: $primary;
+          }
+        }
+
+        .gallery-indicators {
+          display: flex;
+          gap: 0.5rem;
+
+          span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: $gray-400;
+            cursor: pointer;
+
+            &.active {
+              background-color: $primary;
+              transform: scale(1.25);
+            }
+          }
+        }
+      }
+    }
+
+    .tool-meta {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .tool-category {
+        display: inline-block;
+        padding: 0.35rem 0.75rem;
+        border-radius: 2rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+
+        i {
+          margin-right: 0.25rem;
+        }
+      }
+
+      .tool-description {
+        color: $gray-700;
+        flex: 1;
+        margin-bottom: 1rem;
+      }
+
+      .tool-cta {
+        margin-top: auto;
+      }
+    }
+
+    .features-section, .tech-section {
+      margin-top: 1.5rem;
+
+      h5 {
+        font-weight: 600;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+
+        i {
+          margin-right: 0.5rem;
+        }
+      }
+    }
+
+    .feature-list {
+      list-style: none;
+      padding-left: 0.5rem;
+
+      li {
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+
+        i {
+          margin-right: 0.75rem;
+          font-size: 0.875rem;
+        }
+      }
+    }
+
+    .technologies {
+      .badge {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.75rem;
+      }
+    }
+  }
+
+  .modal-footer {
+    border-top: 1px solid $gray-200;
+    padding: 1.25rem 1.5rem;
   }
 }
