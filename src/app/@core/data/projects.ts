@@ -59,5 +59,22 @@ export const Projects = [
       'Android', 'Kotlin'
     ]
   },
+  {
+    projectName: 'Drawing Tools',
+    shortDescription: 'A comprehensive drawing toolbar built with Angular, TypeScript, and Canvas, designed to inspire creativity and streamline visual projects.',
+    description: "The 'Drawing Tools' project is a comprehensive, feature-rich drawing and image editing toolbar designed to provide users with a wide range of creative options. " +
+      "It allows users to create freehand drawings, add geometric shapes, customize text, and apply various image effects, making it perfect for artists, designers, and anyone looking to" +
+      " explore their visual creativity. Built with Angular and Bootstrap, this tool integrates multiple brush styles, shape options, image filters, and advanced canvas customization features.",
+    image: 'assets/image/tools/drawing-tools.png',
+    link:'',
+    demoLink: 'https://khatrisanjay.com.np/tools/drawing',
+    languageUsed: [
+      'Angular',
+      'Bootstrap',
+      'Canvas',
+      'SCSS'
+    ]
+  }
+
 
 ];
