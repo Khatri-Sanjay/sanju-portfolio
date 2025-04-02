@@ -71,7 +71,7 @@ export class ToolsComponent implements OnInit {
             'assets/image/tools/drawing-tools-3.png',
             'assets/image/tools/drawing-tools-4.png',
           ],
-          code: 'https://github.com/yourusername/drawing-tools',
+          code: '/tools/drawing',
           demo: '/tools/drawing',
           features: [
             "<b>Multiple Drawing Modes:</b> Brush, Eraser, Shape, and Text tools for versatile design.",
