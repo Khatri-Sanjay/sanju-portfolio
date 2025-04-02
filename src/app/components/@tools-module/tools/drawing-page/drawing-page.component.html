@@ -92,7 +92,7 @@
             <div id="brushStylesCollapse" class="accordion-collapse collapse show" aria-labelledby="brushStylesHeading">
               <div class="accordion-body">
                 <div class="btn-group-vertical w-100">
-                  @for (style of brushStyleKeys; track style) {
+                  @for (style of brushStyleKeys; track style.key) {
                     <button
                       type="button"
                       class="btn btn-sm mb-1"
@@ -371,9 +371,11 @@
           </h2>
           <div id="specialEffectsCollapse" class="accordion-collapse collapse" aria-labelledby="specialEffectsHeading">
             <div class="accordion-body">
-              <button type="button" class="btn btn-outline-primary w-100" (click)="createParticleEffect()">
-                <i class="bi bi-snow me-1"></i> Particle Effect
-              </button>
+              @for (effect of EffectTypes; track effect.key) {
+                <button type="button" class="btn btn-outline-primary w-100 mb-2" (click)="createSpecialEffect(effect.value)">
+                  <i class="bi bi-snow me-1"></i> {{effect.value}}
+                </button>
+              }
             </div>
           </div>
         </div>
@@ -385,11 +387,21 @@
 
     <div class="info-marquee">
       <div class="scrolling-text-container">
-        @for (array of myArray; track array) {
           <div class="scrolling-text">
             <span class="icon"></span> Draw anything you want! Use the toolbar to select colors, shapes, and brushes.
           </div>
-        }
+          <div class="scrolling-text">
+            <span class="icon"></span> Draw anything you want! Use the toolbar to select colors, shapes, and brushes.
+          </div>
+          <div class="scrolling-text">
+            <span class="icon"></span> Draw anything you want! Use the toolbar to select colors, shapes, and brushes.
+          </div>
+          <div class="scrolling-text">
+            <span class="icon"></span> Draw anything you want! Use the toolbar to select colors, shapes, and brushes.
+          </div>
+          <div class="scrolling-text">
+            <span class="icon"></span> Draw anything you want! Use the toolbar to select colors, shapes, and brushes.
+          </div>
       </div>
     </div>
 

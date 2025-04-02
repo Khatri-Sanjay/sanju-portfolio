@@ -10,6 +10,7 @@ import {ImageFilter} from './@core/enum/image-filter.enum';
 import {GradientType} from './@core/enum/gradient-type.enum';
 import {BrushStyle} from './@core/interface/brush-style.interface';
 import {DrawingCanvasService} from './@core/services/drawing-canvas.service';
+import {EffectTypes} from './@core/enum/effect-types.enum';
 
 @Component({
   selector: 'app-drawing-page',
@@ -43,6 +44,8 @@ export class DrawingPageComponent {
   ShapeType = ShapeType;
   ImageFilter = ImageFilter;
   GradientType = GradientType;
+  EffectTypes: { key: string; value: EffectTypes }[] = Object.entries(EffectTypes).map(([key, value]) => ({ key, value }));
+
 
   // Drawing mode options
   currentMode: DrawingMode = DrawingMode.Brush;
@@ -161,7 +164,7 @@ export class DrawingPageComponent {
     }
 
     if (this.particleCanvas) {
-      this.canvasService.stopParticleEffect(this.particleCanvas);
+      this.canvasService.stopAllEffects(this.particleCanvas);
     }
   }
 
@@ -206,7 +209,6 @@ export class DrawingPageComponent {
     if (this.canvasComponent) {
       const mainCanvas = this.canvasComponent.canvasRef.nativeElement;
 
-      // Create a separate canvas for particles if not already created
       if (!this.particleCanvas) {
         this.particleCanvas = document.createElement('canvas');
         this.particleCanvas.width = mainCanvas.width;
@@ -218,15 +220,51 @@ export class DrawingPageComponent {
         mainCanvas.parentElement?.appendChild(this.particleCanvas);
       }
 
-      // Start animation on the new particle canvas
-      this.canvasService.createParticleEffect(this.particleCanvas, 50);
+      this.canvasService.createParticleEffect(this.particleCanvas, 100);
+    }
+  }
+
+  createSpecialEffect (key: EffectTypes) {
+    if (this.canvasComponent) {
+      const mainCanvas = this.canvasComponent.canvasRef.nativeElement;
+
+      if (!this.particleCanvas) {
+        this.particleCanvas = document.createElement('canvas');
+        this.particleCanvas.width = mainCanvas.width;
+        this.particleCanvas.height = mainCanvas.height;
+        this.particleCanvas.style.position = 'absolute';
+        this.particleCanvas.style.top = '0';
+        this.particleCanvas.style.left = '0';
+        this.particleCanvas.style.pointerEvents = 'none';
+        mainCanvas.parentElement?.appendChild(this.particleCanvas);
+      }
+
+      switch (key) {
+        case EffectTypes.Interactive:
+          this.canvasService.createInteractiveParticleEffect(this.particleCanvas, 100);
+          break;
+        case EffectTypes.ParticleEffect:
+          this.canvasService.createParticleEffect(this.particleCanvas, 100);
+          break;
+        case EffectTypes.FlowingWave:
+          this.canvasService.createFlowingWaveEffect(this.particleCanvas, 100);
+          break;
+        /*case EffectTypes.ShimmeringNetwork:
+          this.canvasService.createShimmeringNetworkEffect(this.particleCanvas, 100);
+          break;*/
+        case EffectTypes.ConfettiBurst:
+          this.canvasService.createConfettiBurstEffect(this.particleCanvas, 100);
+          break;
+        default:
+          this.canvasService.createParticleEffect(this.particleCanvas, 100);
+          break;
+      }
     }
   }
 
   toggleGrid(): void {
     if (this.canvasComponent && this.showGrid) {
       const canvas = this.canvasComponent.canvasRef.nativeElement;
-      // First restore the last state to clear any previous grid
       if (this.canvasComponent.undoStack.length > 0) {
         this.canvasComponent.restoreCanvasState(
           this.canvasComponent.undoStack[this.canvasComponent.undoStack.length - 1]
@@ -234,7 +272,6 @@ export class DrawingPageComponent {
       }
       this.canvasService.drawGrid(canvas, this.gridSize);
     } else if (this.canvasComponent && !this.showGrid) {
-      // Restore the last state to remove the grid
       if (this.canvasComponent.undoStack.length > 0) {
         this.canvasComponent.restoreCanvasState(
           this.canvasComponent.undoStack[this.canvasComponent.undoStack.length - 1]
@@ -279,10 +316,8 @@ export class DrawingPageComponent {
           const canvas = this.canvasComponent.canvasRef.nativeElement;
           const imageUrl = e.target.result as string;
 
-          // Save current state before adding image
           this.canvasComponent.saveCanvasState();
 
-          // Add image to center of canvas
           this.canvasService.addImageToCanvas(
             canvas,
             imageUrl,

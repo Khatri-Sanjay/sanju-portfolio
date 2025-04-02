@@ -1,9 +1,7 @@
-<!-- tool-cards.component.html -->
 <div class="container-fluid tool-cards-container">
   <h2 class="text-center mb-2">My Creative Tools</h2>
   <p class="text-center text-muted mb-4">A collection of powerful tools built for designers and developers</p>
 
-  <!-- Search and Filter -->
   <div class="tool-filters mb-5">
     <div class="row justify-content-center">
       <div class="col-12 col-md-6">
@@ -15,7 +13,7 @@
           <button class="btn btn-primary" (click)="searchTools()">Search</button>
         </div>
       </div>
-      <div class="col-12 col-md-4 mt-3 mt-md-0">
+      <div class="col-12 mt-3 mt-3">
         <div class="category-filter">
           <button class="filter-btn" [ngClass]="{'active': activeCategory === 'all'}"
                   (click)="setCategory('all')">All</button>
@@ -30,7 +28,6 @@
     </div>
   </div>
 
-  <!-- Loading State -->
   @if(isLoading) {
     <div class="loading-container">
       <div class="spinner-border text-primary" role="status">
@@ -40,7 +37,6 @@
     </div>
   }
 
-  <!-- Empty State -->
   @if(!isLoading && filteredTools.length === 0) {
     <div class="empty-state">
       <div class="empty-icon">
@@ -55,41 +51,39 @@
   }
 
   @if(!isLoading && filteredTools.length > 0) {
-    <div class="row g-4">
-      <div *ngFor="let tool of filteredTools" class="col-12 col-sm-6 col-lg-4">
-        <div class="card tool-card h-100" (click)="openToolDetails(tool)">
-          <!-- Card Top: Image or Icon Header -->
-          @if (hasValidImage(tool)) {
-            <div class="tool-image-container">
-              <img [src]="tool.mainImage" class="card-img-top" [alt]="tool.name" loading="lazy">
-              <div class="tool-category-badge" [ngClass]="'category-' + tool.category">
-                {{tool.category}}
-              </div>
-              <div class="tool-icon-badge">
-                <i class="bi bi-{{tool.icon}}"></i>
-              </div>
-            </div>
-          } @else {
-            <div class="tool-text-header" [ngClass]="'category-bg-' + tool.category">
-              <div class="tool-category-badge" [ngClass]="'category-' + tool.category">
-                {{tool.category}}
-              </div>
-              <div class="tool-icon-large">
-                <i class="{{tool.icon}}"></i>
-              </div>
-              <h4 class="text-header-title">{{tool.name}}</h4>
-            </div>
-          }
-
-          <!-- Card Body -->
-          <div class="card-body">
-            <!-- Only show title again if we're using the image version -->
+    <div class="row g-4 justify-content-center">
+      @for (tool of filteredTools; track tool) {
+        <div class="col-12 col-sm-6 col-lg-3 text-center">
+          <div class="card tool-card h-100" (click)="openToolDetails(tool)">
             @if (hasValidImage(tool)) {
-              <h5 class="card-title">{{tool.name}}</h5>
+              <div class="tool-image-container">
+                <img [src]="tool.mainImage" class="card-img-top" [alt]="tool.name" loading="lazy">
+                <div class="tool-category-badge" [ngClass]="'category-' + tool.category">
+                  {{tool.category}}
+                </div>
+                <div class="tool-icon-badge">
+                  <i class="bi bi-{{tool.icon}}"></i>
+                </div>
+              </div>
+            } @else {
+              <div class="tool-text-header" [ngClass]="'category-bg-' + tool.category">
+                <div class="tool-category-badge" [ngClass]="'category-' + tool.category">
+                  {{tool.category}}
+                </div>
+                <div class="tool-icon-large">
+                  <i class="{{tool.icon}}"></i>
+                </div>
+                <h4 class="text-header-title">{{tool.name}}</h4>
+              </div>
             }
-            <p class="card-subtitle mb-3">{{tool.shortDescription}}</p>
 
-            <div class="tool-figure" [ngClass]="tool.figureType">
+            <div class="card-body">
+              @if (hasValidImage(tool)) {
+                <h5 class="card-title">{{tool.name}}</h5>
+              }
+              <p class="card-subtitle truncate-text mb-3">{{tool.shortDescription}}</p>
+
+              <div class="tool-figure" [ngClass]="tool.figureType">
 
                 @switch (tool.figureType) {
                   @case ('chart') {
@@ -162,38 +156,41 @@
                     </div>
                   }
                 }
-            </div>
-          </div>
-
-          <div class="card-footer">
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="tool-tech">
-                @if (tool.technologies && tool.technologies.length > 0) {
-                  <span class="tech-badge">{{tool.technologies[0]}}</span>
-                  @if (tool.technologies.length > 1) {
-                    <span class="tech-more">+{{tool.technologies.length - 1}}</span>
-                  }
-                }
               </div>
-              <div class="action-buttons">
-                @if (tool.demo) {
-                  <button class="btn btn-sm btn-primary"
-                          (click)="navigateToDemo(tool.demo, $event)">
-                    <i class="bi bi-play-circle"></i>
-                  </button>
-                }
+            </div>
 
-                @if (tool.code) {
-                  <button class="btn btn-sm btn-outline-dark"
-                          (click)="navigateToDemo(tool.code, $event)">
-                    <i class="bi bi-code-slash"></i>
-                  </button>
-                }
+            <div class="card-footer">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="tool-tech">
+                  @if (tool.technologies && tool.technologies.length > 0) {
+                    <span class="tech-badge">{{tool.technologies[0]}}</span>
+                    @if (tool.technologies.length > 1) {
+                      <span class="tech-more">+{{tool.technologies.length - 1}}</span>
+                    }
+                  }
+                </div>
+                <div class="action-buttons">
+                  @if (tool.demo) {
+                    <button class="btn btn-sm btn-primary"
+                            (click)="navigateToDemo(tool.demo, $event)">
+                      Demo
+                      <i class="bi bi-play-circle"></i>
+                    </button>
+                  }
+
+                  @if (tool.code) {
+                    <button class="btn btn-sm btn-outline-dark"
+                            (click)="navigateToDemo(tool.code, $event)">
+                      Code
+                      <i class="bi bi-code-slash"></i>
+                    </button>
+                  }
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      }
     </div>
   }
 </div>
@@ -213,27 +210,25 @@
         <div class="modal-body">
           <div class="row mb-4">
             <div class="col-md-7">
-              @if (hasValidImage(selectedTool) && selectedTool.otherImages && selectedTool.otherImages.length > 0) {
-                  <div class="image-gallery">
-                    <div class="gallery-main">
-                      <img [src]="selectedTool.otherImages[currentImageIndex]" class="img-fluid rounded" [alt]="selectedTool.name" loading="lazy">
-                    </div>
-                    <div class="gallery-nav">
-                      <button class="gallery-nav-btn prev" (click)="prevImage()">
-                        <i class="bi bi-chevron-left"></i>
-                      </button>
-                      @if (selectedTool.mainImage && selectedTool.otherImages.length) {
-                        <div class="gallery-indicators">
-                          @for (img of getAllImages(selectedTool.mainImage, selectedTool.otherImages); track img; let i = $index) {
-                            <span [ngClass]="{'active': i === currentImageIndex}" (click)="currentImageIndex = i"></span>
-                          }
-                        </div>
-                      }
-                      <button class="gallery-nav-btn next" (click)="nextImage()">
-                        <i class="bi bi-chevron-right"></i>
-                      </button>
-                    </div>
+              @if (combinedImagesList.length > 0) {
+                <div class="image-gallery">
+                  <div class="gallery-main">
+                    <img [src]="combinedImagesList[currentImageIndex]" class="img-fluid rounded" [alt]="selectedTool.name" loading="lazy">
                   </div>
+                  <div class="gallery-nav">
+                    <button class="gallery-nav-btn prev" (click)="prevImage()">
+                      <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <div class="gallery-indicators">
+                      @for (img of combinedImagesList; track img; let i = $index) {
+                        <span [ngClass]="{'active': i === currentImageIndex}" (click)="currentImageIndex = i"></span>
+                      }
+                    </div>
+                    <button class="gallery-nav-btn next" (click)="nextImage()">
+                      <i class="bi bi-chevron-right"></i>
+                    </button>
+                  </div>
+                </div>
               } @else {
                 @if (hasValidImage(selectedTool)) {
                   <img [src]="selectedTool.mainImage" class="img-fluid rounded" [alt]="selectedTool.name" loading="lazy">
@@ -272,7 +267,6 @@
             </div>
           </div>
 
-          <!-- Features and Technologies -->
           <div class="row">
             <div class="col-md-12">
               <p class="tool-description text-justify">{{selectedTool.description}}</p>
@@ -284,7 +278,7 @@
                   @for (feature of selectedTool.features; track feature) {
                     <li>
                       <i class="bi bi-check-circle-fill text-success"></i>
-                      {{feature}}
+                      <span [innerHTML]="feature"></span>
                     </li>
                   }
                 </ul>

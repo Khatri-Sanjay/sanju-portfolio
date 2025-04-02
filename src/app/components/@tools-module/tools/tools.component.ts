@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
+import {Component, OnInit} from '@angular/core';
+import { NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 interface Tool {
@@ -23,7 +23,6 @@ interface Tool {
   standalone: true,
   templateUrl: './tools.component.html',
   imports: [
-    NgForOf,
     NgClass,
     FormsModule
   ],
@@ -37,8 +36,9 @@ export class ToolsComponent implements OnInit {
   activeCategory: 'all' | 'design' | 'development' | 'analytics' | 'other' = 'all';
   isLoading: boolean = true;
 
-  // For responsive gallery view
   currentImageIndex: number = 0;
+
+  combinedImagesList: string[] = [];
 
   constructor() { }
 
@@ -74,16 +74,16 @@ export class ToolsComponent implements OnInit {
           code: 'https://github.com/yourusername/drawing-tools',
           demo: '/tools/drawing',
           features: [
-            "Multiple Drawing Modes: Brush, Eraser, Shape, and Text tools for versatile design.",
-            "Shape Tools: Create lines, rectangles, circles, and triangles with customizable fill options.",
-            "Text Insertion: Customize font style, size, and color to suit your needs.",
-            "Grid Display: Adjustable grid size for precision and alignment.",
-            "Background Color Customization: Personalize your canvas background to fit your project.",
-            "Undo/Redo Functionality: Quickly adjust your designs with keyboard shortcuts.",
-            "Touch Support: Smooth drawing experience on mobile devices.",
-            "Image Export: Export your creations in various formats for easy sharing or use."
+            "<b>Multiple Drawing Modes:</b> Brush, Eraser, Shape, and Text tools for versatile design.",
+            "<b>Shape Tools:</b> Create lines, rectangles, circles, and triangles with customizable fill options.",
+            "<b>Text Insertion:</b> Customize font style, size, and color to suit your needs.",
+            "<b>Grid Display:</b> Adjustable grid size for precision and alignment.",
+            "<b>Background Color Customization:</b> Personalize your canvas background to fit your project.",
+            "<b>Undo/Redo Functionality:</b> Quickly adjust your designs with keyboard shortcuts.",
+            "<b>Touch Support:</b> Smooth drawing experience on mobile devices.",
+            "<b>Image Export:</b> Export your creations in various formats for easy sharing or use."
           ],
-          technologies: ['Canvas API', 'SVG', 'WebGL', 'TypeScript'],
+          technologies: ['Canvas', 'SVG', 'Angular', 'TypeScript'],
           category: 'design'
         },
         // {
@@ -185,12 +185,10 @@ export class ToolsComponent implements OnInit {
     }, 500);
   }
 
-  // Method to check if a tool has a valid image URL
   hasValidImage(tool: Tool): boolean {
     return !!tool.mainImage && tool.mainImage.trim().length > 0;
   }
 
-  // Search and filter methods
   searchTools(): void {
     this.applyFilters();
   }
@@ -202,10 +200,8 @@ export class ToolsComponent implements OnInit {
 
   private applyFilters(): void {
     this.filteredTools = this.tools.filter(tool => {
-      // Apply category filter
       const categoryMatch = this.activeCategory === 'all' || tool.category === this.activeCategory;
 
-      // Apply search query filter
       const query = this.searchQuery.toLowerCase().trim();
       const searchMatch = query === '' ||
         tool.name.toLowerCase().includes(query) ||
@@ -216,42 +212,39 @@ export class ToolsComponent implements OnInit {
     });
   }
 
-  // Tool details methods
   openToolDetails(tool: Tool): void {
     this.selectedTool = tool;
     this.currentImageIndex = 0;
+    this.updateCombinedImages();
   }
 
   closeToolDetails(): void {
     this.selectedTool = null;
   }
 
-  // Image gallery navigation
-  nextImage(): void {
-    if (this.selectedTool?.otherImages && this.selectedTool.otherImages.length > 0) {
-      this.currentImageIndex = (this.currentImageIndex + 1) % this.selectedTool.otherImages.length;
+  updateCombinedImages() {
+    this.combinedImagesList = [
+      this.selectedTool?.mainImage || '',
+      ...(this.selectedTool?.otherImages || [])
+    ];
+  }
+
+  prevImage() {
+    if (this.currentImageIndex > 0) {
+      this.currentImageIndex--;
+    } else {
+      this.currentImageIndex = this.combinedImagesList.length - 1;
     }
   }
 
-  getAllImages(mainImage: string, otherImages: string[]): string[] {
-    const allImages: Array<string> = new Array<string>();
-    allImages.push(mainImage);
-    otherImages.forEach((value) => {
-      allImages.push(value);
-    })
-    console.log('selectedTool.otherImages', allImages);
-    return allImages;
-  }
-
-  prevImage(): void {
-    if (this.selectedTool?.otherImages && this.selectedTool.otherImages.length > 0) {
-      this.currentImageIndex = this.currentImageIndex === 0 ?
-        this.selectedTool.otherImages.length - 1 :
-        this.currentImageIndex - 1;
+  nextImage() {
+    if (this.currentImageIndex < this.combinedImagesList.length - 1) {
+      this.currentImageIndex++;
+    } else {
+      this.currentImageIndex = 0;
     }
   }
 
-  // Navigation methods
   navigateToDemo(url: string, event?: Event): void {
     if (event) {
       event.stopPropagation();
