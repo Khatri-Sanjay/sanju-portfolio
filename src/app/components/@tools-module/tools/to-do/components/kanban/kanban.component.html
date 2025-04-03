@@ -1,0 +1,445 @@
+<div class="container-fluid p-4">
+  <div class="row mb-4 align-items-center">
+    <div class="col-lg-8 mb-3 mb-lg-0">
+      <div class="d-flex align-items-center">
+        <h1 class="mb-0 me-3">{{ currentBoard?.name || 'Kanban Task Board' }}</h1>
+        <div class="board-stats ms-3 d-none d-md-flex">
+          <div class="stat-item text-primary me-3">
+            <i class="bi bi-list-check me-1"></i> {{ todoTasks.length }}
+          </div>
+          <div class="stat-item text-warning me-3">
+            <i class="bi bi-hourglass-split me-1"></i> {{ inProgressTasks.length }}
+          </div>
+          <div class="stat-item text-success">
+            <i class="bi bi-check2-all me-1"></i> {{ doneTasks.length }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="d-flex justify-content-start justify-content-lg-end">
+        <div class="dropdown me-2">
+          <button class="btn btn-outline-primary dropdown-toggle" type="button" id="boardDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-layout-three-columns me-1"></i> {{ currentBoard?.name || 'Select Board' }}
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="boardDropdown">
+            <ng-container *ngFor="let board of boards">
+              <li><a class="dropdown-item" (click)="selectBoard(board)" [class.active]="currentBoard?.id === board.id">{{ board.name }}</a></li>
+            </ng-container>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" (click)="openAddBoardModal(boardModal)"><i class="bi bi-plus-circle me-1"></i> Add New Board</a></li>
+          </ul>
+        </div>
+        <button class="btn btn-primary me-2" (click)="openAddBoardModal(boardModal)">
+          <i class="bi bi-plus"></i> New Board
+        </button>
+        <button *ngIf="boards.length > 1" class="btn btn-outline-danger" (click)="openDeleteBoard(confirmDeleteBoard)" title="Delete current board">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #confirmDeleteBoard let-modal>
+    <div class="modal-header bg-danger text-white">
+      <h5 class="modal-title"><i class="bi bi-exclamation-triangle me-2"></i>Confirm Delete</h5>
+      <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to delete this Board?</p>
+      <div class="alert alert-warning text-center">
+        <strong>"{{ currentBoard?.name }}"</strong> will be permanently removed.
+        <br>
+        @if (currentBoard?.tasks?.length) {
+          <i>* Note: It have {{ currentBoard?.tasks?.length }} tasks.</i>
+        }
+      </div>
+      <p class="mb-0 text-danger"><small>This action cannot be undone.</small></p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel')">Cancel</button>
+      <button type="button" class="btn btn-danger" (click)="deleteBoard()">
+        <i class="bi bi-trash me-1"></i> Delete
+      </button>
+    </div>
+  </ng-template>
+
+  <div class="quick-add-form mb-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-lg-5">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="quickAddTaskName"
+              placeholder="Add a new task quickly..."
+              (keyup.enter)="quickAddTask()">
+          </div>
+          <div class="col-lg-3">
+            <select class="form-select" [(ngModel)]="quickAddColumn">
+              <option value="todo">To Do</option>
+              <option value="inProgress">In Progress</option>
+              <option value="done">Done</option>
+            </select>
+          </div>
+          <div class="col-lg-2">
+            <select class="form-select" [(ngModel)]="quickAddPriority">
+              <option value="low">Low Priority</option>
+              <option value="medium">Medium Priority</option>
+              <option value="high">High Priority</option>
+            </select>
+          </div>
+          <div class="col-lg-2">
+            <button class="btn btn-primary w-100" (click)="quickAddTask()" [disabled]="!quickAddTaskName.trim()">
+              <i class="bi bi-plus"></i> Add Task
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-lg-6 mb-3 mb-lg-0">
+      <div class="input-group">
+        <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search tasks..."
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="filterTasks()">
+      </div>
+    </div>
+    <div class="col-lg-6 mt-2">
+      <div class="d-flex flex-wrap justify-content-start justify-content-lg-end">
+        <div class="me-2 mb-2 mb-lg-0">
+          <select class="form-select" [(ngModel)]="priorityFilter" (ngModelChange)="filterTasks()">
+            <option value="">All Priorities</option>
+            <option value="high">High Priority</option>
+            <option value="medium">Medium Priority</option>
+            <option value="low">Low Priority</option>
+          </select>
+        </div>
+        <button class="btn btn-outline-secondary" (click)="clearFilters()">
+          <i class="bi bi-x-circle me-1"></i> Clear Filters
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Kanban Board -->
+  <div class="kanban-board">
+    <!-- Todo Column -->
+    <div class="kanban-column card shadow-sm" [ngClass]="getColumnClass('todo')">
+      <div class="card-header bg-primary text-white">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="mb-0"><i class="bi bi-list-check me-2"></i> To Do</h3>
+          <span class="badge bg-light text-primary rounded-pill">{{ filteredTodoTasks.length }}</span>
+        </div>
+      </div>
+      <div
+        class="kanban-list p-2"
+        cdkDropList
+        id="todo-list"
+        [cdkDropListData]="filteredTodoTasks"
+        [cdkDropListConnectedTo]="['inProgress-list', 'done-list']"
+        (cdkDropListDropped)="onDrop($event)"
+      >
+        <ng-container *ngFor="let task of filteredTodoTasks">
+          <div
+            class="kanban-card card mb-2"
+            [ngClass]="getTaskClass(task)"
+            cdkDrag
+          >
+            <div class="card-body py-2">
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="task-content">
+                  <h5 class="card-title task-name mb-2">{{ task.name }}</h5>
+                  <div *ngIf="task.description" class="task-description mb-2">{{ task.description }}</div>
+                </div>
+                <div class="task-actions">
+                  <button class="btn btn-sm btn-outline-primary me-1" (click)="openEditTaskModal(taskModal, task)" title="Edit">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary me-1" (click)="moveTask(task, 'inProgress')" title="Move to In Progress">
+                    <i class="bi bi-arrow-right"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="confirmDeleteTask(confirmDeleteModal, task)" title="Delete">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="task-footer d-flex justify-content-between align-items-center">
+                <small class="text-muted">{{ task.createdAt | date:'short' }}</small>
+                <span class="badge rounded-pill"
+                      [ngClass]="{'bg-danger': task.priority === 'high',
+                                 'bg-warning text-dark': task.priority === 'medium',
+                                 'bg-info text-dark': task.priority === 'low'}">
+                  {{ task.priority }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <div *ngIf="filteredTodoTasks.length === 0" class="empty-list text-center p-3">
+          <i class="bi bi-inbox fs-2 text-muted"></i>
+          <p class="text-muted">No tasks found</p>
+        </div>
+      </div>
+      <div class="card-footer bg-light">
+        <button class="btn btn-primary w-100" (click)="openAddTaskModal(taskModal, 'todo')">
+          <i class="bi bi-plus"></i> Add Task
+        </button>
+      </div>
+    </div>
+
+    <!-- In Progress Column -->
+    <div class="kanban-column card shadow-sm" [ngClass]="getColumnClass('inProgress')">
+      <div class="card-header bg-warning text-dark">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="mb-0"><i class="bi bi-hourglass-split me-2"></i> In Progress</h3>
+          <span class="badge bg-light text-warning rounded-pill">{{ filteredInProgressTasks.length }}</span>
+        </div>
+      </div>
+      <div
+        class="kanban-list p-2"
+        cdkDropList
+        id="inProgress-list"
+        [cdkDropListData]="filteredInProgressTasks"
+        [cdkDropListConnectedTo]="['todo-list', 'done-list']"
+        (cdkDropListDropped)="onDrop($event)"
+      >
+        <ng-container *ngFor="let task of filteredInProgressTasks">
+          <div
+            class="kanban-card card mb-2"
+            [ngClass]="getTaskClass(task)"
+            cdkDrag
+          >
+            <div class="card-body py-2">
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="task-content">
+                  <h5 class="card-title task-name mb-2">{{ task.name }}</h5>
+                  <div *ngIf="task.description" class="task-description mb-2">{{ task.description }}</div>
+                </div>
+                <div class="task-actions">
+                  <button class="btn btn-sm btn-outline-primary me-1" (click)="openEditTaskModal(taskModal, task)" title="Edit">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary me-1" (click)="moveTask(task, 'todo')" title="Move to To Do">
+                    <i class="bi bi-arrow-left"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary me-1" (click)="moveTask(task, 'done')" title="Move to Done">
+                    <i class="bi bi-arrow-right"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="confirmDeleteTask(confirmDeleteModal, task)" title="Delete">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="task-footer d-flex justify-content-between align-items-center">
+                <small class="text-muted">{{ task.createdAt | date:'short' }}</small>
+                <span class="badge rounded-pill"
+                      [ngClass]="{'bg-danger': task.priority === 'high',
+                                 'bg-warning text-dark': task.priority === 'medium',
+                                 'bg-info text-dark': task.priority === 'low'}">
+                  {{ task.priority }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <div *ngIf="filteredInProgressTasks.length === 0" class="empty-list text-center p-3">
+          <i class="bi bi-inbox fs-2 text-muted"></i>
+          <p class="text-muted">No tasks found</p>
+        </div>
+      </div>
+      <div class="card-footer bg-light">
+        <button class="btn btn-warning w-100 text-dark" (click)="openAddTaskModal(taskModal, 'inProgress')">
+          <i class="bi bi-plus"></i> Add Task
+        </button>
+      </div>
+    </div>
+
+    <!-- Done Column -->
+    <div class="kanban-column card shadow-sm" [ngClass]="getColumnClass('done')">
+      <div class="card-header bg-success text-white">
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="mb-0"><i class="bi bi-check2-all me-2"></i> Done</h3>
+          <span class="badge bg-light text-success rounded-pill">{{ filteredDoneTasks.length }}</span>
+        </div>
+      </div>
+      <div
+        class="kanban-list p-2"
+        cdkDropList
+        id="done-list"
+        [cdkDropListData]="filteredDoneTasks"
+        [cdkDropListConnectedTo]="['todo-list', 'inProgress-list']"
+        (cdkDropListDropped)="onDrop($event)"
+      >
+        <ng-container *ngFor="let task of filteredDoneTasks">
+          <div
+            class="kanban-card card mb-2"
+            [ngClass]="getTaskClass(task)"
+            cdkDrag
+          >
+            <div class="card-body py-2">
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="task-content">
+                  <h5 class="card-title task-name mb-2">{{ task.name }}</h5>
+                  <div *ngIf="task.description" class="task-description mb-2">{{ task.description }}</div>
+                </div>
+                <div class="task-actions">
+                  <button class="btn btn-sm btn-outline-primary me-1" (click)="openEditTaskModal(taskModal, task)" title="Edit">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary me-1" (click)="moveTask(task, 'inProgress')" title="Move to In Progress">
+                    <i class="bi bi-arrow-left"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" (click)="confirmDeleteTask(confirmDeleteModal, task)" title="Delete">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="task-footer d-flex justify-content-between align-items-center">
+                <small class="text-muted">{{ task.createdAt | date:'short' }}</small>
+                <span class="badge rounded-pill"
+                      [ngClass]="{'bg-danger': task.priority === 'high',
+                                 'bg-warning text-dark': task.priority === 'medium',
+                                 'bg-info text-dark': task.priority === 'low'}">
+                  {{ task.priority }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <div *ngIf="filteredDoneTasks.length === 0" class="empty-list text-center p-3">
+          <i class="bi bi-inbox fs-2 text-muted"></i>
+          <p class="text-muted">No tasks found</p>
+        </div>
+      </div>
+      <div class="card-footer bg-light">
+        <button class="btn btn-success w-100" (click)="openAddTaskModal(taskModal, 'done')">
+          <i class="bi bi-plus"></i> Add Task
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Task Modal -->
+<ng-template #taskModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">{{ modalTitle }}</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <label for="taskName" class="form-label">Task Name <span class="text-danger">*</span></label>
+        <input
+          type="text"
+          class="form-control"
+          [class.is-invalid]="formSubmitted && !newTaskName.trim()"
+          id="taskName"
+          [(ngModel)]="newTaskName"
+          name="taskName"
+          placeholder="Enter task name">
+        <div *ngIf="formSubmitted && !newTaskName.trim()" class="invalid-feedback">
+          Task name is required
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="taskDescription" class="form-label">Description</label>
+        <textarea
+          class="form-control"
+          id="taskDescription"
+          [(ngModel)]="newTaskDescription"
+          name="taskDescription"
+          rows="3"
+          placeholder="Enter task description (optional)"></textarea>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="taskPriority" class="form-label">Priority</label>
+          <select class="form-select" id="taskPriority" [(ngModel)]="newTaskPriority" name="taskPriority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="taskStatus" class="form-label">Status</label>
+          <select class="form-select" id="taskStatus" [(ngModel)]="currentColumn" name="taskStatus">
+            <option value="todo">To Do</option>
+            <option value="inProgress">In Progress</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="saveTask()">
+      <i class="bi" [ngClass]="editingTask ? 'bi-check-lg' : 'bi-plus-lg'"></i>
+      {{ editingTask ? 'Update Task' : 'Create Task' }}
+    </button>
+  </div>
+</ng-template>
+
+<!-- Confirm Delete Modal -->
+<ng-template #confirmDeleteModal let-modal>
+  <div class="modal-header bg-danger text-white">
+    <h5 class="modal-title"><i class="bi bi-exclamation-triangle me-2"></i>Confirm Delete</h5>
+    <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure you want to delete this task?</p>
+    <div class="alert alert-warning">
+      <strong>"{{ editingTask?.name }}"</strong> will be permanently removed.
+    </div>
+    <p class="mb-0 text-danger"><small>This action cannot be undone.</small></p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel')">Cancel</button>
+    <button type="button" class="btn btn-danger" (click)="executeDeleteTask()">
+      <i class="bi bi-trash me-1"></i> Delete
+    </button>
+  </div>
+</ng-template>
+
+<!-- Board Modal -->
+<ng-template #boardModal let-modal>
+  <div class="modal-header bg-primary text-white">
+    <h5 class="modal-title"><i class="bi bi-layout-three-columns me-2"></i>Create New Board</h5>
+    <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        <label for="boardName" class="form-label">Board Name <span class="text-danger">*</span></label>
+        <input
+          type="text"
+          class="form-control"
+          [class.is-invalid]="formSubmitted && !newBoardName.trim()"
+          id="boardName"
+          [(ngModel)]="newBoardName"
+          name="boardName"
+          placeholder="Enter board name (e.g. Project X, Personal Tasks)">
+        <div *ngIf="formSubmitted && !newBoardName.trim()" class="invalid-feedback">
+          Board name is required
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cancel')">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="saveBoard()">
+      <i class="bi bi-plus-lg me-1"></i> Create Board
+    </button>
+  </div>
+</ng-template>

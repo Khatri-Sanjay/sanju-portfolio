@@ -21,4 +21,11 @@ export const ToolsRoutes: Routes = [
         .then((m) => m.DrawingPageComponent),
     data: { title: 'Drawing Tool', description: 'Draw your thoughts' },
   },
+  {
+    path: 'todo',
+    loadComponent: () =>
+      import('../@tools-module/tools/to-do/task.component')
+        .then((m) => m.TaskComponent),
+    data: { title: 'Todo App', description: 'Manage your task' },
+  },
 ];

@@ -79,4 +79,5 @@ export class LocalStorage {
   chatMessages: any;
   terminal_theme: any;
   userData: any;
+  kanban_boards: any;
 }

@@ -74,6 +74,24 @@ export const Projects = [
       'Canvas',
       'SCSS'
     ]
+  },
+  {
+    projectName: 'Todo Management App',
+    shortDescription: 'A task management tool built with Angular and CDK, offering intuitive task organization by categories and priorities (Low, Medium, High).' +
+      ' It integrates with localStorage to persist data, so your tasks are always saved across sessions.',
+    description: "This To-Do Management App allows you to effectively organize your tasks with different categories like \"To Do\", \"In Progress\", and \"Done\". " +
+      "You can assign each task a priority level: \"Low\", \"Medium\", or \"High\". The app uses Angular and the Component Dev Kit (CDK) to provide a seamless, interactive experience. " +
+      "All data is stored in localStorage, ensuring that your tasks are available even after you refresh or restart the app. Features like drag-and-drop, task editing, and task creation" +
+      " make managing your workflow more efficient.'",
+    image: 'assets/image/to-do/todo.png',
+    link:'',
+    demoLink: 'https://khatrisanjay.com.np/tools/todo',
+    languageUsed: [
+      'Angular',
+      'CDK',
+      'TypeScript',
+      'LocalStorage'
+    ]
   }
 
 

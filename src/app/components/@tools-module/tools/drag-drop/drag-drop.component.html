@@ -1,0 +1,60 @@
+<div class="kanban-board">
+  <div
+    class="kanban-column"
+    cdkDropList
+    [cdkDropListData]="todoTasks"
+    (cdkDropListDropped)="onDrop($event, 'todo')"
+  >
+    <h3>To Do</h3>
+    @for (task of todoTasks; track task) {
+      <div
+        class="kanban-card"
+        cdkDrag
+        [cdkDragData]="task"
+      >
+        {{ task.name }}
+        <button class="delete-btn" (click)="deleteTask(task, 'todo')">X</button>
+      </div>
+    }
+    <button (click)="addTask('todo')">Add Task</button>
+  </div>
+
+  <div
+    class="kanban-column"
+    cdkDropList
+    [cdkDropListData]="inProgressTasks"
+    (cdkDropListDropped)="onDrop($event, 'inProgress')"
+  >
+    <h3>In Progress</h3>
+    @for (task of inProgressTasks; track task) {
+      <div
+        class="kanban-card"
+        cdkDrag
+        [cdkDragData]="task"
+      >
+        {{ task.name }}
+        <button class="delete-btn" (click)="deleteTask(task, 'inProgress')">X</button>
+      </div>
+    }
+    <button (click)="addTask('inProgress')">Add Task</button>
+  </div>
+
+  <div
+    class="kanban-column"
+    cdkDropList
+    [cdkDropListData]="doneTasks"
+    (cdkDropListDropped)="onDrop($event, 'done')"
+  >
+    <h3>Done</h3>
+    @for (task of doneTasks; track task) {
+      <div class="kanban-card"
+        cdkDrag
+        [cdkDragData]="task"
+      >
+        {{ task.name }}
+        <button class="delete-btn" (click)="deleteTask(task, 'done')">X</button>
+      </div>
+    }
+    <button (click)="addTask('done')">Add Task</button>
+  </div>
+</div>

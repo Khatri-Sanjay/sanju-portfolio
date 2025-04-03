@@ -86,6 +86,32 @@ export class ToolsComponent implements OnInit {
           technologies: ['Canvas', 'SVG', 'Angular', 'TypeScript'],
           category: 'design'
         },
+        {
+          id: 2,
+          name: 'To-Do Management App',
+          shortDescription: 'A task management tool built with Angular and CDK, offering intuitive task organization by categories (To Do, In Progress, Done) and priorities (Low, Medium, High). It integrates with localStorage to persist data, so your tasks are always saved across sessions.',
+          description: 'This To-Do Management App allows you to effectively organize your tasks with different categories like "To Do", "In Progress", and "Done". You can assign each task a priority level: "Low", "Medium", or "High". The app uses Angular and the Component Dev Kit (CDK) to provide a seamless, interactive experience. All data is stored in localStorage, ensuring that your tasks are available even after you refresh or restart the app. Features like drag-and-drop, task editing, and task creation make managing your workflow more efficient.',
+          icon: 'bi bi-check-circle',
+          figureType: 'graph',
+          mainImage: 'assets/image/to-do/todo.png',
+          otherImages: [
+            'assets/image/to-do/todo-1.png',
+            'assets/image/to-do/todo-2.png'
+          ],
+          code: '/tools/todo',
+          demo: '/tools/todo',
+          features: [
+            "<b>Task Categories:</b> Organize tasks into 'To Do', 'In Progress', and 'Done'.",
+            "<b>Priority Levels:</b> Assign tasks priorities like Low, Medium, or High.",
+            "<b>Persistent Data Storage:</b> LocalStorage ensures your tasks are saved and available across sessions.",
+            "<b>Task Creation and Editing:</b> Easily add, edit, and manage your tasks.",
+            "<b>Drag-and-Drop:</b> Reorganize tasks by dragging and dropping between categories.",
+            "<b>Filter by Priority:</b> Sort tasks by priority (Low, Medium, High).",
+            "<b>Responsive Design:</b> Fully optimized for desktop and mobile use."
+          ],
+          technologies: ['Angular', 'CDK', 'TypeScript', 'LocalStorage'],
+          category: 'other'
+        },
         // {
         //   id: 2,
         //   name: 'Data Visualizer',
