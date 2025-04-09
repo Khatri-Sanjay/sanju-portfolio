@@ -83,7 +83,7 @@ export class AppComponent implements OnInit{
   }
 
   setSocialMediaTags() {
-    const title = 'Sanjay Khatri | Frontend Developer | Angular Expert';
+    const title = 'Sanjay Khatri | Frontend Developer | Angular | Java';
     const description = 'Explore my portfolio, projects, and skills in Angular and Java Spring Boot.';
     const imageUrl = 'https://khatrisanjay.com.np/assets/image/sanjay2.png';
     const websiteUrl = this.socialProfiles.personalWebsite;
@@ -112,18 +112,22 @@ export class AppComponent implements OnInit{
       }
     });
 
-    // Schema.org JSON-LD for SEO
     this.addSchemaOrgJsonLd();
   }
 
   addSchemaOrgJsonLd() {
     const schemaJson = {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Sanjay Khatri",
-      "url": this.socialProfiles.personalWebsite,
-      "sameAs": Object.values(this.socialProfiles).filter(link => link) // Only include non-empty values
-    };
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Sanjay Khatri",
+        "url": "https://khatrisanjay.com.np",
+        "sameAs": Object.values(this.socialProfiles).filter(link => link),
+        "jobTitle": "Software Engineer",
+        "worksFor": {
+          "@type": "Organization",
+          "name": "F1Soft International Pvt. Ltd."
+        }
+      };
 
     const script = document.createElement('script');
     script.type = 'application/ld+json';
