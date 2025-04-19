@@ -7,6 +7,8 @@ import {AddEditUserComponent} from './user/add-edit-user/add-edit-user.component
 import {AddEditBlogsComponent} from './blogs/add-edit-blogs/add-edit-blogs.component';
 import {AuthGuard} from '../../@core/guard/auth.guard';
 import {MessagesComponent} from './messages/messages.component';
+import {FinanceTrackerComponent} from './finance-tracker/finance-tracker.component';
+import {LifeAchievementsComponent} from './achivement-list/achievement-list.component';
 
 export const AdminRoute: Routes = [
   {
@@ -55,6 +57,16 @@ export const AdminRoute: Routes = [
         path: 'messages',
         component: MessagesComponent,
         data: { title: 'Messages', breadcrumb: 'Messages' }
+      },
+      {
+        path: 'finance-tracker',
+        component: FinanceTrackerComponent,
+        data: { title: 'Finance Tracker', breadcrumb: 'Finance Tracker' }
+      },
+      {
+        path: 'achievement-list',
+        component: LifeAchievementsComponent,
+        data: { title: 'Achievement List', breadcrumb: 'Achievement List' }
       },
       {
         path: '404',

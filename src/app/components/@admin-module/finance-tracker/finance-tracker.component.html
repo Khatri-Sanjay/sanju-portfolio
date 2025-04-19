@@ -1,0 +1,433 @@
+<div class="finance-tracker-container">
+  <div class="container-fluid py-4">
+    <!-- Header with month navigation -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center">
+                <button class="btn btn-outline-primary me-2" (click)="changeMonth(-1)">
+                  <i class="bi bi-chevron-left"></i>
+                </button>
+                <h3 class="mb-0">{{ monthLabels[currentMonth] }} {{ currentYear }}</h3>
+                <button class="btn btn-outline-primary ms-2" (click)="changeMonth(1)">
+                  <i class="bi bi-chevron-right"></i>
+                </button>
+              </div>
+              <div class="d-none d-md-flex gap-3">
+                <span class="badge bg-success rounded-pill fs-6 p-2">
+                  Income: रू {{ monthlyIncomeTotal | number:'1.0-0' }}
+                </span>
+                <span class="badge bg-danger rounded-pill fs-6 p-2">
+                  Expenses: रू {{ monthlyExpenseTotal | number:'1.0-0' }}
+                </span>
+                <span class="badge rounded-pill fs-6 p-2" [ngClass]="{'bg-primary': monthlyNetTotal >= 0, 'bg-danger': monthlyNetTotal < 0}">
+                  Net: रू {{ monthlyNetTotal | number:'1.0-0' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+      <div class="col-md-3 mb-3 mb-md-0">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title text-muted">Monthly Income</h5>
+            <h3 class="card-text text-success">रू {{ monthlyIncomeTotal | number:'1.0-0' }}</h3>
+            <p class="card-text text-muted">This month's total income</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3 mb-md-0">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title text-muted">Monthly Expenses</h5>
+            <h3 class="card-text text-danger">रू {{ monthlyExpenseTotal | number:'1.0-0' }}</h3>
+            <p class="card-text text-muted">This month's total expenses</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3 mb-md-0">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title text-muted">Monthly Net</h5>
+            <h3 class="card-text" [ngClass]="{'text-success': monthlyNetTotal >= 0, 'text-danger': monthlyNetTotal < 0}">
+              रू {{ monthlyNetTotal | number:'1.0-0' }}
+            </h3>
+            <p class="card-text text-muted">Income - Expenses</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-3 mb-md-0">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title text-muted">Daily Average</h5>
+            <h3 class="card-text" [ngClass]="{'text-success': dailyAverage >= 0, 'text-danger': dailyAverage < 0}">
+              रू {{ dailyAverage | number:'1.0-0' }}
+            </h3>
+            <p class="card-text text-muted">Net / Days in month</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form and Transactions Section -->
+    <div class="row">
+      <!-- Form Card -->
+      <div class="col-lg-4 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">{{ editingTransaction ? 'Edit' : 'Add' }} Transaction</h5>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
+              <!-- Transaction Type -->
+              <div class="mb-3">
+                <label class="form-label">Transaction Type</label>
+                <div class="btn-group w-100" role="group">
+                  <input type="radio" class="btn-check" formControlName="type" id="typeExpense" value="expense">
+                  <label class="btn btn-outline-danger" for="typeExpense">Expense</label>
+
+                  <input type="radio" class="btn-check" formControlName="type" id="typeIncome" value="income">
+                  <label class="btn btn-outline-success" for="typeIncome">Income</label>
+                </div>
+              </div>
+
+              <!-- Amount -->
+              <div class="mb-3">
+                <label for="amount" class="form-label">Amount (रू)</label>
+                <input type="number" class="form-control" id="amount" formControlName="amount" placeholder="Enter amount" min="0.01" step="0.01" required>
+                @if (transactionForm.get('amount')?.invalid && transactionForm.get('amount')?.touched) {
+                  <div class="text-danger small">
+                    Amount is required and must be greater than 0
+                  </div>
+                }
+
+              </div>
+
+              <!-- Category -->
+              <div class="mb-3">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-select" id="category" formControlName="category" required>
+                  <option value="" disabled selected>Select category</option>
+                  @for (category of transactionCategories; track category) {
+                    <option [value]="category">
+                      {{ category }}
+                    </option>
+                  }
+                </select>
+
+                @if (transactionForm.get('category')?.invalid && transactionForm.get('category')?.touched) {
+                  <div class="text-danger small">
+                    Category is required
+                  </div>
+                }
+
+              </div>
+
+              <!-- Description -->
+              <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <input type="text" class="form-control" id="description" formControlName="description" placeholder="Enter description" required>
+
+                @if (transactionForm.get('description')?.invalid && transactionForm.get('description')?.touched) {
+                  <div class="text-danger small">
+                    Description is required
+                  </div>
+                }
+              </div>
+
+              <!-- Date -->
+              <div class="mb-3">
+                <label for="date" class="form-label">Date</label>
+                <input type="date" class="form-control" id="date" formControlName="date" required>
+
+                @if (transactionForm.get('date')?.invalid && transactionForm.get('date')?.touched) {
+                  <div class="text-danger small">
+                    Date is required
+                  </div>
+                }
+
+              </div>
+
+              <!-- Nepali Date -->
+              <div class="mb-3">
+                <label for="nepaliDate" class="form-label">Nepali Date (BS)</label>
+                <input type="text" class="form-control" id="nepaliDate" formControlName="nepaliDate" placeholder="YYYY-MM-DD" required>
+
+                @if (transactionForm.get('nepaliDate')?.invalid && transactionForm.get('nepaliDate')?.touched) {
+                  <div class="text-danger small">
+                    Nepali date is required
+                  </div>
+                }
+
+              </div>
+
+              <!-- Submit/Cancel Buttons -->
+              <div class="d-flex justify-content-between mt-4">
+                @if (editingTransaction) {
+                  <button type="button" class="btn btn-outline-secondary" (click)="cancelEdit()">Cancel</button>
+                }
+
+                <button type="button" class="btn btn-outline-secondary" (click)="resetForm()">Clear</button>
+                <button type="submit" class="btn btn-primary" [disabled]="transactionForm.invalid">
+                  {{ editingTransaction ? 'Update' : 'Add' }} Transaction
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transactions List -->
+      <div class="col-lg-8 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Transactions</h5>
+            <!-- Filter Toggle Button - Add data-bs-toggle attribute -->
+            <button class="btn btn-sm btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
+              <i class="bi bi-funnel"></i> Filters
+            </button>
+          </div>
+
+          <!-- Add Bootstrap collapse class -->
+          <div class="collapse" id="filterCollapse">
+            <div class="card-body border-bottom">
+              <form [formGroup]="filterForm" class="row g-3">
+                <!-- Category Filter -->
+                <div class="col-md-3">
+                  <label for="filterCategory" class="form-label">Category</label>
+                  <select class="form-select" id="filterCategory" formControlName="category">
+                    <option value="all">All Categories</option>
+                    @for (category of allCategories; track category) {
+                      <option [value]="category">{{ category }}</option>
+                    }
+                  </select>
+                </div>
+
+                <!-- Transaction Type Filter -->
+                <div class="col-md-3">
+                  <label for="filterType" class="form-label">Type</label>
+                  <select class="form-select" id="filterType" formControlName="transactionType">
+                    <option value="all">All Types</option>
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                  </select>
+                </div>
+
+                <!-- Amount Range Filter -->
+                <div class="col-md-6">
+                  <label class="form-label">Amount Range</label>
+                  <div class="input-group">
+                    <span class="input-group-text">रू</span>
+                    <input type="number" class="form-control" placeholder="Min" formControlName="amountRangeMin">
+                    <span class="input-group-text">to</span>
+                    <input type="number" class="form-control" placeholder="Max" formControlName="amountRangeMax">
+                  </div>
+                </div>
+
+                <!-- Date Range Filter -->
+                <div class="col-md-12">
+                  <label class="form-label">Date Range</label>
+                  <div class="input-group">
+                    <input type="date" class="form-control" formControlName="dateRangeStart">
+                    <span class="input-group-text">to</span>
+                    <input type="date" class="form-control" formControlName="dateRangeEnd">
+                  </div>
+                </div>
+
+                <!-- Filter Action Buttons -->
+                <div class="col-12 text-end">
+                  <button type="button" class="btn btn-outline-secondary me-2" (click)="resetFilters()">
+                    Reset Filters
+                  </button>
+                  <button type="button" class="btn btn-primary" (click)="applyFilters()">
+                    Apply Filters
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Transactions Table -->
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead class="table-light">
+                <tr>
+                  <th>Nepali Date</th>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Category</th>
+                  <th>Amount</th>
+                  <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                  @if (activeTransactionType === 'expense') {
+                    @for (transaction of expenses; track transaction) {
+                      <tr>
+                        <td>{{ transaction.nepaliDate }}</td>
+                        <td>{{ transaction.date | date:'MMM d' }}</td>
+                        <td>{{ transaction.description }}</td>
+                        <td>
+                          <span class="badge bg-secondary">{{ transaction.category }}</span>
+                        </td>
+                        <td class="text-danger">रू {{ transaction.amount | number:'1.0-0' }}</td>
+                        <td>
+                          <button class="btn btn-sm btn-outline-primary me-1" (click)="editTransaction(transaction)">
+                            <i class="bi bi-pencil"></i>
+                          </button>
+                          <button class="btn btn-sm btn-outline-danger" (click)="deleteTransaction(transaction.id)">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    }
+                    @if (expenses.length === 0) {
+                      <tr>
+                        <td colspan="5" class="text-center py-3">No expense transactions found</td>
+                      </tr>
+                    }
+                  } @else {
+                    @for (transaction of incomes; track transaction) {
+                      <tr>
+                        <td>{{ transaction.nepaliDate }}</td>
+                        <td>{{ transaction.date | date:'MMM d' }}</td>
+                        <td>{{ transaction.description }}</td>
+                        <td>
+                          <span class="badge bg-secondary">{{ transaction.category }}</span>
+                        </td>
+                        <td class="text-success">रू {{ transaction.amount | number:'1.0-0' }}</td>
+                        <td>
+                          <button class="btn btn-sm btn-outline-primary me-1" (click)="editTransaction(transaction)">
+                            <i class="bi bi-pencil"></i>
+                          </button>
+                          <button class="btn btn-sm btn-outline-danger" (click)="deleteTransaction(transaction.id)">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    }
+                    @if (incomes.length === 0) {
+                      <tr>
+                        <td colspan="5" class="text-center py-3">No income transactions found</td>
+                      </tr>
+                    }
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Transaction Type Tabs -->
+          <div class="card-footer p-0 bg-white">
+            <ul class="nav nav-tabs nav-fill">
+              <li class="nav-item">
+                <a class="nav-link" [class.active]="activeTransactionType === 'expense'" (click)="activeTransactionType = 'expense'">
+                  Expenses ({{ expenses.length }})
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" [class.active]="activeTransactionType === 'income'" (click)="activeTransactionType = 'income'">
+                  Income ({{ incomes.length }})
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row mb-4">
+      <!-- Bar Chart -->
+      <div class="col-lg-8 mb-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Monthly Overview ({{ currentYear }})</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height: 300px; position: relative;">
+              <canvas baseChart
+                      [data]="barChartData"
+                      [options]="barChartOptions"
+                      [type]="'bar'">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Distribution -->
+      <div class="col-lg-4 mb-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">{{ activeTransactionType === 'expense' ? 'Expense' : 'Income' }} by Category</h5>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height: 300px; position: relative;">
+              <canvas baseChart #categoryChart
+                      [data]="activeTransactionType === 'expense' ? expenseDoughnutChartData : incomeDoughnutChartData"
+                      [options]="doughnutChartOptions"
+                      [type]="'doughnut'">
+              </canvas>
+            </div>
+            <div class="mt-3 text-center">
+              <div class="btn-group" role="group">
+                <input type="radio" class="btn-check" name="categoryChartType" id="expenseChart"
+                       [checked]="activeTransactionType === 'expense'"
+                       (change)="changeTransactionType('expense')">
+                <label class="btn btn-outline-danger btn-sm" for="expenseChart">Expenses</label>
+
+                <input type="radio" class="btn-check" name="categoryChartType" id="incomeChart"
+                       [checked]="activeTransactionType === 'income'"
+                       (change)="changeTransactionType('income')">
+                <label class="btn btn-outline-success btn-sm" for="incomeChart">Income</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comparison Chart -->
+    <div class="row">
+      <div class="col-12 mb-4">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">{{ comparisonTimeframe | titlecase }} Comparison</h5>
+            <div class="btn-group btn-group-sm" role="group">
+              <button type="button" class="btn" [class.btn-light]="comparisonTimeframe === 'daily'"
+                      [class.btn-outline-light]="comparisonTimeframe !== 'daily'" (click)="changeTimeframe('daily')">
+                Daily
+              </button>
+              <button type="button" class="btn" [class.btn-light]="comparisonTimeframe === 'weekly'"
+                      [class.btn-outline-light]="comparisonTimeframe !== 'weekly'" (click)="changeTimeframe('weekly')">
+                Weekly
+              </button>
+              <button type="button" class="btn" [class.btn-light]="comparisonTimeframe === 'monthly'"
+                      [class.btn-outline-light]="comparisonTimeframe !== 'monthly'" (click)="changeTimeframe('monthly')">
+                Monthly
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="chart-container" style="height: 300px; position: relative;">
+              <canvas baseChart
+                      [data]="comparisonChartData"
+                      [options]="comparisonChartOptions"
+                      [type]="'line'">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

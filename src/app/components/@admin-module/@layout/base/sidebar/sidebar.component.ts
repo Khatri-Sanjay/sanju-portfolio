@@ -135,10 +135,28 @@ export class SidebarComponent implements OnInit, OnDestroy {
       title: 'Apps',
       items: [
         {
+          id: 'finance-tracker',
+          label: 'Finance Tracker',
+          icon: 'bi bi-wallet',
+          path: 'finance-tracker'
+        },
+        {
+          id: 'expense-tracker',
+          label: 'Expense Tracker',
+          icon: 'bi bi-wallet',
+          path: 'expense-tracker'
+        },
+        {
+          id: 'achievement-list',
+          label: 'Achievement',
+          icon: 'bi bi-wallet',
+          path: 'achievement-list'
+        },
+        {
           id: 'calendar',
           label: 'Calendar',
           icon: 'bi-calendar-event',
-          path: '/calendar'
+          path: 'calendar'
         },
         {
           id: 'messages',

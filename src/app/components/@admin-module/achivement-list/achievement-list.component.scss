@@ -1,0 +1,464 @@
+// Variables
+$primary-color: #4e73df;
+$secondary-color: #6c757d;
+$success-color: #1cc88a;
+$info-color: #36b9cc;
+$warning-color: #f6c23e;
+$danger-color: #e74a3b;
+$light-color: #f8f9fc;
+$dark-color: #5a5c69;
+$white: #fff;
+$card-border-radius: 0.75rem;
+$transition-speed: 0.3s;
+$box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+
+// Base styles
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f7f9fc;
+  color: $dark-color;
+}
+
+.achievement-app {
+  min-height: 100vh;
+}
+
+// Card Styles
+.dashboard-card {
+  border-radius: $card-border-radius;
+  border: none;
+  box-shadow: $box-shadow;
+  transition: transform $transition-speed, box-shadow $transition-speed;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 2rem 0 rgba(58, 59, 69, 0.2);
+  }
+}
+
+.stats-card {
+  background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+  color: $white;
+
+  .stat-item {
+    padding: 1rem;
+    text-align: center;
+
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      opacity: 0.8;
+    }
+  }
+}
+
+// Enhanced Quote Card Styling
+.quote-card {
+  position: relative;
+  height: 100%;
+  background-color: $white;
+  overflow: hidden;
+  border: none;
+  transition: all $transition-speed;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+
+    .quote-mark {
+      opacity: 0.8;
+    }
+
+    .inspiration-icon {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  // Background Pattern
+  .quote-bg-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(circle at 10% 20%, rgba(78, 115, 223, 0.05) 0%, rgba(107, 137, 222, 0.05) 100%);
+    z-index: 1;
+  }
+
+  // Large Quote Mark
+  .quote-mark {
+    position: absolute;
+    top: -15px;
+    left: 10px;
+    font-size: 5rem;
+    color: rgba($primary-color, 0.1);
+    z-index: 2;
+    opacity: 0.6;
+    transition: opacity $transition-speed;
+  }
+
+  // Quote Content Container
+  .quote-content {
+    position: relative;
+    z-index: 3;
+    padding: 2rem 1.5rem;
+  }
+
+  // Quote Text
+  .quote-text {
+    font-size: 1.15rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: $dark-color;
+    margin-bottom: 1rem;
+    font-style: italic;
+  }
+
+  // Author Styling
+  .quote-author {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+
+    &:before {
+      content: '—';
+      margin-right: 0.5rem;
+      color: $primary-color;
+    }
+
+    .author-name {
+      font-weight: 600;
+      color: $primary-color;
+    }
+  }
+
+  // Category Badge
+  .quote-category {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+
+    .badge {
+      font-size: 0.7rem;
+      padding: 0.35em 0.65em;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  // Refresh Button
+  .refresh-quote {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba($white, 0.8);
+    color: $primary-color;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all $transition-speed;
+
+    &:hover {
+      background-color: $primary-color;
+      color: $white;
+      box-shadow: 0 3px 8px rgba($primary-color, 0.4);
+      transform: rotate(180deg);
+    }
+
+    .fa-spin-hover {
+      font-size: 1rem;
+    }
+  }
+
+  // Inspirational Icon
+  .inspiration-icon {
+    position: absolute;
+    bottom: -10px;
+    left: 1rem;
+    font-size: 1.5rem;
+    color: $primary-color;
+    opacity: 0.6;
+    transform: translateY(100%);
+    transition: all 0.4s ease;
+    z-index: 2;
+
+    i {
+      animation: glow 2s infinite alternate;
+    }
+  }
+}
+
+// Glow Animation
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px rgba($primary-color, 0.5);
+  }
+  to {
+    text-shadow: 0 0 10px rgba($primary-color, 0.8);
+  }
+}
+
+// Make Quote Section Responsive
+@media (max-width: 992px) {
+  .quote-card {
+    margin-top: 1rem;
+
+    .quote-text {
+      font-size: 1rem;
+    }
+
+    .quote-mark {
+      font-size: 4rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .quote-card {
+    .quote-content {
+      padding: 1.5rem 1rem;
+    }
+  }
+}
+
+.form-card {
+  border-radius: $card-border-radius;
+  border: none;
+  box-shadow: $box-shadow;
+  overflow: hidden;
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+
+    .toggle-form {
+      padding: 0.25rem 0.5rem;
+      transition: transform $transition-speed;
+
+      &[aria-expanded="true"] i {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
+
+.filter-card, .data-tools-card {
+  border-radius: $card-border-radius;
+  border: none;
+  box-shadow: $box-shadow;
+
+  .form-floating {
+    margin-bottom: 0;
+  }
+}
+
+.data-tools-card {
+  height: 100%;
+
+  .btn-group {
+    @media (max-width: 576px) {
+      flex-direction: column;
+      width: 100%;
+
+      .btn {
+        border-radius: 0.25rem !important;
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+}
+
+.achievement-card {
+  border-radius: $card-border-radius;
+  border: none;
+  box-shadow: $box-shadow;
+  transition: all $transition-speed;
+  overflow: hidden;
+
+  &.completed-card {
+    border-left: 5px solid $success-color;
+  }
+
+  .card-header {
+    background-color: $white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .achievement-title {
+    transition: text-decoration $transition-speed;
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.35em 0.65em;
+    border-radius: 0.5rem;
+  }
+
+  .achievement-actions {
+    .btn-link {
+      padding: 0.25rem 0.5rem;
+      transition: transform $transition-speed;
+
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+
+  .achievement-description {
+    color: $secondary-color;
+  }
+
+  .achievement-details {
+    font-size: 0.875rem;
+
+    i {
+      color: $primary-color;
+    }
+  }
+
+  .achievement-progress {
+    .progress {
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+  }
+
+  .milestone-list {
+    .form-check-label {
+      transition: text-decoration $transition-speed;
+    }
+  }
+
+  .achievement-timestamps {
+    font-size: 0.75rem;
+    color: $secondary-color;
+  }
+}
+
+.empty-state {
+  border-radius: $card-border-radius;
+  border: none;
+  box-shadow: $box-shadow;
+
+  .empty-icon {
+    color: lighten($secondary-color, 25%);
+  }
+}
+
+// Form Styles
+.form-floating {
+  margin-bottom: 1rem;
+}
+
+.priority-toggle {
+  margin-bottom: 1.5rem;
+
+  .btn-group {
+    .btn {
+      flex: 1;
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease forwards;
+}
+
+.animate-item {
+  animation: slideIn 0.3s ease forwards;
+  opacity: 0;
+}
+
+// Hover effects
+.fa-spin-hover {
+  transition: transform 0.3s ease;
+
+  &:hover {
+    animation: fa-spin 2s infinite linear;
+  }
+}
+
+// Counter animation
+.counter {
+  transition: all 0.5s ease;
+}
+
+// Responsive adjustments
+@media (max-width: 992px) {
+  .data-management {
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .btn-group {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .stat-item .stat-value {
+    font-size: 2rem;
+  }
+
+  .achievement-header {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .achievement-actions {
+      align-self: flex-end;
+      margin-top: 0.5rem;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .stats-container {
+    flex-direction: column;
+  }
+
+  .achievement-header {
+    padding: 0.75rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+}

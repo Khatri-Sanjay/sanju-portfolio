@@ -1,0 +1,344 @@
+<div class="achievement-app">
+  <div class="container-fluid py-4">
+    <h1 class="text-center mb-4">Goal Achiever</h1>
+
+    <!-- Dashboard Stats Row -->
+    <div class="row mb-4 animate-fade-in">
+      <div class="col-lg-8">
+        <div class="card dashboard-card stats-card shadow-sm">
+          <div class="card-body">
+            <div class="row stats-container text-center">
+              <div class="col-md-4 stat-item">
+                <div class="stat-value counter">{{achievements.length}}</div>
+                <div class="stat-label">Total Goals</div>
+              </div>
+              <div class="col-md-4 stat-item">
+                <div class="stat-value counter">{{completedCount}}</div>
+                <div class="stat-label">Completed</div>
+              </div>
+              <div class="col-md-4 stat-item">
+                <div class="stat-value counter">{{completionRate}}%</div>
+                <div class="stat-label">Completion Rate</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card dashboard-card quote-card shadow-sm">
+          <div class="card-body position-relative p-0">
+            <!-- Background Pattern -->
+            <div class="quote-bg-pattern"></div>
+
+            <!-- Decorative Quote Mark -->
+            <div class="quote-mark">
+              <i class="fas fa-quote-left"></i>
+            </div>
+
+            <!-- Quote Content -->
+            <div class="quote-content">
+              <blockquote class="blockquote mb-0">
+                <p class="quote-text">"{{currentQuote.text}}"</p>
+                <footer class="quote-author">
+                  <span class="author-name">{{currentQuote.author}}</span>
+                </footer>
+              </blockquote>
+
+              <!-- Category Tag -->
+              <div class="quote-category">
+                <span class="badge bg-primary">{{ 'Motivation'}}</span>
+              </div>
+
+              <!-- Refresh Button -->
+              <button class="btn btn-light btn-sm refresh-quote" (click)="changeQuote()" title="Get a new quote">
+                <i class="fas fa-sync-alt fa-spin-hover"></i>
+              </button>
+            </div>
+
+            <!-- Inspirational Icon -->
+            <div class="inspiration-icon">
+              <i class="fas fa-lightbulb"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add New Achievement Form -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card form-card shadow-sm animate-slide-up">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Add New Achievement</h5>
+            <button class="btn btn-sm btn-light toggle-form"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#formCollapse"
+                    aria-expanded="false">
+              <i class="fas fa-chevron-down"></i>
+            </button>
+          </div>
+          <div class="collapse show" id="formCollapse">
+            <div class="card-body">
+              <form [formGroup]="achievementForm" (ngSubmit)="addAchievement()">
+                <div class="row g-3">
+                  <div class="col-md-12">
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" id="title" formControlName="title" placeholder="Enter achievement title">
+                      <label for="title">Title</label>
+                      <div class="invalid-feedback" *ngIf="achievementForm.get('title')?.hasError('required')">
+                        Title is required
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-12">
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" id="description" formControlName="description"
+                                  style="height: 100px" placeholder="Describe your achievement"></textarea>
+                      <label for="description">Description</label>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                      <select class="form-select" id="category" formControlName="category">
+                        <option *ngFor="let category of categories" [value]="category">{{category}}</option>
+                      </select>
+                      <label for="category">Category</label>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-floating mb-3">
+                      <input type="date" class="form-control" id="targetDate" formControlName="targetDate">
+                      <label for="targetDate">Target Date</label>
+                    </div>
+                  </div>
+
+                  <div class="col-md-12">
+                    <label class="form-label">Priority:</label>
+                    <div class="priority-toggle">
+                      <div class="btn-group w-100" role="group">
+                        <input type="radio" class="btn-check" name="priority" id="low" value="low" formControlName="priority">
+                        <label class="btn btn-outline-success" for="low">Low</label>
+
+                        <input type="radio" class="btn-check" name="priority" id="medium" value="medium" formControlName="priority">
+                        <label class="btn btn-outline-warning" for="medium">Medium</label>
+
+                        <input type="radio" class="btn-check" name="priority" id="high" value="high" formControlName="priority">
+                        <label class="btn btn-outline-danger" for="high">High</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-12 text-end">
+                    <button type="button" class="btn btn-light me-2" (click)="resetForm()">
+                      <i class="fas fa-undo me-1"></i> Reset
+                    </button>
+                    <button type="submit" class="btn btn-primary" [disabled]="!achievementForm.valid">
+                      <i class="fas fa-plus me-1"></i> Add Achievement
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters and Data Management Row -->
+    <div class="row mb-4">
+      <div class="col-lg-8">
+        <div class="card filter-card shadow-sm">
+          <div class="card-body">
+            <div class="row g-2">
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <select class="form-select" id="filterCategory" [(ngModel)]="filterCategory" (change)="applyFilters()">
+                    <option value="all">All Categories</option>
+                    <option *ngFor="let category of categories" [value]="category">{{category}}</option>
+                  </select>
+                  <label for="filterCategory">Category</label>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <select class="form-select" id="filterStatus" [(ngModel)]="filterStatus" (change)="applyFilters()">
+                    <option value="all">All Status</option>
+                    <option value="active">In Progress</option>
+                    <option value="completed">Completed</option>
+                  </select>
+                  <label for="filterStatus">Status</label>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-floating">
+                  <select class="form-select" id="sortBy" [(ngModel)]="sortBy" (change)="sortAchievements()">
+                    <option value="createdAt">Newest First</option>
+                    <option value="targetDate">Target Date</option>
+                    <option value="priority">Priority</option>
+                    <option value="progress">Progress</option>
+                  </select>
+                  <label for="sortBy">Sort By</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="card data-tools-card shadow-sm">
+          <div class="card-body">
+            <div class="data-management d-flex justify-content-between">
+              <div class="btn-group">
+                <button class="btn btn-primary" (click)="exportAchievements()">
+                  <i class="fas fa-download me-1"></i> Export
+                </button>
+                <button class="btn btn-outline-primary" (click)="fileImport.click()">
+                  <i class="fas fa-upload me-1"></i> Import
+                </button>
+                <input #fileImport type="file" hidden accept=".json" (change)="importAchievements($event)">
+              </div>
+
+              <div class="btn-group">
+                <button class="btn btn-info text-white" (click)="generateBackup()">
+                  <i class="fas fa-cloud-upload-alt me-1"></i> Backup
+                </button>
+                <button class="btn btn-outline-info" (click)="fileRestore.click()">
+                  <i class="fas fa-cloud-download-alt me-1"></i> Restore
+                </button>
+                <input #fileRestore type="file" hidden accept=".enc" (change)="restoreFromBackup($event)">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Achievement List Display -->
+    <div class="row">
+      <div class="col-12">
+        <div class="achievements-list">
+          <div class="card achievement-card shadow-sm mb-3 animate-item"
+               *ngFor="let achievement of filteredAchievements; let i = index"
+               [ngClass]="{'completed-card': achievement.completed}"
+               [style.animation-delay]="i * 0.05 + 's'">
+            <div class="card-header achievement-header d-flex justify-content-between align-items-center"
+                 [ngClass]="{'bg-success-subtle': achievement.completed}">
+              <div class="achievement-title-area d-flex align-items-center">
+                <div class="form-check form-switch me-2">
+                  <input class="form-check-input" type="checkbox" [checked]="achievement.completed"
+                         (change)="toggleComplete(achievement)" id="complete-{{i}}">
+                </div>
+                <h5 class="mb-0 achievement-title" [ngClass]="{'text-decoration-line-through': achievement.completed}">
+                  {{achievement.title}}
+                </h5>
+                <span class="badge ms-2"
+                      [ngClass]="{'bg-danger': achievement.priority === 'high',
+                                   'bg-warning': achievement.priority === 'medium',
+                                   'bg-success': achievement.priority === 'low'}">
+                    {{achievement.priority}}
+                  </span>
+              </div>
+              <div class="achievement-actions">
+                <button class="btn btn-sm btn-link text-primary" (click)="editAchievement(achievement)">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-link text-info" (click)="shareAchievement(achievement)">
+                  <i class="fas fa-share-alt"></i>
+                </button>
+                <button class="btn btn-sm btn-link text-danger" (click)="deleteAchievement(achievement)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="card-body">
+              <p class="achievement-description">{{achievement.description}}</p>
+              <div class="achievement-details d-flex flex-wrap mb-3">
+                <div class="achievement-category me-3">
+                  <i class="fas fa-tag me-1"></i> {{achievement.category}}
+                </div>
+                <div class="achievement-date" *ngIf="achievement.targetDate">
+                  <i class="fas fa-calendar-alt me-1"></i>
+                  Target: {{achievement.targetDate | date:'mediumDate'}}
+                </div>
+              </div>
+
+              <div class="achievement-progress mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="progress-label">Progress</span>
+                  <span class="progress-value">{{achievement.progress}}%</span>
+                </div>
+                <div class="progress" style="height: 8px;">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated"
+                       [ngClass]="{'bg-success': achievement.progress === 100}"
+                       [style.width]="achievement.progress + '%'"></div>
+                </div>
+              </div>
+
+              <!-- Milestones Section -->
+              <div class="accordion mb-3" id="milestoneAccordion-{{i}}">
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            [attr.data-bs-target]="'#milestonesCollapse-' + i" aria-expanded="false">
+                      Milestones
+                    </button>
+                  </h2>
+                  <div [id]="'milestonesCollapse-' + i" class="accordion-collapse collapse"
+                       [attr.data-bs-parent]="'#milestoneAccordion-' + i">
+                    <div class="accordion-body">
+                      <div class="milestone-list">
+                        <div class="form-check" *ngFor="let milestone of achievement.milestones; let j = index">
+                          <input class="form-check-input" type="checkbox" [id]="'milestone-' + i + '-' + j"
+                                 [checked]="milestone.completed" (change)="toggleMilestone(achievement, j)">
+                          <label class="form-check-label" [for]="'milestone-' + i + '-' + j"
+                                 [ngClass]="{'text-decoration-line-through': milestone.completed}">
+                            {{milestone.description}}
+                          </label>
+                        </div>
+
+                        <div class="add-milestone mt-2">
+                          <div class="input-group">
+                            <input type="text" class="form-control" #newMilestone placeholder="Add a milestone">
+                            <button class="btn btn-primary" type="button"
+                                    (click)="addMilestone(achievement, newMilestone.value); newMilestone.value=''">
+                              <i class="fas fa-plus"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="achievement-timestamps d-flex justify-content-between text-muted small">
+                <div class="timestamp">Created: {{achievement.createdAt | date:'short'}}</div>
+                <div class="timestamp">Updated: {{achievement.updatedAt | date:'short'}}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div class="card empty-state shadow-sm text-center py-5" *ngIf="filteredAchievements.length === 0">
+            <div class="card-body">
+              <i class="fas fa-folder-open empty-icon fa-4x mb-3 text-muted"></i>
+              <h3>No achievements found</h3>
+              <p class="text-muted">Try adjusting your filters or add new achievements to get started</p>
+              <button class="btn btn-primary mt-3" data-bs-toggle="collapse" data-bs-target="#formCollapse">
+                <i class="fas fa-plus me-1"></i> Create Your First Achievement
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
