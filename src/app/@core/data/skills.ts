@@ -39,7 +39,7 @@ export const Skills = {
     return [
       {
         title: DetailedSkillCategory.FrontendTechnologies,
-        details: 'Technologies and frameworks for building dynamic and responsive web applications including Angular, Angular Material, TypeScript, JavaScript, HTML5, CSS3, and Bootstrap. Proficiency in responsive design is also included.'
+        details: 'Technologies and frameworks for building dynamic and responsive web applications including Angular, Angular Material, TypeScript, JavaScript, HTML, CSS, and Bootstrap. Proficiency in responsive design is also included.'
       },
       {
         title: DetailedSkillCategory.BackendFrameworks,

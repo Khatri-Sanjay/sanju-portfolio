@@ -23,7 +23,7 @@ export const PersonalDetails = {
     personalWebsite: 'https://khatrisanjay.com.np/'
   },
 
-  summaryMessage: 'I am a passionate and results-driven Frontend Developer with over 2 years of hands-on experience in Angular,\n' +
+  summaryMessage: 'I am a passionate and results-driven Frontend Developer with over 2.5 years of hands-on experience in Angular,\n' +
     '    TypeScript, and JavaScript. I specialize in creating dynamic, responsive, and high-performance user interfaces,\n' +
     '    ensuring seamless and optimized user experiences. With a strong background in collaborating with cross-functional\n' +
     '    teams, I deliver high-quality web applications within deadlines. Now, I am seeking to leverage my\n' +

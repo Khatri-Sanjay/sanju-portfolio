@@ -21,12 +21,53 @@ interface Company {
 
 export const Experience: { company: Company }[] = [
   {
-    company: {
-      name: 'F1Soft International Pvt. Ltd.',
-      duration: '16th March 2025 – Present',
-      role: 'Software Engineer',
-      description: '',
-      projects: []
+    "company": {
+      "name": "F1Soft International Pvt. Ltd.",
+      "duration": "16th March 2025 – Present",
+      "role": "Software Engineer",
+      "description": "Contributing to the development of a centralized digital remittance platform using a scalable Angular-based frontend architecture within an npm-based monorepo. Focused on modular development, API integration, and secure role-based access while delivering high-quality features through Agile sprints.",
+      "projects": [
+        {
+          "title": "Foneremit",
+          "role": "Frontend Team Lead",
+          "description": "Led the frontend team in developing and enhancing Foneremit, a digital remittance platform designed for financial institutions and agents.",
+          "responsibilities": [
+            {
+              "title": "Monorepo Architecture",
+              "description": "Implemented and maintained an npm-based monorepo for modular and maintainable codebases.",
+              "details": [
+                "Structured the project using an npm-based monorepo to manage multiple Angular applications and shared libraries.",
+                "Enabled isolated feature development, better dependency management, and streamlined versioning across modules.",
+                "Improved build times and code sharing between projects using locally scoped packages and custom scripts."
+              ]
+            },
+            {
+              "title": "Frontend Dashboard Development",
+              "description": "Built a robust admin dashboard for managing remittance operations.",
+              "details": [
+                "Developed responsive Angular interfaces to manage sender and receiver data, transactions, agent activity, and user permissions.",
+                "Implemented advanced data tables using Angular CDK Table with features like sorting, filtering, and pagination for optimal usability."
+              ]
+            },
+            {
+              "title": "Project Coordination",
+              "description": "Facilitated smooth cross-team collaboration and execution.",
+              "details": [
+                "Worked closely with cross-functional teams to ensure timely, high-quality deliverables.",
+                "Coordinated efforts between frontend, backend, QA, and product teams to streamline development workflows."
+              ]
+            },
+            {
+              "title": "Agile Development & Releases",
+              "description": "Supported iterative feature development within Agile sprints.",
+              "details": [
+                "Actively participated in Agile ceremonies including sprint planning, reviews, and retrospectives.",
+                "Contributed to stable and timely releases through continuous integration, bug fixing, and feature delivery."
+              ]
+            }
+          ]
+        }
+      ]
     }
   },
   {
