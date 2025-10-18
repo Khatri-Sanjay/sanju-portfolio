@@ -1,0 +1,54 @@
+.crypto-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.crypto-img {
+  width: 40px;
+  height: 40px;
+}
+
+.list-view {
+  .crypto-card {
+    .card-body {
+      .crypto-img {
+        width: 30px;
+        height: 30px;
+      }
+    }
+  }
+}
+
+.modal-content {
+  border-radius: 10px;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.modal-body {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+canvas#priceChart {
+  max-height: 300px;
+  width: 100%;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 576px) {
+  .crypto-img {
+    width: 30px;
+    height: 30px;
+  }
+  .modal-dialog {
+    margin: 1rem;
+  }
+}

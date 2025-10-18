@@ -1,0 +1,183 @@
+<div class="container my-5">
+  <h2 class="text-center mb-4">Crypto Tracker</h2>
+
+  <!-- Controls Section -->
+  <div class="mb-4">
+    <div class="row g-3 align-items-center">
+      <div class="col-12 col-md-4">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search by name or symbol..."
+          [(ngModel)]="searchTerm"
+          (input)="filterCryptos()"
+        />
+      </div>
+      <div class="col-12 col-md-3">
+        <select
+          class="form-select"
+          [(ngModel)]="sortBy"
+          (change)="sortCryptos()"
+        >
+          <option value="market_cap_desc">Sort by Market Cap (Desc)</option>
+          <option value="market_cap_asc">Sort by Market Cap (Asc)</option>
+          <option value="price_desc">Sort by Price (Desc)</option>
+          <option value="price_asc">Sort by Price (Asc)</option>
+          <option value="change_desc">Sort by 24h Change (Desc)</option>
+          <option value="change_asc">Sort by 24h Change (Asc)</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-3">
+        <button
+          class="btn btn-outline-primary w-100"
+          (click)="toggleFavorites()"
+        >
+          {{ showFavorites ? 'Show All' : 'Show Favorites' }}
+        </button>
+      </div>
+      <div class="col-12 col-md-2 text-md-end">
+        <button class="btn btn-primary me-2" (click)="refreshData()">
+          Refresh
+        </button>
+        <button
+          class="btn btn-outline-secondary"
+          (click)="toggleView()"
+        >
+          {{ isGridView ? 'List View' : 'Grid View' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading()) {
+    <div class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (errorMessage()) {
+    <div class="alert alert-danger text-center" role="alert">
+      {{ errorMessage() }}
+      <button class="btn btn-link" (click)="refreshData()">Try Again</button>
+    </div>
+  }
+
+  <!-- Crypto Data -->
+  @if (!loading() && !errorMessage()) {
+    <div [ngClass]="{'row': isGridView, 'list-view': !isGridView}">
+      @for (crypto of paginatedCryptos(); track crypto.id) {
+        <div
+          [ngClass]="{
+            'col-12 col-sm-6 col-md-4 col-lg-3 mb-4': isGridView,
+            'col-12 mb-3': !isGridView
+          }"
+        >
+          <div class="card h-100 shadow-sm crypto-card" (click)="openDetailModal(crypto)">
+            <div class="card-body d-flex align-items-center" [ngClass]="{'flex-column': isGridView, 'flex-row': !isGridView}">
+              <img
+                [src]="crypto.image"
+                [alt]="crypto.name"
+                class="crypto-img me-3"
+                [ngClass]="{'mb-2': isGridView}"
+              />
+              <div class="flex-grow-1">
+                <h5>{{ crypto.name }} ({{ crypto.symbol | uppercase }})</h5>
+                <p>Price: ${{ crypto.current_price | number:'1.2-2' }}</p>
+                <p>Market Cap: ${{ crypto.market_cap | number }}</p>
+                <p
+                  [ngClass]="{
+                    'text-success': crypto.price_change_percentage_24h >= 0,
+                    'text-danger': crypto.price_change_percentage_24h < 0
+                  }"
+                >
+                  24h Change: {{ crypto.price_change_percentage_24h | number:'1.2-2' }}%
+                </p>
+                <button
+                  class="btn btn-sm"
+                  [ngClass]="{'btn-outline-warning': !isFavorite(crypto.id), 'btn-warning': isFavorite(crypto.id)}"
+                  (click)="toggleFavorite(crypto, $event)"
+                >
+                  {{ isFavorite(crypto.id) ? '★ Favorited' : '☆ Favorite' }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      } @empty {
+        <div class="text-center my-5">
+          <p>No cryptocurrencies found matching your criteria.</p>
+        </div>
+      }
+    </div>
+
+    <!-- Pagination -->
+    <nav aria-label="Page navigation" class="mt-4">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [ngClass]="{'disabled': currentPage() === 1}">
+          <button class="page-link" (click)="changePage(currentPage() - 1)">Previous</button>
+        </li>
+        @for (page of pageNumbers(); track page) {
+          <li class="page-item" [ngClass]="{'active': currentPage() === page}">
+            <button class="page-link" (click)="changePage(page)">{{ page }}</button>
+          </li>
+        }
+        <li class="page-item" [ngClass]="{'disabled': currentPage() === totalPages()}">
+          <button class="page-link" (click)="changePage(currentPage() + 1)">Next</button>
+        </li>
+      </ul>
+    </nav>
+  }
+
+  <!-- Detail Modal -->
+  @if (selectedCrypto()) {
+    <div class="modal fade show d-block" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ selectedCrypto()!.name }} ({{ selectedCrypto()!.symbol | uppercase }})</h5>
+            <button type="button" class="btn-close" (click)="closeDetailModal()"></button>
+          </div>
+          <div class="modal-body">
+            @if (chartLoading()) {
+              <div class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                  <span class="visually-hidden">Loading chart...</span>
+                </div>
+              </div>
+            } @else if (chartError()) {
+              <div class="alert alert-warning text-center">
+                {{ chartError() }}
+              </div>
+            } @else {
+              <canvas id="priceChart" style="max-height: 300px;" #priceChart></canvas>
+            }
+            <div class="mt-3">
+              <p><strong>Current Price:</strong> ${{ selectedCrypto()!.current_price | number:'1.2-2' }}</p>
+              <p><strong>Market Cap:</strong> ${{ selectedCrypto()!.market_cap | number }}</p>
+              <p><strong>24h High:</strong> ${{ selectedCrypto()!.high_24h | number:'1.2-2' }}</p>
+              <p><strong>24h Low:</strong> ${{ selectedCrypto()!.low_24h | number:'1.2-2' }}</p>
+              <p><strong>Total Volume:</strong> ${{ selectedCrypto()!.total_volume | number }}</p>
+              <p><strong>Circulating Supply:</strong> {{ selectedCrypto()!.circulating_supply | number }} {{ selectedCrypto()!.symbol | uppercase }}</p>
+              <p
+                [ngClass]="{
+                    'text-success': selectedCrypto()!.price_change_percentage_24h >= 0,
+                    'text-danger': selectedCrypto()!.price_change_percentage_24h < 0
+                  }"
+              >
+                <strong>24h Change:</strong> {{ selectedCrypto()!.price_change_percentage_24h | number:'1.2-2' }}%
+              </p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="closeDetailModal()">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+  }
+</div>

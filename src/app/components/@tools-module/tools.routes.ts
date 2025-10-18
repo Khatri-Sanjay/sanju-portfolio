@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import {CryptoTrackerComponent} from './tools/crypto-tracker/crypto-tracker.component';
 
 export const ToolsRoutes: Routes = [
   {
@@ -27,5 +28,12 @@ export const ToolsRoutes: Routes = [
       import('../@tools-module/tools/to-do/task.component')
         .then((m) => m.TaskComponent),
     data: { title: 'Todo App', description: 'Manage your task' },
+  },
+  {
+    path: 'crypto',
+    loadComponent: () =>
+      import('../@tools-module/tools/crypto-tracker/crypto-tracker.component')
+        .then((m) => m.CryptoTrackerComponent),
+    data: { title: 'Crypto Tracker', description: 'Track all crypto coin' },
   },
 ];

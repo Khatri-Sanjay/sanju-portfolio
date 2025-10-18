@@ -112,24 +112,29 @@ export class ToolsComponent implements OnInit {
           technologies: ['Angular', 'CDK', 'TypeScript', 'LocalStorage'],
           category: 'other'
         },
-        // {
-        //   id: 2,
-        //   name: 'Data Visualizer',
-        //   shortDescription: 'Transform data into visual insights',
-        //   description: 'Turn complex datasets into beautiful visualizations and gain actionable insights. Supports various chart types and data sources with easy customization options.',
-        //   icon: 'bi bi-bar-chart',
-        //   figureType: 'chart',
-        //   features: [
-        //     'Interactive charts and graphs',
-        //     'Data filtering and sorting',
-        //     'CSV/JSON import',
-        //     'Dashboard creation'
-        //   ],
-        //   technologies: ['D3.js', 'Chart.js', 'Angular', 'RxJS'],
-        //   code: 'https://github.com/yourusername/data-visualizer',
-        //   demo: 'https://demo.yourdomain.com/data-visualizer',
-        //   category: 'analytics'
-        // },
+        {
+          "id": 3,
+          "name": "Crypto Tracker",
+          "shortDescription": "Track and visualize cryptocurrency data in real-time",
+          "description": "Crypto Tracker is an Angular-based application that fetches live cryptocurrency data from multiple sources and turns it into intuitive, interactive visualizations. Users can monitor coin prices, market caps, and 24-hour changes with responsive charts and cards. The platform supports filtering, sorting, and customizable dashboards, helping users make informed decisions quickly.",
+          "icon": "bi bi-bar-chart",
+          "figureType": "chart",
+          "mainImage": "https://tse1.mm.bing.net/th/id/OIP.vMgkcwZ3naphGJby4SAz9AHaEK?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "otherImages": [
+            "https://thvnext.bing.com/th/id/OIP.4L7UesMnQCsZnkk-9z4-2AHaEt?w=255&h=180&c=7&r=0&o=7&cb=12&dpr=1.1&pid=1.7&rm=3",
+            "https://tse2.mm.bing.net/th/id/OIP._pNmmjeeaCPmM5HQsdpfcwHaEO?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3",
+          ],
+          "features": [
+            "Real-time cryptocurrency data tracking",
+            "Interactive charts and graphs for price trends",
+            "Data filtering and sorting by coin, market cap, or price"
+          ],
+          "technologies": ["Angular", "RxJS"],
+          "code": "/tools/crypto",
+          "demo": "/tools/crypto",
+          "category": "analytics"
+        }
+
         // {
         //   id: 3,
         //   name: 'Network Mapper',
