@@ -1,5 +1,56 @@
 export const Projects = [
   {
+    projectName: 'ngx-nepali-dualpicker',
+    shortDescription: 'A modern Angular Nepali Date Picker supporting Bikram Sambat (BS) and Gregorian (AD) calendars with built-in conversion, range selection, and advanced customization.',
+    description: "ngx-nepali-dualpicker is a production-ready Angular date picker designed specifically for Nepali applications requiring both Bikram Sambat (BS) and Gregorian (AD) calendar support. " +
+      "It features an accurate BS ↔ AD conversion engine, single/range/multiple date selection modes, Reactive Forms integration, multilingual support (English & Nepali), advanced theming with CSS variables, " +
+      "date restriction controls, and built-in utilities like nepaliDate and currencyFormatter pipes. Built for Angular 17+ standalone architecture, it is ideal for government systems, banking platforms, HR software, accounting tools, and Nepali SaaS applications.",
+    image: 'assets/image/dual-nepalipicker.jpg',
+    link: 'https://github.com/Khatri-Sanjay/ngx-nepali-dualpicker',
+    demoLink: 'https://khatri-sanjay.github.io/nepali-dualpicker-demo/',
+    languageUsed: [
+      'Angular',
+      'TypeScript',
+      'SCSS',
+      'HTML',
+      'RxJS'
+    ]
+  },
+  {
+    projectName: 'Drawing Tools',
+    shortDescription: 'A comprehensive drawing toolbar built with Angular, TypeScript, and Canvas, designed to inspire creativity and streamline visual projects.',
+    description: "The 'Drawing Tools' project is a comprehensive, feature-rich drawing and image editing toolbar designed to provide users with a wide range of creative options. " +
+      "It allows users to create freehand drawings, add geometric shapes, customize text, and apply various image effects, making it perfect for artists, designers, and anyone looking to" +
+      " explore their visual creativity. Built with Angular and Bootstrap, this tool integrates multiple brush styles, shape options, image filters, and advanced canvas customization features.",
+    image: 'assets/image/tools/drawing-tools.png',
+    link:'',
+    demoLink: 'https://khatrisanjay.com.np/tools/drawing',
+    languageUsed: [
+      'Angular',
+      'Bootstrap',
+      'Canvas',
+      'SCSS'
+    ]
+  },
+  {
+    projectName: 'Todo Management App',
+    shortDescription: 'A task management tool built with Angular and CDK, offering intuitive task organization by categories and priorities (Low, Medium, High).' +
+      ' It integrates with localStorage to persist data, so your tasks are always saved across sessions.',
+    description: "This To-Do Management App allows you to effectively organize your tasks with different categories like \"To Do\", \"In Progress\", and \"Done\". " +
+      "You can assign each task a priority level: \"Low\", \"Medium\", or \"High\". The app uses Angular and the Component Dev Kit (CDK) to provide a seamless, interactive experience. " +
+      "All data is stored in localStorage, ensuring that your tasks are available even after you refresh or restart the app. Features like drag-and-drop, task editing, and task creation" +
+      " make managing your workflow more efficient.'",
+    image: 'assets/image/to-do/todo.png',
+    link:'',
+    demoLink: 'https://khatrisanjay.com.np/tools/todo',
+    languageUsed: [
+      'Angular',
+      'CDK',
+      'TypeScript',
+      'LocalStorage'
+    ]
+  },
+  {
     projectName: 'Blood Bank Management System',
     shortDescription: 'System for managing blood donation and distribution, featuring donor registration and real-time updates.',
     description: 'The Blood Bank Management System is a digital solution designed to streamline ' +
@@ -57,40 +108,6 @@ export const Projects = [
     link: '',
     languageUsed: [
       'Android', 'Kotlin'
-    ]
-  },
-  {
-    projectName: 'Drawing Tools',
-    shortDescription: 'A comprehensive drawing toolbar built with Angular, TypeScript, and Canvas, designed to inspire creativity and streamline visual projects.',
-    description: "The 'Drawing Tools' project is a comprehensive, feature-rich drawing and image editing toolbar designed to provide users with a wide range of creative options. " +
-      "It allows users to create freehand drawings, add geometric shapes, customize text, and apply various image effects, making it perfect for artists, designers, and anyone looking to" +
-      " explore their visual creativity. Built with Angular and Bootstrap, this tool integrates multiple brush styles, shape options, image filters, and advanced canvas customization features.",
-    image: 'assets/image/tools/drawing-tools.png',
-    link:'',
-    demoLink: 'https://khatrisanjay.com.np/tools/drawing',
-    languageUsed: [
-      'Angular',
-      'Bootstrap',
-      'Canvas',
-      'SCSS'
-    ]
-  },
-  {
-    projectName: 'Todo Management App',
-    shortDescription: 'A task management tool built with Angular and CDK, offering intuitive task organization by categories and priorities (Low, Medium, High).' +
-      ' It integrates with localStorage to persist data, so your tasks are always saved across sessions.',
-    description: "This To-Do Management App allows you to effectively organize your tasks with different categories like \"To Do\", \"In Progress\", and \"Done\". " +
-      "You can assign each task a priority level: \"Low\", \"Medium\", or \"High\". The app uses Angular and the Component Dev Kit (CDK) to provide a seamless, interactive experience. " +
-      "All data is stored in localStorage, ensuring that your tasks are available even after you refresh or restart the app. Features like drag-and-drop, task editing, and task creation" +
-      " make managing your workflow more efficient.'",
-    image: 'assets/image/to-do/todo.png',
-    link:'',
-    demoLink: 'https://khatrisanjay.com.np/tools/todo',
-    languageUsed: [
-      'Angular',
-      'CDK',
-      'TypeScript',
-      'LocalStorage'
     ]
   }
 
