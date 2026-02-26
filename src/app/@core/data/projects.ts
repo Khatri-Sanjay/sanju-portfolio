@@ -5,8 +5,8 @@ export const Projects = [
     description: "ngx-nepali-dualpicker is a production-ready Angular date picker designed specifically for Nepali applications requiring both Bikram Sambat (BS) and Gregorian (AD) calendar support. " +
       "It features an accurate BS ↔ AD conversion engine, single/range/multiple date selection modes, Reactive Forms integration, multilingual support (English & Nepali), advanced theming with CSS variables, " +
       "date restriction controls, and built-in utilities like nepaliDate and currencyFormatter pipes. Built for Angular 17+ standalone architecture, it is ideal for government systems, banking platforms, HR software, accounting tools, and Nepali SaaS applications.",
-    image: 'assets/image/dual-nepalipicker.jpg',
-    link: 'https://github.com/Khatri-Sanjay/ngx-nepali-dualpicker',
+    image: 'assets/image/dual-nepalipicker.png',
+    link: 'https://www.npmjs.com/package/ngx-nepali-dualpicker',
     demoLink: 'https://khatri-sanjay.github.io/nepali-dualpicker-demo/',
     languageUsed: [
       'Angular',
