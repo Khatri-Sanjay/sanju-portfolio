@@ -1,7 +1,7 @@
 import {Component, HostListener, OnInit, signal} from '@angular/core';
 import { PersonalDetails } from '../../../../@core/data/personal-details';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-
+import { CommonModule } from '@angular/common';
 
 type SocialPlatform = 'facebook' | 'instagram' | 'linkedin' | 'github';
 type AnimationState = 'initial' | 'expanded';
@@ -14,7 +14,7 @@ interface SocialLink {
 }
 
 @Component({
-  imports: [],
+  imports: [CommonModule],
   selector: 'app-side-link',
   standalone: true,
   styleUrl: './side-link.component.scss',
@@ -78,7 +78,7 @@ export class SideLinkComponent implements OnInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event: Event): void {
+  onResize(): void {
     this.checkScreenSize();
   }
 

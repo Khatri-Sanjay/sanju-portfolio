@@ -2,7 +2,7 @@ import {Component, HostListener, Inject, inject, OnDestroy, OnInit, PLATFORM_ID,
 import {NavigationEnd, Router, RouterLink, RouterLinkActive} from '@angular/router';
 import { SidebarService } from './sidebar.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { isPlatformBrowser } from '@angular/common';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {filter} from 'rxjs';
 
 interface MenuItemBase {
@@ -41,9 +41,10 @@ interface MenuSection {
   selector: 'app-sidebar',
   standalone: true,
   imports: [
+    CommonModule,
     RouterLink,
-    RouterLinkActive
-],
+    RouterLinkActive,
+  ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
   animations: [

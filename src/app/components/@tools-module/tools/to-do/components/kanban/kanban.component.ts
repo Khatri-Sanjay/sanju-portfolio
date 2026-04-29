@@ -3,7 +3,7 @@ import { Task } from '../../@core/interface/task.interface';
 import { Board } from '../../@core/interface/board.interface';
 import { TaskService } from '../../@core/service/task.service';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { DatePipe, NgClass } from '@angular/common';
+import { DatePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
@@ -16,8 +16,10 @@ import { Subscription } from 'rxjs';
     DatePipe,
     CdkDropList,
     CdkDrag,
-    FormsModule
-],
+    FormsModule,
+    NgForOf,
+    NgIf
+  ],
   templateUrl: './kanban.component.html',
   styleUrl: './kanban.component.scss'
 })

@@ -3,38 +3,32 @@
     <div class="terminal-title">Sanjay Terminal Portfolio</div>
     <div class="theme-toggle" (click)="toggleThemeMenu()">
       <span class="theme-icon">🎨</span>
-      @if (showThemeMenu) {
-        <div class="theme-menu" [@slideDown]>
-          @for (theme of themes | keyvalue; track theme) {
-            <div
-              class="theme-option"
-              (click)="changeTheme(theme.key)"
-              [class.active]="currentTheme === theme.key"
-              >
-              {{ theme.key }}
-            </div>
-          }
+      <div class="theme-menu" *ngIf="showThemeMenu" [@slideDown]>
+        <div
+          *ngFor="let theme of themes | keyvalue"
+          class="theme-option"
+          (click)="changeTheme(theme.key)"
+          [class.active]="currentTheme === theme.key"
+        >
+          {{ theme.key }}
         </div>
-      }
+      </div>
     </div>
   </div>
 
   <div #outputContainer class="terminal-output">
-    @for (line of outputLines; track line) {
-      <div
-        class="output-line"
-        [ngStyle]="getLineStyles(line)"
-        [@lineAnimation]
-        >
-        <span class="timestamp">{{ line.timestamp | date:'hh:mm:ss a' }}</span>
-        @if (line.type === 'command') {
-          <span class="prompt">
-            {{ username }}{{ '@portfolio' }}:~$
-          </span>
-        }
-        <span class="text" [innerHTML]="line.text | lineBreak"></span>
-      </div>
-    }
+    <div
+      *ngFor="let line of outputLines"
+      class="output-line"
+      [ngStyle]="getLineStyles(line)"
+      [@lineAnimation]
+    >
+      <span class="timestamp">{{ line.timestamp | date:'hh:mm:ss a' }}</span>
+      <span *ngIf="line.type === 'command'" class="prompt">
+        {{ username }}{{ '@portfolio' }}:~$
+      </span>
+      <span class="text" [innerHTML]="line.text | lineBreak"></span>
+    </div>
   </div>
 
   <div class="terminal-input-container">
@@ -50,20 +44,17 @@
       [ngStyle]="{'color': themes[currentTheme].text}"
       autocomplete="off"
       spellcheck="false"
-      />
-    </div>
-
-    @if (showSuggestions) {
-      <div class="suggestions-container" [@slideUp]>
-        @for (suggestion of suggestions; track suggestion; let i = $index) {
-          <div
-            class="suggestion"
-            [class.active]="i === activeSuggestionIndex"
-            (click)="currentInput = suggestion; showSuggestions = false; focusInput()"
-            >
-            {{ suggestion }}
-          </div>
-        }
-      </div>
-    }
+    />
   </div>
+
+  <div class="suggestions-container" *ngIf="showSuggestions" [@slideUp]>
+    <div
+      *ngFor="let suggestion of suggestions; let i = index"
+      class="suggestion"
+      [class.active]="i === activeSuggestionIndex"
+      (click)="currentInput = suggestion; showSuggestions = false; focusInput()"
+    >
+      {{ suggestion }}
+    </div>
+  </div>
+</div>

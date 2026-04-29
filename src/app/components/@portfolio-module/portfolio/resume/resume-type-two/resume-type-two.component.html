@@ -1,7 +1,7 @@
 <div class="offset-11 mb-2">
   <button class="btn btn-sm btn-outline-primary" ngxPrint
-    [useExistingCss]="true"
-    [printSectionId]="'contentToPrintType2'">
+          [useExistingCss]="true"
+          [printSectionId]="'contentToPrintType2'">
     <i class="fas fa-print mr-2"></i> Print
   </button>
 </div>
@@ -46,11 +46,9 @@
       <section class="skills-section">
         <h3>Technical Skills</h3>
         <div class="skills-container">
-          @for (skill of resumeData.skills; track skill) {
-            <span class="skill-badge">
-              {{skill.name}}
-            </span>
-          }
+          <span *ngFor="let skill of resumeData.skills" class="skill-badge">
+            {{skill.name}}
+          </span>
         </div>
       </section>
     </aside>
@@ -64,35 +62,27 @@
 
       <section class="experience-section">
         <h3>Professional Experience</h3>
-        @for (exp of resumeData.experience; track exp) {
-          <div class="experience-item">
-            <div class="experience-header">
-              <h4>{{exp.title}}</h4>
-              <span class="period">{{exp.period}}</span>
-            </div>
-            <div class="company-info">
-              <span class="company">{{exp.company}}</span>
-              <span class="location">{{exp.location}}</span>
-            </div>
-            <ul class="experience-description">
-              @for (desc of exp.description; track desc) {
-                <li>{{desc}}</li>
-              }
-            </ul>
-            @if (exp.skillsDeveloped) {
-              <div class="skills-developed">
-                <h5>Skills Developed:</h5>
-                <div class="skills-badges">
-                  @for (skill of exp.skillsDeveloped; track skill) {
-                    <span class="skill-badge">
-                      {{skill}}
-                    </span>
-                  }
-                </div>
-              </div>
-            }
+        <div *ngFor="let exp of resumeData.experience" class="experience-item">
+          <div class="experience-header">
+            <h4>{{exp.title}}</h4>
+            <span class="period">{{exp.period}}</span>
           </div>
-        }
+          <div class="company-info">
+            <span class="company">{{exp.company}}</span>
+            <span class="location">{{exp.location}}</span>
+          </div>
+          <ul class="experience-description">
+            <li *ngFor="let desc of exp.description">{{desc}}</li>
+          </ul>
+          <div *ngIf="exp.skillsDeveloped" class="skills-developed">
+            <h5>Skills Developed:</h5>
+            <div class="skills-badges">
+              <span *ngFor="let skill of exp.skillsDeveloped" class="skill-badge">
+                {{skill}}
+              </span>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   </div>

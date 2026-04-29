@@ -1,11 +1,12 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import { NgClass } from '@angular/common';
+import {NgClass, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-pop-up',
   imports: [
+    NgIf,
     NgClass
-],
+  ],
   templateUrl: './pop-up.component.html',
   styleUrl: './pop-up.component.scss'
 })
