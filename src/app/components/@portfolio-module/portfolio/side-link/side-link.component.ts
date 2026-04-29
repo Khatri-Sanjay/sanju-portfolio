@@ -78,7 +78,7 @@ export class SideLinkComponent implements OnInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(): void {
+  onResize(event: Event): void {
     this.checkScreenSize();
   }
 
