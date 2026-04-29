@@ -12,111 +12,122 @@
           class="form-control form-control-sm"
           formControlName="name"
           placeholder="Enter full name"
-        />
-        <div *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched" class="error-text">
-          Name is required and must be at least 2 characters.
-        </div>
-      </div>
-
-      <!-- Email Field -->
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input
-          type="email"
-          id="email"
-          class="form-control form-control-sm"
-          formControlName="email"
-          placeholder="Enter email address"
-        />
-        <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="error-text">
-          A valid email is required.
-        </div>
-      </div>
-
-      <div class="mb-3" *ngIf="isEditMode">
-        <div class="form-check">
-          <input
-            type="checkbox"
-            id="isUpdatePassword"
-            class="form-check-input"
-            [(ngModel)]="isUpdatePasswordEnable"
-            [ngModelOptions]="{ standalone: true }"
           />
-          <label for="isUpdatePassword" class="form-check-label">
-            Do you want to update Password?
-          </label>
+          @if (userForm.get('name')?.invalid && userForm.get('name')?.touched) {
+            <div class="error-text">
+              Name is required and must be at least 2 characters.
+            </div>
+          }
         </div>
-      </div>
 
-      <div class="mb-3" *ngIf="isUpdatePasswordEnable || !isEditMode">
-        <label for="password" class="form-label">Password</label>
-        <div class="input-group">
+        <!-- Email Field -->
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
           <input
-            [type]="showPassword ? 'text' : 'password'"
-            id="password"
+            type="email"
+            id="email"
             class="form-control form-control-sm"
-            formControlName="password"
-            placeholder="Enter password"
-          />
-          <button
-            type="button"
-            class="btn btn-outline-secondary"
-            (click)="showPassword = !showPassword"
-            aria-label="Toggle password visibility"
-          >
-            <i class="bi" [class]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
-          </button>
-        </div>
-        <div
-          *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched"
-          class="text-danger small mt-1"
-        >
-          A valid password is required.
-        </div>
-      </div>
+            formControlName="email"
+            placeholder="Enter email address"
+            />
+            @if (userForm.get('email')?.invalid && userForm.get('email')?.touched) {
+              <div class="error-text">
+                A valid email is required.
+              </div>
+            }
+          </div>
 
-      <!-- Phone Field -->
-      <div class="mb-3">
-        <label for="phone" class="form-label">Phone</label>
-        <input
-          type="tel"
-          id="phone"
-          class="form-control form-control-sm"
-          formControlName="phone"
-          placeholder="Enter 10-digit phone number"
-        />
-        <div *ngIf="userForm.get('phone')?.invalid && userForm.get('phone')?.touched" class="error-text">
-          Valid 10-digit phone number is required.
-        </div>
-      </div>
+          @if (isEditMode) {
+            <div class="mb-3">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  id="isUpdatePassword"
+                  class="form-check-input"
+                  [(ngModel)]="isUpdatePasswordEnable"
+                  [ngModelOptions]="{ standalone: true }"
+                  />
+                  <label for="isUpdatePassword" class="form-check-label">
+                    Do you want to update Password?
+                  </label>
+                </div>
+              </div>
+            }
 
-      <!-- Role Field -->
-      <div class="mb-3">
-        <label for="role" class="form-label">Role</label>
-        <select id="role" class="form-control form-control-sm" formControlName="role">
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select>
-      </div>
+            @if (isUpdatePasswordEnable || !isEditMode) {
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <div class="input-group">
+                  <input
+                    [type]="showPassword ? 'text' : 'password'"
+                    id="password"
+                    class="form-control form-control-sm"
+                    formControlName="password"
+                    placeholder="Enter password"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary"
+                      (click)="showPassword = !showPassword"
+                      aria-label="Toggle password visibility"
+                      >
+                      <i class="bi" [class]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                    </button>
+                  </div>
+                  @if (userForm.get('password')?.invalid && userForm.get('password')?.touched) {
+                    <div
+                      class="text-danger small mt-1"
+                      >
+                      A valid password is required.
+                    </div>
+                  }
+                </div>
+              }
 
-      <!-- Is Active Field -->
-      <div class="mb-3">
-        <div class="form-check">
-          <input
-            type="checkbox"
-            id="isActive"
-            class="form-check-input"
-            formControlName="isActive"
-          />
-          <label for="isActive" class="form-check-label">Active</label>
-        </div>
-      </div>
+              <!-- Phone Field -->
+              <div class="mb-3">
+                <label for="phone" class="form-label">Phone</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  class="form-control form-control-sm"
+                  formControlName="phone"
+                  placeholder="Enter 10-digit phone number"
+                  />
+                  @if (userForm.get('phone')?.invalid && userForm.get('phone')?.touched) {
+                    <div class="error-text">
+                      Valid 10-digit phone number is required.
+                    </div>
+                  }
+                </div>
 
-      <!-- Submit and Cancel Buttons -->
-      <button type="submit" class="btn btn-primary w-100" [disabled]="userForm.invalid">
-        {{ isEditMode ? 'Update User' : 'Create User' }}
-      </button>
-<!--      <button type="button" class="btn btn-secondary w-100 mt-2" (click)="cancel()">Cancel</button>-->
-    </form>
-  </div>
-</div>
+                <!-- Role Field -->
+                <div class="mb-3">
+                  <label for="role" class="form-label">Role</label>
+                  <select id="role" class="form-control form-control-sm" formControlName="role">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
+
+                <!-- Is Active Field -->
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input
+                      type="checkbox"
+                      id="isActive"
+                      class="form-check-input"
+                      formControlName="isActive"
+                      />
+                      <label for="isActive" class="form-check-label">Active</label>
+                    </div>
+                  </div>
+
+                  <!-- Submit and Cancel Buttons -->
+                  <button type="submit" class="btn btn-primary w-100" [disabled]="userForm.invalid">
+                    {{ isEditMode ? 'Update User' : 'Create User' }}
+                  </button>
+                  <!--      <button type="button" class="btn btn-secondary w-100 mt-2" (click)="cancel()">Cancel</button>-->
+                </form>
+              </div>
+            </div>

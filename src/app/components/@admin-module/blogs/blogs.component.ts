@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {NgClass, NgForOf, NgIf, SlicePipe} from '@angular/common';
+import { NgClass, SlicePipe } from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
   ActionButton,
@@ -28,15 +28,13 @@ interface User {
 @Component({
   selector: 'app-blogs',
   imports: [
-    NgForOf,
     FormsModule,
     NgClass,
-    NgIf,
     SlicePipe,
     DynamicTableComponent,
     BreadcrumbsComponent,
-    PopUpComponent,
-  ],
+    PopUpComponent
+],
   templateUrl: './blogs.component.html',
   standalone: true,
   styleUrl: './blogs.component.scss'

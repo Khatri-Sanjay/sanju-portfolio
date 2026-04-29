@@ -33,7 +33,7 @@ export class AboutMeComponent implements OnInit {
   skills = Skills.getAllSkills();
 
   @HostListener('window:scroll', ['$event'])
-  onScroll() {
+  onScroll(event: Event) {
     const scrollPosition = window.pageYOffset;
     const windowHeight = window.innerHeight;
     const aboutSection = document.querySelector('.about-section');

@@ -1,15 +1,5 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {
-  DatePipe,
-  NgClass,
-  NgForOf,
-  NgIf,
-  NgSwitch,
-  NgSwitchCase,
-  NgSwitchDefault,
-  NgTemplateOutlet,
-  TitleCasePipe
-} from '@angular/common';
+import { DatePipe, NgClass, NgTemplateOutlet, TitleCasePipe } from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {PaginationComponent} from '../pagination/pagination.component';
 import {TooltipDirective} from '../../@core/directives/tooltip.directive';
@@ -127,20 +117,15 @@ interface ExtendedColumnConfig extends ColumnConfig {
 @Component({
   selector: 'app-dynamic-table',
   imports: [
-    NgSwitchCase,
-    NgSwitch,
     FormsModule,
-    NgForOf,
-    NgIf,
     NgClass,
     NgTemplateOutlet,
-    NgSwitchDefault,
     TitleCasePipe,
     DatePipe,
     PaginationComponent,
     TooltipDirective,
     ShowMoreLessComponent
-  ],
+],
   templateUrl: './dynamic-table.component.html',
   standalone: true,
   styleUrl: './dynamic-table.component.scss'

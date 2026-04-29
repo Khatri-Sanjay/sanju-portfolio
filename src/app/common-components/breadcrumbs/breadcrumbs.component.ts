@@ -1,17 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import { RouterLink} from '@angular/router';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import { NgClass } from '@angular/common';
 import {Breadcrumb, BreadcrumbService} from './breadcrumb.service';
 import {animate, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-breadcrumbs',
   imports: [
-    NgForOf,
     NgClass,
-    NgIf,
     RouterLink
-  ],
+],
   templateUrl: './breadcrumbs.component.html',
   standalone: true,
   styleUrl: './breadcrumbs.component.scss',
