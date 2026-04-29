@@ -1,6 +1,6 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {DatePipe, NgIf} from '@angular/common';
+import { DatePipe } from '@angular/common';
 import {BlogComment, BlogPost} from '../../../../../@core/interface/blog-post';
 import {BlogService} from '../../../../../shared-service/@api-services/blog.service';
 import {ConvertToStandardDateTimePipe} from '../../../../../@core/pipe/convert-to-standard-date-time.pipe';
@@ -17,10 +17,9 @@ import {QuillViewComponent, QuillViewHTMLComponent} from 'ngx-quill';
     DatePipe,
     ConvertToStandardDateTimePipe,
     ReactiveFormsModule,
-    NgIf,
     QuillViewComponent,
     QuillViewHTMLComponent
-  ],
+],
   templateUrl: './blog-post.component.html',
   standalone: true,
   styleUrl: './blog-post.component.scss',

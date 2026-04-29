@@ -45,15 +45,17 @@
                 <h5 class="card-title">Leave a Comment</h5>
                 <form [formGroup]="blogForm">
                   <div class="mb-3">
-                      <textarea
-                        class="form-control"
-                        rows="4"
-                        formControlName="comment"
-                        placeholder="Write your comment...">
-                      </textarea>
-                    <div *ngIf="isInvalid('comment')" class="text-danger text-sm-start">
-                      * Comment is required.
-                    </div>
+                    <textarea
+                      class="form-control"
+                      rows="4"
+                      formControlName="comment"
+                      placeholder="Write your comment...">
+                    </textarea>
+                    @if (isInvalid('comment')) {
+                      <div class="text-danger text-sm-start">
+                        * Comment is required.
+                      </div>
+                    }
                   </div>
 
                   <div class="mb-3">
@@ -61,47 +63,49 @@
                       class="form-control"
                       formControlName="authorName"
                       placeholder="Author Name..."/>
-                    <div *ngIf="isInvalid('authorName')" class="text-danger text-sm-start">
-                      * Author Name is required.
+                      @if (isInvalid('authorName')) {
+                        <div class="text-danger text-sm-start">
+                          * Author Name is required.
+                        </div>
+                      }
                     </div>
-                  </div>
 
-                  <button type="submit" class="btn btn-primary" (click)="addComment()">Post Comment</button>
-                </form>
-              </div>
-            </div>
-
-
-            @for (comment of post.comments; track comment.commentId; let index = $index) {
-              <div class="card mb-3">
-                <div class="card-body">
-                  <div class="d-flex mb-3">
-                    <img src="https://picsum.photos/seed/css/800/400"
-                         class="rounded-circle me-2" width="40" height="40">
-                    <div>
-                      <h6 class="mb-0">{{comment?.author?.name}}</h6>
-                      <small class="text-muted">
-                        {{comment.date | convertToStandardDateTime | date:'medium'}}
-                      </small>
-                    </div>
-                  </div>
-                  <p class="card-text">{{comment.content}}</p>
-                  <button class="btn btn-sm"
-                          [class.btn-primary]="likedComments[comment.commentId]"
-                          [class.btn-outline-primary]="!likedComments[comment.commentId]"
-                          (click)="increaseLikes(comment.commentId, $event)">
-                    <i class="bi"
-                       [class.bi-hand-thumbs-up-fill]="likedComments[comment.commentId]"
-                       [class.bi-hand-thumbs-up]="!likedComments[comment.commentId]"
-                       [@likeAnimation]="animationStates[comment.commentId] || 'inactive'"></i>
-                    {{ comment?.likes || 0 }}
-                  </button>
+                    <button type="submit" class="btn btn-primary" (click)="addComment()">Post Comment</button>
+                  </form>
                 </div>
               </div>
-            }
-          </section>
-        </div>
+
+
+              @for (comment of post.comments; track comment.commentId; let index = $index) {
+                <div class="card mb-3">
+                  <div class="card-body">
+                    <div class="d-flex mb-3">
+                      <img src="https://picsum.photos/seed/css/800/400"
+                        class="rounded-circle me-2" width="40" height="40">
+                        <div>
+                          <h6 class="mb-0">{{comment?.author?.name}}</h6>
+                          <small class="text-muted">
+                            {{comment.date | convertToStandardDateTime | date:'medium'}}
+                          </small>
+                        </div>
+                      </div>
+                      <p class="card-text">{{comment.content}}</p>
+                      <button class="btn btn-sm"
+                        [class.btn-primary]="likedComments[comment.commentId]"
+                        [class.btn-outline-primary]="!likedComments[comment.commentId]"
+                        (click)="increaseLikes(comment.commentId, $event)">
+                        <i class="bi"
+                          [class.bi-hand-thumbs-up-fill]="likedComments[comment.commentId]"
+                          [class.bi-hand-thumbs-up]="!likedComments[comment.commentId]"
+                        [@likeAnimation]="animationStates[comment.commentId] || 'inactive'"></i>
+                        {{ comment?.likes || 0 }}
+                      </button>
+                    </div>
+                  </div>
+                }
+              </section>
+            </div>
+          </div>
+        </article>
       </div>
-    </article>
-  </div>
-}
+    }

@@ -10,7 +10,7 @@ import {
   Renderer2
 } from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {isPlatformBrowser, NgClass, NgForOf, NgIf} from '@angular/common';
+import { isPlatformBrowser, NgClass } from '@angular/common';
 import {ToastrService} from 'ngx-toastr';
 import {BlogService} from '../../../../shared-service/@api-services/blog.service';
 import {SpinnerService} from '../../../../common-components/spinner/service/spinner.service';
@@ -23,11 +23,9 @@ import {QuillModule} from 'ngx-quill';
   imports: [
     ReactiveFormsModule,
     NgClass,
-    NgIf,
     FormsModule,
-    QuillModule,
-    NgForOf
-  ],
+    QuillModule
+],
   templateUrl: './add-edit-blogs.component.html',
   standalone: true,
   styleUrl: './add-edit-blogs.component.scss'

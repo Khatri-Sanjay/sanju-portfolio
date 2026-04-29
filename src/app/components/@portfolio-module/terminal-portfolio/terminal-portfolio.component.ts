@@ -7,7 +7,7 @@ import {
   HostListener,
 } from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {DatePipe, KeyValuePipe, NgForOf, NgIf, NgStyle} from '@angular/common';
+import { DatePipe, KeyValuePipe, NgStyle } from '@angular/common';
 import {
   animate,
   style,
@@ -75,7 +75,7 @@ const animations: AnimationTriggerMetadata[] = [
   templateUrl: './terminal-portfolio.component.html',
   styleUrl: './terminal-portfolio.component.scss',
   standalone: true,
-  imports: [FormsModule, NgForOf, NgStyle, NgIf, DatePipe, KeyValuePipe, LineBreakPipe],
+  imports: [FormsModule, NgStyle, DatePipe, KeyValuePipe, LineBreakPipe],
   animations,
 })
 export class TerminalPortfolioComponent implements OnInit, AfterViewChecked {

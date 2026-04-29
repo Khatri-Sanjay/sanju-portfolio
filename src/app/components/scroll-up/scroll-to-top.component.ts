@@ -1,12 +1,10 @@
 import {Component, HostListener, inject, signal, DOCUMENT} from '@angular/core';
-import {NgIf} from '@angular/common';
+
 import {animate, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-scroll-to-top',
-  imports: [
-    NgIf
-  ],
+  imports: [],
   templateUrl: './scroll-to-top.component.html',
   standalone: true,
   styleUrl: './scroll-to-top.component.scss',
