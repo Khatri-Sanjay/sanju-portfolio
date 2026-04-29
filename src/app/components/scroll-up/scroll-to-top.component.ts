@@ -1,5 +1,5 @@
-import {Component, HostListener, inject, signal} from '@angular/core';
-import {DOCUMENT, NgIf} from '@angular/common';
+import {Component, HostListener, inject, signal, DOCUMENT} from '@angular/core';
+import {NgIf} from '@angular/common';
 import {animate, style, transition, trigger} from '@angular/animations';
 
 @Component({
