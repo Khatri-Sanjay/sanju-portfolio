@@ -1,4 +1,21 @@
 export const Projects = [
+    {
+        projectName: 'Global Next Educational Consultancy',
+        shortDescription: 'A modern educational consultancy website helping students pursue study and career opportunities through expert guidance, language preparation, and visa support.',
+        description: "Global Next Educational Consultancy is a comprehensive educational consultancy platform designed to connect aspiring students with academic and professional opportunities. " +
+            "The website showcases consultancy services including preparation courses, university admissions, documentation assistance, visa processing, career counseling. " +
+            "Built with a modern Angular architecture, responsive UI, and cloud-based Firebase integration, the platform delivers a seamless user experience across devices. It features dynamic content management, inquiry forms, service presentations, and optimized performance, making it an effective digital presence for international education consulting.",
+        image: 'assets/image/global-next-edu.png',
+        link: 'https://www.globalnextedu.com/',
+        demoLink: 'https://www.globalnextedu.com/',
+        languageUsed: [
+            'Angular',
+            'TypeScript',
+            'Tailwind CSS',
+            'HTML',
+            'Firebase'
+        ]
+    },
   {
     projectName: 'ngx-nepali-dualpicker',
     shortDescription: 'A modern Angular Nepali Date Picker supporting Bikram Sambat (BS) and Gregorian (AD) calendars with built-in conversion, range selection, and advanced customization.',
